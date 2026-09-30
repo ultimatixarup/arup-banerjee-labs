@@ -1,0 +1,50 @@
+name: Wrong or missing check
+description: A Labs checker missed something, or flagged text that looks fine.
+title: "[Check]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > **Redact secrets before you paste.** I can't unpublish a key once it's in an issue.
+
+        Please remove API keys, tokens, passwords, connection strings, account IDs, and other secrets before you paste any config, prompt, transcript, or bill export. Share a **minimal, redacted snippet** instead of a full file. A few lines around the check is enough.
+
+        This form is for the Agent Health Checker, Cloud Bill Smell Detector, and Observability Gap Finder.
+  - type: dropdown
+    id: tool
+    attributes:
+      label: Which tool
+      options:
+        - AI Agent Health Checker
+        - Cloud Bill Smell Detector
+        - Observability Gap Finder
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What looked wrong
+      description: What did the check miss, or what did it flag that looks fine?
+      placeholder: The secrets check missed a key written in a YAML block, or it flagged my placeholder.
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Minimal redacted snippet
+      description: Optional. Paste only the lines I need, with secrets replaced by REDACTED. Not a full config or bill export.
+      placeholder: |
+        api_key: REDACTED
+        # the line the check should have caught
+    validations:
+      required: false
+  - type: checkboxes
+    id: secrets-removed
+    attributes:
+      label: Before I submit
+      description: Required. I review these reports in a public issue.
+      options:
+        - label: I removed API keys, tokens, passwords, connection strings, account IDs, and other secrets. If I pasted anything, it is a minimal, redacted snippet.
+          required: true

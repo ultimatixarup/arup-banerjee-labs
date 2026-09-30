@@ -27,4 +27,10 @@ computed live from the built-in sample (`sample-agent-config.yaml`).
 Testing: see the case study (`../case-study/`). The fixtures there are for a fictional business; nothing in
 `app.js` refers to them.
 
+## Report a wrong check
+
+If a check missed something or flagged harmless text, [tell me on GitHub](https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml). Please redact secrets before you post. A short snippet is enough.
+
+Copy Markdown report masks secrets this checker already found. It can still miss some, so redact before you post the report.
+
 Maintainer: Arup Kumar Banerjee · Little Elm, Texas · arupkumar.banerjee@gmail.com

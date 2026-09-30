@@ -989,7 +989,7 @@
       const st = div.querySelector(".status");
       st.classList.add(r.status);
       st.textContent = r.status.toUpperCase();
-      div.querySelector(".msg").textContent = r.message;
+      div.querySelector(".msg").textContent = maskDetectedSecrets(r.message);
       if (r.evidence && r.evidence.length > 1) {
         const d = document.createElement("details");
         d.className = "evidence";
@@ -997,7 +997,7 @@
         sm.textContent = "Show all " + r.evidence.length;
         d.appendChild(sm);
         const ul = document.createElement("ul");
-        r.evidence.forEach((e) => { const li = document.createElement("li"); li.textContent = e; ul.appendChild(li); });
+        r.evidence.forEach((e) => { const li = document.createElement("li"); li.textContent = maskDetectedSecrets(e); ul.appendChild(li); });
         d.appendChild(ul);
         div.appendChild(d);
       }
@@ -1005,6 +1005,16 @@
     });
     window.__lastReport = result;
     bumpRuns();
+  }
+
+  // Mask secrets this checker already detected, so a copied report is safer to paste.
+  // It can still miss some; the page asks people to redact before posting.
+  function maskDetectedSecrets(text) {
+    let out = String(text);
+    const hits = findSecrets(out).filter(function (h) { return h.raw; });
+    hits.sort(function (a, b) { return b.raw.length - a.raw.length; });
+    hits.forEach(function (h) { out = out.split(h.raw).join(h.value); });
+    return out;
   }
 
   function reportMarkdown(r) {
@@ -1025,7 +1035,8 @@
       lines.push("| " + x.group + " | " + x.title + " | " + x.status + " | " + (x.status === "skip" ? "info" : x.severity) + " | " + x.message.replace(/\|/g, "/").replace(/\n/g, " ") + " |");
     });
     lines.push("", "_Heuristic keyword checker: it can miss problems and false-flag. Not a security audit. Generated locally; nothing was uploaded._", "");
-    return lines.join("\n");
+    lines.push("_Redact secrets before you post this. A short snippet is enough — not a full config._", "");
+    return maskDetectedSecrets(lines.join("\n"));
   }
 
   function redTeamText() {
@@ -1130,7 +1141,7 @@
     $("btn-copy").addEventListener("click", () => {
       const md = reportMarkdown(window.__lastReport);
       if (!md) return toast("Run a check first");
-      copy(md, "Markdown report copied");
+      copy(md, "Markdown report copied — redact anything else before you post it");
     });
     if ($("btn-copy-redteam")) $("btn-copy-redteam").addEventListener("click", () => copy(redTeamText(), "Red-team pack copied"));
     $("input").addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") runAnalyze(); });
