@@ -1,0 +1,70 @@
+# Sanitized DEMO observability snippet for Arup Banerjee Labs — Observability Gap Finder
+# Fictional. Safe for demos. Intentional gaps: missing SLIs, no tracing, high-cardinality risk.
+
+apiVersion: labs.demo/v1
+kind: ServiceObservabilityInventory
+metadata:
+  name: checkout-platform
+  environment: prod
+
+services:
+  - name: checkout-api
+    owner: platform
+    language: go
+    metrics:
+      prometheus:
+        scrape: true
+        path: /metrics
+        # Missing: latency histogram SLI, error-rate SLI, availability SLI
+        labels:
+          - service
+          - instance
+          - user_id   # cardinality smell
+    logs:
+      destination: splunk
+      index: main
+      # Missing: structured fields / trace_id correlation
+    tracing:
+      enabled: false   # gap: no OTel / Langfuse / Jaeger
+    alerts:
+      - name: cpu-high
+        expr: avg(cpu_usage) > 0.9
+        # Missing: burn-rate / SLO-based alerts
+
+  - name: agent-orchestrator
+    owner: ai-platform
+    language: python
+    metrics:
+      prometheus:
+        scrape: true
+        path: /metrics
+        # Missing: llm_latency, tool_error_rate, token_cost
+    logs:
+      destination: stdout
+    tracing:
+      enabled: false
+      # Missing: Langfuse / OTel hooks for agent spans
+    alerts: []   # gap: no alerts
+
+  - name: payments-worker
+    owner: payments
+    language: java
+    metrics:
+      prometheus:
+        scrape: false  # gap: not scraped
+    logs:
+      destination: splunk
+      index: payments
+    tracing:
+      otel:
+        endpoint: http://otel-collector:4317
+        # Partial: tracing present but no exemplars / no SLO
+    alerts:
+      - name: queue-depth
+        expr: queue_depth > 10000
+
+# Global gaps intentional for demo scorecard:
+# - no organization-wide SLO objects
+# - no cardinality guards / metric relabel drop rules
+# - no synthetic checks
+# - inconsistent trace_id in logs

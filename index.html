@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arup Banerjee Labs — Free-forever client-side scorecards</title>
+  <meta name="description" content="Arup Banerjee Labs: Agent Health Checker, Cloud Bill Smell Detector, Observability Gap Finder. Free forever, client-side only, no upload." />
+  <meta name="author" content="Arup Kumar Banerjee — Little Elm, Texas" />
+  <link rel="stylesheet" href="shared/labs.css" />
+  <!-- Plausible: <script defer data-domain="YOUR_DOMAIN" src="https://plausible.io/js/script.js"></script> -->
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">AB</div>
+        <div>Arup Banerjee Labs<span class="brand-sub">Free-forever utilities · browser-only · no signup</span></div>
+      </div>
+      <div class="badge-privacy">Nothing uploaded · no cloud login</div>
+    </header>
+
+    <section class="hero">
+      <h1>Three free scorecards for people who <span>ship agents &amp; platforms</span>.</h1>
+      <p class="hero-lead">
+        Paste an agent config, a cloud bill export you already own, or an observability inventory —
+        get a reliability / smell / gaps report in your browser. Built by Arup Kumar Banerjee · Little Elm, Texas
+        (Global SRE · LangGraph / AI agents · Observability · OpenShift).
+      </p>
+      <div class="trust">
+        <span>Client-side only</span>
+        <span>Free forever</span>
+        <span>No account required</span>
+        <span>Self-check — never scans others’ systems</span>
+      </div>
+    </section>
+
+    <section class="hub-grid" style="margin-bottom:2rem">
+      <article class="card hub-card">
+        <h3>AI Agent Health Checker</h3>
+        <p>Paste LangGraph / agent JSON or YAML. Score retries, timeouts, tracing, secret smells, injection sinks, tool auth, evals, LLM SPOF.</p>
+        <a class="open" href="agent-health-checker/index.html">Open tool →</a>
+      </article>
+      <article class="card hub-card">
+        <h3>Cloud Bill Smell Detector</h3>
+        <p>Paste your AWS/GCP/Azure cost CSV or JSON export. Heuristic smells for egress, NAT, idle-ish lines, metrics creep. No cloud login.</p>
+        <a class="open" href="cloud-bill-smell/index.html">Open tool →</a>
+      </article>
+      <article class="card hub-card">
+        <h3>Observability Gap Finder</h3>
+        <p>Paste a stack description or tick what you run. Gaps across OTel, Langfuse, Prometheus, Splunk + starter snippets.</p>
+        <a class="open" href="observability-gap-finder/index.html">Open tool →</a>
+      </article>
+    </section>
+
+    <section class="section">
+      <h2>About Arup Kumar Banerjee · Little Elm, Texas</h2>
+      <div class="card">
+        <p style="margin:0;color:var(--muted);font-size:.95rem">
+          <strong style="color:var(--text)">Arup Kumar Banerjee · Little Elm, Texas</strong> — Global SRE background with LangGraph / AI agents, observability (Splunk, Langfuse, OpenTelemetry, Prometheus),
+          OpenShift, payments/cloud, and privacy-minded systems. These Labs tools are free public utilities for reputation and education —
+          not consulting intake forms, not account scanners, and always-free public demos.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Privacy</h2>
+      <div class="card">
+        <p style="margin:0;color:var(--muted);font-size:.92rem">
+          Scoring runs in your browser. Pasted configs and bill exports are not sent to a backend for analysis.
+          Optional cookieless Plausible page/usage events (metadata only) may be enabled at deploy — never paste contents.
+          See each tool’s footer and <code>MONETIZATION.md</code> for the free-forever policy.
+        </p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div>© Arup Kumar Banerjee · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Deploy: GitHub Pages · WAVE 1 marketing drafts are unpublished</div>
+    </footer>
+  </div>
+</body>
+</html>

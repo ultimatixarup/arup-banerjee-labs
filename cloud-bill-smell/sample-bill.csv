@@ -1,0 +1,18 @@
+provider,service,usage_type,region,cost_usd,usage_quantity,unit
+aws,AmazonEC2,BoxUsage:t3.medium,us-east-1,420.50,730,Hrs
+aws,AmazonEC2,BoxUsage:t3.medium,us-east-1,380.00,730,Hrs
+aws,AmazonS3,TimedStorage-ByteHrs,us-east-1,45.20,1200000000000,Byte-Hrs
+aws,AmazonS3,DataTransfer-Out-Bytes,us-east-1,890.00,4500000000000,Bytes
+aws,AmazonRDS,InstanceUsage:db.r5.large,us-east-1,610.00,730,Hrs
+aws,AWSLambda,Request,us-east-1,12.40,50000000,Requests
+aws,AmazonCloudWatch,GMD-Metrics,us-east-1,210.00,150000,Metrics
+aws,AmazonEC2,EBS:VolumeUsage.gp3,us-east-1,95.00,4000,GB-Mo
+aws,AmazonEC2,NatGateway-Hours,us-east-1,320.00,730,Hrs
+aws,AmazonEC2,NatGateway-Bytes,us-east-1,540.00,8000000000000,Bytes
+aws,Support,Developer,global,29.00,1,Months
+aws,AmazonEC2,IP:ElasticIP,us-east-1,18.25,5,Hrs
+aws,AmazonS3,EarlyDelete-ByteHrs,us-east-1,65.00,50000000000,Byte-Hrs
+gcp,Compute Engine,N2 Instance Core,us-central1,210.00,1000,hour
+gcp,Cloud Storage,Standard Storage,us-central1,33.00,1000,gb-month
+azure,Virtual Machines,D4s v3,eastus,390.00,730,Hours
+azure,Bandwidth,Data Transfer Out,eastus,275.00,2000,GB

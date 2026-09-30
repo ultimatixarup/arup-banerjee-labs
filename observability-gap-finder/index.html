@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Observability Gap Finder — Arup Banerjee Labs</title>
+  <meta name="description" content="Paste stack description or tick checklist. OTel/Langfuse/Prometheus/Splunk gap scorecard + snippets. Arup Banerjee Labs." />
+  <link rel="stylesheet" href="../shared/labs.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Plausible: <script defer data-domain="YOUR_DOMAIN" src="https://plausible.io/js/script.js"></script> -->
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">OG</div>
+        <div>Observability Gap Finder<span class="brand-sub">Arup Banerjee Labs · self-check only · no remote scan</span></div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <div class="badge-privacy">Paste or checklist · in-browser</div>
+      </div>
+    </header>
+    <section class="hero">
+      <h1>Find gaps in <span>OTel · Langfuse · Prometheus · Splunk</span>.</h1>
+      <p class="hero-lead">Describe your stack or tick what you already run. Get a gap scorecard and starter snippets. Does not probe external systems.</p>
+    </section>
+    <div class="panel-grid">
+      <section class="card">
+        <h2>1 · Stack paste + checklist</h2>
+        <label class="field-label" for="input">Inventory / config excerpt</label>
+        <textarea id="input" class="input" style="min-height:160px" placeholder="e.g. LangGraph on OpenShift; fluent-bit→Splunk; no Langfuse..."></textarea>
+        <h2 style="margin-top:1rem;font-size:.95rem">What you already have</h2>
+        <div class="check-grid" id="checklist"></div>
+        <div class="toolbar">
+          <button type="button" class="primary" id="btn-run">Find gaps</button>
+          <button type="button" id="btn-sample">Load sample</button>
+          <button type="button" class="ghost" id="btn-clear">Clear</button>
+        </div>
+      </section>
+      <section class="card">
+        <h2>2 · Gap scorecard</h2>
+        <div id="results-empty" class="results-empty">Paste a description and/or tick checklist items.</div>
+        <div id="results-body" class="hidden">
+          <div class="score-head">
+            <div class="score-ring" id="score-ring" style="--p:0"><div class="score-ring-inner">
+              <div class="score-num" id="score-num">0</div>
+              <div class="score-label" id="score-grade">bucket</div>
+            </div></div>
+            <div class="score-meta"><h3 id="score-headline">—</h3><p id="score-sub">—</p></div>
+          </div>
+          <div class="check-list" id="check-list"></div>
+          <h2 style="font-size:.95rem;margin-top:1rem">Starter snippets (for gaps)</h2>
+          <div id="snippets"></div>
+          <div class="actions-row"><button type="button" id="btn-copy">Copy Markdown report</button></div>
+        </div>
+      </section>
+    </div>
+    <footer class="site-footer">
+      <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong></div>
+    </footer>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

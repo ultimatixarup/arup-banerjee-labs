@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud Bill Smell Detector — Arup Banerjee Labs</title>
+  <meta name="description" content="Paste your own cloud cost CSV/JSON export. Get heuristic cost smells in-browser. No cloud login. By Arup Kumar Banerjee." />
+  <link rel="stylesheet" href="../shared/labs.css" />
+  <!-- Plausible: <script defer data-domain="YOUR_DOMAIN" src="https://plausible.io/js/script.js"></script> -->
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">CB</div>
+        <div>Cloud Bill Smell Detector<span class="brand-sub">Arup Banerjee Labs · your export only · no cloud login</span></div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <div class="badge-privacy">Client-side · no account scan</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Paste a cloud bill export. Spot <span>cost smells</span> in seconds.</h1>
+      <p class="hero-lead">
+        Educational heuristics on <strong>your</strong> AWS/GCP/Azure CSV or JSON export — egress, NAT, idle-ish lines, metrics creep.
+        Does not log into any cloud. Does not scan anyone else’s account.
+      </p>
+      <div class="trust">
+        <span>User-owned exports only</span>
+        <span>No cloud credentials</span>
+        <span>100% in-browser</span>
+        <span>Free forever — Arup Banerjee Labs</span>
+      </div>
+    </section>
+
+    <div class="panel-grid">
+      <section class="card">
+        <h2>1 · Paste or upload CSV/JSON</h2>
+        <label class="field-label" for="input">Cost &amp; Usage / billing export text</label>
+        <textarea id="input" class="input" spellcheck="false" placeholder="provider,service,usage_type,region,cost_usd&#10;aws,AmazonEC2,..."></textarea>
+        <div class="file-row">
+          <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" />
+        </div>
+        <div class="toolbar">
+          <button type="button" class="primary" id="btn-run">Detect smells</button>
+          <button type="button" id="btn-sample">Load sample CSV</button>
+          <button type="button" class="ghost" id="btn-clear">Clear</button>
+        </div>
+        <p class="hint">Honest tool: heuristics on pasted rows only — not a FinOps audit or rightsizing guarantee.</p>
+      </section>
+      <section class="card">
+        <h2>2 · Smell report</h2>
+        <div id="results-empty" class="results-empty">Paste an export you already downloaded from your cloud billing console.</div>
+        <div id="results-body" class="hidden">
+          <div class="score-head">
+            <div class="score-ring" id="score-ring" style="--p:0"><div class="score-ring-inner">
+              <div class="score-num" id="score-num">0</div>
+              <div class="score-label" id="score-grade">bucket</div>
+            </div></div>
+            <div class="score-meta">
+              <h3 id="score-headline">—</h3>
+              <p id="score-sub">—</p>
+            </div>
+          </div>
+          <h2 style="font-size:.95rem">Top services (from paste)</h2>
+          <ul id="top-services" style="margin:0 0 .75rem;padding-left:1.1rem;color:var(--muted);font-size:.88rem"></ul>
+          <table class="smell">
+            <thead><tr><th>Smell</th><th>Sev</th><th>Notes</th><th>Evidence</th></tr></thead>
+            <tbody id="smell-body"></tbody>
+          </table>
+          <div class="actions-row"><button type="button" id="btn-copy">Copy Markdown report</button></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>Non-goals (legal / honesty)</h2>
+      <div class="card"><p style="margin:0;color:var(--muted);font-size:.92rem">
+        No cloud API access · no credential collection · no scanning accounts you do not own ·
+        no “bypass billing” advice · not a substitute for official Cost Explorer / CUDOS / FinOps practice.
+      </p></div>
+    </section>
+
+    <footer class="site-footer">
+      <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong></div>
+    </footer>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

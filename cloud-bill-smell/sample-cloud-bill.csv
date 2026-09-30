@@ -1,0 +1,9 @@
+billing_period_start,billing_period_end,provider,account_alias,service,region,resource_id,resource_name,usage_type,usage_qty,usage_unit,unblended_cost_usd,currency,tags_env,tags_owner,tags_project,notes
+2026-08-01,2026-08-31,aws,demo-prod,AmazonEC2,us-east-1,i-0demoec2aaa111,web-api-1,BoxUsage:t3.medium,720,Hrs,62.40,USD,prod,platform,checkout,
+2026-08-01,2026-08-31,aws,demo-prod,AmazonEC2,us-east-1,i-0demoec2bbb222,old-batch-worker,BoxUsage:m5.large,720,Hrs,70.08,USD,,,,"idle-ish low util demo"
+2026-08-01,2026-08-31,aws,demo-prod,AmazonEC2,us-east-1,vol-0demodisk999,orphan-vol-old-node,EBS:VolumeUsage.gp3,500,GB-Mo,40.00,USD,,,,untagged orphaned volume
+2026-08-01,2026-08-31,aws,demo-prod,AmazonS3,us-east-1,demo-logs-bucket,app-logs,TimedStorage-ByteHrs,1500000000000,Byte-Hrs,34.50,USD,prod,sre,logging,
+2026-08-01,2026-08-31,aws,demo-prod,AWSDataTransfer,us-east-1,dt-demo-001,egress-spike,DataTransfer-Out-Bytes,2500000000000,Bytes,225.00,USD,prod,platform,checkout,unusual egress demo
+2026-08-01,2026-08-31,aws,demo-prod,AmazonRDS,us-east-1,db-demodemo01,checkout-db,InstanceUsage:db.r5.xlarge,720,Hrs,580.00,USD,prod,data,checkout,
+2026-08-01,2026-08-31,aws,demo-prod,AmazonCloudWatch,us-east-1,cw-demo-logs,ingest,TimedStorage-ByteHrs,800000000000,Byte-Hrs,48.00,USD,,,,missing owner project tags
+2026-08-01,2026-08-31,gcp,demo-gcp,Compute Engine,us-central1,gce-demo-idle,notebook-leftover,N2-standard-4,720,hours,140.00,USD,,,,no labels leftover notebook

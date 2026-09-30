@@ -1,0 +1,56 @@
+# Sanitized DEMO config for Arup Banerjee Labs — Agent Health Checker
+# Fictional. No real secrets. Safe to paste in demos / screenshots.
+# Intentional gaps so the scorecard shows mixed findings.
+
+name: demo-support-agent
+version: "0.1"
+framework: langgraph
+
+llm:
+  provider: openai
+  model: gpt-4o-mini
+  # Intentionally no fallback / router → single_llm_spof
+  # Intentionally no request timeout → timeouts partial
+
+graph:
+  entry: triage
+  nodes:
+    - id: triage
+      type: llm
+      prompt: |
+        You are a support triage agent. Classify the user message.
+        User message: {{user_input}}
+    - id: act
+      type: tool_router
+      tools:
+        - search_kb
+        - run_sql
+        - shell_exec
+
+tools:
+  - name: search_kb
+    description: Search internal knowledge base
+    parameters:
+      query: { type: string }
+    # Intentionally sparse auth notes → tool_auth_notes
+
+  - name: run_sql
+    description: Run a SQL query against the support warehouse
+    parameters:
+      sql: { type: string }   # free-form SQL → prompt_injection_sinks
+    # no auth/scope notes
+
+  - name: shell_exec
+    description: Execute a shell command on the runner
+    parameters:
+      command: { type: string }  # free-form shell → prompt_injection_sinks
+    # irreversible / no confirmation flag
+
+# Intentionally missing:
+# - retries / backoff
+# - tracing (langfuse / otel)
+# - evals / golden tests
+# - max_iterations / recursion limit
+
+# NOT a secret (demo placeholder only — pattern may still smell):
+# api_key: "sk-demo-not-a-real-key-000000"
