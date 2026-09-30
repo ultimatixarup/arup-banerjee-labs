@@ -544,7 +544,7 @@
     ]
   };
   function initQuestions() {
-    var sel = load(K.q, ["Side effects", "Maintenance / coming off"]);
+    var sel = load(K.q, ["Side effects"]);
     chipGroup("q-topics", Object.keys(QBANK), sel);
     $("q-topics").addEventListener("change", function () { save(K.q, chipValues("q-topics")); });
     $("btn-q-gen").addEventListener("click", genQuestions);
@@ -653,7 +653,7 @@
       function () { return (load(K.ins, { checks: {}, fields: {} }).checks) || {}; },
       function (s) { var all = load(K.ins, { checks: {}, fields: {} }); all.checks = s; save(K.ins, all); });
     insReminders();
-    chipGroup("q-topics", Object.keys(QBANK), load(K.q, ["Side effects", "Maintenance / coming off"]));
+    chipGroup("q-topics", Object.keys(QBANK), load(K.q, ["Side effects"]));
   }
 
   window.addEventListener("afterprint", function () {

@@ -145,11 +145,14 @@ button.ghost { background: transparent; }
 }
 .hidden { display: none !important; }
 .toast {
-  position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(120%);
+  position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(calc(100% + 1.5rem));
   background: #1c2738; border: 1px solid var(--border); color: var(--text);
-  padding: .65rem 1rem; border-radius: 999px; font-size: .85rem; transition: transform .25s ease; z-index: 50;
+  padding: .65rem 1rem; border-radius: 999px; font-size: .85rem; z-index: 50;
+  max-width: calc(100vw - 2rem); visibility: hidden; opacity: 0; pointer-events: none;
+  transition: transform .25s ease, opacity .25s ease, visibility 0s linear .25s;
 }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.show { transform: translateX(-50%) translateY(0); visibility: visible; opacity: 1; transition: transform .25s ease, opacity .25s ease, visibility 0s; }
+.toast:empty { display: none; }
 .hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 @media (max-width: 800px) { .hub-grid { grid-template-columns: 1fr; } }
 .hub-card h3 { margin: 0 0 .4rem; font-size: 1.05rem; }

@@ -105,7 +105,7 @@
 
   const BUCKET_COPY = {
     "0-24": "Critical gaps — treat as prototype only.",
-    "25-49": "Shipable prototype, not production-ready.",
+    "25-49": "Shippable prototype, not production-ready.",
     "50-74": "Solid baseline — close the high findings.",
     "75-100": "Strong config hygiene — still review high items."
   };

@@ -62,11 +62,15 @@ button.danger { border-color: var(--bad); color: var(--bad); background: transpa
 button.danger:hover { background: rgba(255,107,122,.1); }
 button { min-height: 44px; }
 
-.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .5rem; font-size: .88rem; }
+/* Keep every panel inside the viewport on phones: grid/flex children may shrink below their content width */
+#main, .tabpanel, .panel-grid > *, .card { min-width: 0; max-width: 100%; }
+.summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 8.5rem), 1fr)); gap: .5rem; font-size: .88rem; }
+.stat { min-width: 0; overflow-wrap: anywhere; }
 .stat { border: 1px solid var(--border); border-radius: 10px; background: var(--bg); padding: .55rem .65rem; }
 .stat b { display: block; font-size: 1.15rem; color: var(--text); }
 .stat span { color: var(--muted); font-size: .78rem; }
-.table-wrap { overflow-x: auto; }
+.table-wrap { position: relative; overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+.table-wrap table { min-width: 32rem; }
 .log-table td button { min-height: 32px; padding: .25rem .55rem; font-size: .75rem; }
 .p-out { display: grid; gap: .5rem; margin: .5rem 0 .75rem; }
 .week-label { font-weight: 600; margin: .5rem 0; }
