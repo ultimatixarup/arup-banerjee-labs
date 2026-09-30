@@ -1,0 +1,53 @@
+name: Bug or feedback
+description: Something else on the Labs pages — a bug, a broken link, or a note.
+title: "[Feedback]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > **Redact secrets before you paste.** I can't unpublish a key once it's in an issue.
+
+        Please remove API keys, tokens, passwords, connection strings, account IDs, and other secrets before you paste any config, prompt, transcript, or bill export. Share a **minimal, redacted snippet** instead of a full file.
+
+        If this is about GLP-1 Support, please don't post personal health information. That tool is not medical advice, and questions about treatment belong with your prescriber. Use the GLP-1 Support form for bugs on that page.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did this happen
+      options:
+        - Labs hub
+        - AI Agent Health Checker
+        - Cloud Bill Smell Detector
+        - Observability Gap Finder
+        - Case study
+        - GLP-1 Support
+        - Somewhere else
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see, and what did you expect?
+      placeholder: I clicked Check my agent and the scorecard stayed empty.
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Minimal redacted snippet
+      description: Optional. Only if a snippet helps. Replace secrets with REDACTED. Not a full config or bill export.
+      placeholder: |
+        api_key: REDACTED
+    validations:
+      required: false
+  - type: checkboxes
+    id: secrets-removed
+    attributes:
+      label: Before I submit
+      description: Required. I review these reports in a public issue.
+      options:
+        - label: I removed API keys, tokens, passwords, connection strings, account IDs, and other secrets. If I pasted anything, it is a minimal, redacted snippet.
+          required: true

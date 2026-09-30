@@ -1,0 +1,46 @@
+name: GLP-1 Support
+description: A bug on the GLP-1 Support page. Not for treatment questions.
+title: "[GLP-1]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > **Don't post personal health information.** And redact secrets before you paste.
+
+        Please don't include symptoms, doses, weight, insurance IDs, names, or anything else from your log. Remove API keys, tokens, passwords, connection strings, account IDs, and other secrets. Share a **minimal, redacted snippet** if you need to show the bug — not a full export of your log.
+
+        **This tool is not medical advice.** Questions about treatment, doses, or side effects belong with your prescriber. Emergencies: call 911. If you have thoughts of harming yourself, call or text 988.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the page
+      options:
+        - Daily log
+        - Protein, fluids, and fiber
+        - Strength and muscle
+        - Maintenance / coming off
+        - Insurance and refills
+        - Questions for my prescriber
+        - Something else on the page
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What broke
+      description: Tell me what the page did. Leave out your own health details.
+      placeholder: The daily log didn't save after I clicked Save this day.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safe-to-post
+    attributes:
+      label: Before I submit
+      description: Required. This issue will be public.
+      options:
+        - label: I did not include personal health information (symptoms, doses, weight, insurance IDs, names, or notes from my log).
+          required: true
+        - label: I removed API keys, tokens, passwords, connection strings, account IDs, and other secrets. If I pasted anything, it is a minimal, redacted snippet.
+          required: true

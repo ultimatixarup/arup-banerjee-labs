@@ -25,6 +25,12 @@ Educational/organizing tool only — it does not diagnose, suggest doses, or rec
 Privacy: localStorage only (`abl_glp1_*` keys), "Clear my data" button, export-to-CSV, no analytics, no network calls
 (a Content-Security-Policy with `connect-src 'none'` enforces this). Sources (FDA, DailyMed, MedlinePlus, NIDDK, CDC, peer-reviewed) are listed on the page.
 
+## Report a problem
+
+If a check looks wrong, [tell me on GitHub](https://github.com/ultimatixarup/arup-banerjee-labs/issues/new/choose). Please redact secrets before you post. A short snippet is enough — not a full config or bill export.
+
+GLP-1 Support page bugs go on the [GLP-1 form](https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=03-glp1-support.yml). Please don’t post personal health information. The tool is not medical advice, and questions about treatment belong with your prescriber.
+
 ## Open locally
 
 ```bash
