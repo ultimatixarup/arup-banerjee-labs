@@ -1,13 +1,17 @@
 /**
  * GLP-1 Support — Arup Banerjee Labs
  * Free, browser-only organizer. Educational/organizational only: no diagnosis, no dosing,
- * no medication-change advice. Data lives only in this browser's localStorage.
- * No network calls, no analytics, no third-party scripts.
+ * no medication-change advice of its own. User data is kept in this browser's localStorage and is never
+ * sent anywhere by this script (the page CSP also sets connect-src 'none'). No analytics, no third-party scripts.
+ * Exports, downloads, prints and copies are created only when the user asks, and carry the disclaimer lines below.
  */
 (function () {
   "use strict";
 
   var PREFIX = "abl_glp1_";
+  // Disclaimer lines added to every export (legal review 4.9). No commas in EXPORT_NOTE so it stays one CSV cell.
+  var EMERGENCY_LINE = "Emergency: call 911. Took too much: Poison Help 1-800-222-1222. Crisis: call or text 988.";
+  var EXPORT_NOTE = "# GLP-1 Support export - personal notes - not medical advice. Emergency: 911. Took too much: 1-800-222-1222. Crisis: call or text 988.";
   var K = {
     log: PREFIX + "log_v1",
     daily: PREFIX + "daily_v1",
@@ -154,13 +158,14 @@
   function alertFor(entry) {
     var msgs = [];
     if (entry.red_flag) {
-      msgs.push("<strong>Red-flag symptom logged.</strong> Please don’t wait on this: call 911 for trouble breathing, swelling of the face or throat, or fainting, " +
-        "and contact your prescriber or seek care right away for the other red-flag symptoms. Check your Medication Guide for what it says to do.");
+      msgs.push("<strong>You marked a red-flag symptom.</strong> Don’t wait on this. Call 911 for trouble breathing or swallowing, swelling of the face, lips, tongue, or throat, or fainting. " +
+        "For the other red-flag symptoms, contact your prescriber right away, or go to urgent care or an emergency room if you can’t reach them. " +
+        "Your Medication Guide says what to do for each one.");
     }
     var severe = SYMPTOMS.filter(function (s) { return entry[s[0]] === "severe"; }).map(function (s) { return s[1].toLowerCase(); });
     if (severe.length) {
-      msgs.push("<strong>Severe symptoms noted (" + esc(severe.join(", ")) + ").</strong> The Medication Guides say to tell your healthcare provider about " +
-        "stomach problems that are severe or will not go away. Contact your prescriber.");
+      msgs.push("<strong>You marked " + esc(severe.join(", ")) + " as severe.</strong> The Medication Guides say to tell your healthcare provider about " +
+        "stomach problems that are severe or won’t go away. Contact your prescriber today. For severe stomach-area pain that won’t go away, get medical help right away.");
     }
     var gi = ["vomiting", "diarrhea"].some(function (k) { return entry[k] === "moderate" || entry[k] === "severe"; });
     if (gi) msgs.push("<strong>Vomiting or diarrhea can lead to dehydration.</strong> Tell your healthcare provider right away if it does not go away.");
@@ -265,7 +270,7 @@
     $("btn-export").addEventListener("click", function () {
       var log = getLog();
       if (!log.length) { toast("Nothing to export yet."); return; }
-      download("glp1-support-log-" + today() + ".csv", toCSV(logToRows(log)), "text/csv");
+      download("glp1-support-log-" + today() + ".csv", toCSV([[EXPORT_NOTE]].concat(logToRows(log))), "text/csv");
     });
     $("btn-sample").addEventListener("click", function () {
       var log = getLog();
@@ -443,7 +448,7 @@
       lines.push("", "Check-ins:");
       [30, 60, 90].forEach(function (n) { lines.push("  Day " + n + ": " + isoLocal(addDays(parseISO(p["pl-change"]), n))); });
     }
-    lines.push("", "Emergency: call 911. Thoughts of self-harm: call or text 988.");
+    lines.push("", EMERGENCY_LINE, "Terms of Use: https://ultimatixarup.github.io/arup-banerjee-labs/glp1-support/terms.html");
     return lines.join("\r\n");
   }
   function initPlan() {
@@ -593,7 +598,7 @@
   }
   function questionsText() {
     if (!lastQuestions) return "";
-    var L = ["QUESTIONS FOR MY PRESCRIBER - " + today(), "(Made with GLP-1 Support, Arup Banerjee Labs. Not medical advice.)", ""];
+    var L = ["QUESTIONS FOR MY PRESCRIBER - " + today(), "(Made with GLP-1 Support, Arup Banerjee Labs. Not medical advice.)", EMERGENCY_LINE, ""];
     if (lastQuestions.log) { L.push("MY LAST 14 DAYS"); lastQuestions.log.forEach(function (l) { L.push("- " + l); }); L.push(""); }
     lastQuestions.topics.forEach(function (t) {
       L.push(t.toUpperCase()); QBANK[t].forEach(function (q, i) { L.push((i + 1) + ". " + q); }); L.push("");
@@ -623,7 +628,7 @@
       Object.keys(ins.fields || {}).forEach(function (k) { if (ins.fields[k]) rows.push(["insurance_details", "", k, ins.fields[k]]); });
     }
     if (rows.length === 1) { toast("Nothing saved yet."); return; }
-    download("glp1-support-all-" + today() + ".csv", toCSV(rows), "text/csv");
+    download("glp1-support-all-" + today() + ".csv", toCSV([[EXPORT_NOTE]].concat(rows)), "text/csv");
   }
   function clearAll() {
     if (!confirm("Delete ALL GLP-1 Support data saved in this browser? This cannot be undone. (Export first if you want a copy.)")) return;
