@@ -25,3 +25,5 @@ Or open `index.html` via `file://` (sample fetch may use embedded fallbacks).
 `/workspace/passive-income/arup-banerjee-labs.zip`
 
 Maintainer: Arup Kumar Banerjee · Little Elm, Texas · arupkumar.banerjee@gmail.com
+
+Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.
