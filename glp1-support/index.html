@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <title>GLP-1 Support — free, private organizer — Arup Banerjee Labs</title>
+  <meta name="description" content="Free, browser-only GLP-1 Support organizer: symptom and side-effect log, protein/fluids/fiber checklist, strength-training tracker, maintenance planner, insurance and refill checklist, and questions for your prescriber. Not medical advice. No account, no uploads." />
+  <meta name="author" content="Arup Kumar Banerjee — Little Elm, Texas" />
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="../shared/labs.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">G1</div>
+        <div>GLP-1 Support<span class="brand-sub">Arup Banerjee Labs · free · private · stays in your browser</span></div>
+      </div>
+      <div class="header-right">
+        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <div class="badge-privacy">No account · no uploads · no tracking</div>
+      </div>
+    </header>
+
+    <aside class="notice notice-medical" role="note" aria-labelledby="top-notice-title">
+      <h2 id="top-notice-title">Important: this is not medical advice</h2>
+      <p>This is a free <strong>educational and organizing tool</strong> for people taking, changing, or coming off GLP-1 medicines
+        (such as Wegovy, Ozempic, Zepbound, or Mounjaro). It does <strong>not</strong> diagnose, does <strong>not</strong> suggest doses,
+        and does <strong>not</strong> recommend starting, stopping, or changing any medicine. Always talk with your prescriber, pharmacist,
+        or a registered dietitian about your own care.</p>
+      <p class="notice-emergency"><strong>Emergency? Call 911.</strong> Get medical help right away for trouble breathing or swallowing,
+        swelling of the face, lips, tongue, or throat, fainting, or severe stomach pain that will not go away.
+        <a href="#red-flags">See the red-flag symptom list</a>.</p>
+    </aside>
+
+    <section class="hero">
+      <h1>Your GLP-1 journey, <span>organized — privately</span>.</h1>
+      <p class="hero-lead">
+        Log symptoms and side effects, check off daily protein, fluids and fiber, track strength training, plan for maintenance
+        or coming off, keep insurance and refill details straight, and walk into your next appointment with clear questions.
+      </p>
+      <div class="trust">
+        <span>Free — no paid tier</span>
+        <span>No account or email</span>
+        <span>Saved only in this browser</span>
+        <span>No analytics, no network calls</span>
+        <span>Export to CSV any time</span>
+      </div>
+    </section>
+
+    <section class="section" id="red-flags" aria-labelledby="rf-title">
+      <div class="card card-danger">
+        <h2 id="rf-title">Red-flag symptoms — get care, don’t just log them</h2>
+        <p>These are drawn from the FDA-approved Medication Guides for Wegovy (semaglutide) and Zepbound (tirzepatide) and from
+          MedlinePlus (National Library of Medicine). Read the Medication Guide for <em>your</em> specific product — it has
+          instructions for each of these.</p>
+        <ul class="rf-list">
+          <li><strong>Call 911 / emergency care:</strong> swelling of your face, lips, tongue, or throat; problems breathing or swallowing;
+            severe rash or itching; a very rapid heartbeat; fainting or feeling dizzy (possible serious allergic reaction).</li>
+          <li><strong>Severe stomach-area pain that will not go away</strong>, with or without nausea or vomiting — sometimes felt from
+            the abdomen through to the back (possible pancreatitis). Get medical help right away.</li>
+          <li><strong>Gallbladder warning signs:</strong> pain in your upper stomach, yellowing of skin or eyes (jaundice), fever, or clay-colored stools.</li>
+          <li><strong>Dehydration:</strong> nausea, vomiting, or diarrhea that does not go away; peeing much less than usual; feeling faint.
+            The labels warn dehydration can lead to kidney problems.</li>
+          <li><strong>Low blood sugar</strong> (especially with type 2 diabetes and insulin or a sulfonylurea): shakiness, sweating, confusion,
+            fast heartbeat, blurred vision, slurred speech.</li>
+          <li><strong>A lump or swelling in your neck</strong>, hoarseness, trouble swallowing, or shortness of breath (thyroid tumor warning).</li>
+          <li><strong>Vision changes</strong> (especially with type 2 diabetes), or a <strong>racing or pounding heartbeat at rest</strong> lasting several minutes.</li>
+          <li><strong>Before any surgery or sedation:</strong> tell every care team you take a GLP-1 medicine — the labels warn food or liquid may get into the lungs during anesthesia.</li>
+          <li><strong>If you have thoughts of harming yourself</strong>, call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline) any time.</li>
+        </ul>
+        <p class="small">You can report side effects to the FDA at 1-800-FDA-1088 (as listed in the Medication Guides).
+          Sources: <a href="#src-wegovy">Wegovy label</a>, <a href="#src-zepbound">Zepbound label</a>, <a href="#src-mp-sema">MedlinePlus semaglutide</a>,
+          <a href="#src-mp-tirz">MedlinePlus tirzepatide</a>, <a href="#src-988">988 Lifeline</a>.</p>
+      </div>
+    </section>
+
+    <main id="main">
+      <div class="tabs" role="tablist" aria-label="GLP-1 Support sections">
+        <button type="button" role="tab" id="tab-log" aria-controls="panel-log" aria-selected="true">1 · Daily log</button>
+        <button type="button" role="tab" id="tab-targets" aria-controls="panel-targets" aria-selected="false" tabindex="-1">2 · Protein, fluids &amp; fiber</button>
+        <button type="button" role="tab" id="tab-strength" aria-controls="panel-strength" aria-selected="false" tabindex="-1">3 · Strength &amp; muscle</button>
+        <button type="button" role="tab" id="tab-plan" aria-controls="panel-plan" aria-selected="false" tabindex="-1">4 · Maintenance / coming off</button>
+        <button type="button" role="tab" id="tab-ins" aria-controls="panel-ins" aria-selected="false" tabindex="-1">5 · Insurance &amp; refills</button>
+        <button type="button" role="tab" id="tab-q" aria-controls="panel-q" aria-selected="false" tabindex="-1">6 · Questions for my prescriber</button>
+      </div>
+
+      <!-- 1. Daily log -->
+      <section class="tabpanel" role="tabpanel" id="panel-log" aria-labelledby="tab-log" tabindex="0">
+        <div class="panel-grid">
+          <form class="card" id="log-form" novalidate>
+            <h2>Add a day to your log</h2>
+            <p class="hint">Write down what happened so you can share it with your care team. This tool never suggests or changes doses.</p>
+            <div class="form-grid">
+              <label>Date <input type="date" id="f-date" required /></label>
+              <label>Medicine name <input type="text" id="f-med" maxlength="60" placeholder="e.g. as written on your label" autocomplete="off" /></label>
+              <label class="span-2">Dose as written on your prescription (optional)
+                <input type="text" id="f-dose" maxlength="60" placeholder="Copy from your pharmacy label" autocomplete="off" />
+                <span class="hint">Record only what your prescriber prescribed. Questions about doses go to your prescriber or pharmacist.</span>
+              </label>
+              <label>Dose today?
+                <select id="f-taken">
+                  <option value="">—</option>
+                  <option>Not a dose day</option>
+                  <option>Taken as prescribed</option>
+                  <option>Missed or late (ask pharmacist/prescriber)</option>
+                </select>
+              </label>
+              <label>Injection site (if any)
+                <select id="f-site">
+                  <option value="">—</option>
+                  <option>Stomach area</option>
+                  <option>Thigh</option>
+                  <option>Upper arm</option>
+                  <option>Tablet / not injected</option>
+                </select>
+              </label>
+            </div>
+
+            <fieldset class="sym-set">
+              <legend>How were these today?</legend>
+              <div class="sym-grid" id="sym-grid"></div>
+            </fieldset>
+
+            <div class="form-grid">
+              <label>Protein (grams, estimate) <input type="number" id="f-protein" min="0" max="400" step="1" inputmode="numeric" /></label>
+              <label>Fluids (cups of 8 oz) <input type="number" id="f-fluids" min="0" max="40" step="0.5" inputmode="decimal" /></label>
+              <label>Fiber (grams, estimate) <input type="number" id="f-fiber" min="0" max="150" step="1" inputmode="numeric" /></label>
+              <label>Activity (minutes) <input type="number" id="f-activity" min="0" max="600" step="1" inputmode="numeric" /></label>
+              <label class="check-inline"><input type="checkbox" id="f-strength" /> Did muscle-strengthening today</label>
+              <label>Weight (optional) <input type="number" id="f-weight" min="0" max="1500" step="0.1" inputmode="decimal" /></label>
+              <label class="span-2">Notes <textarea id="f-notes" rows="3" maxlength="600" placeholder="Meals, sleep, mood, anything to mention at your next visit"></textarea></label>
+              <label class="check-inline span-2 rf-check"><input type="checkbox" id="f-redflag" /> I had a red-flag symptom today (see the list above)</label>
+            </div>
+            <div id="log-alert" class="alert hidden" role="alert"></div>
+            <div class="toolbar">
+              <button type="submit" class="primary">Save this day</button>
+              <button type="reset" class="ghost">Reset form</button>
+            </div>
+          </form>
+
+          <section class="card" aria-labelledby="summary-title">
+            <h2 id="summary-title">Last 7 days at a glance</h2>
+            <div id="summary" class="summary"></div>
+            <h2 class="mt">Saved days</h2>
+            <div class="table-wrap">
+              <table class="smell log-table" id="log-table">
+                <caption class="sr-only">Your saved log entries, newest first</caption>
+                <thead><tr><th scope="col">Date</th><th scope="col">Symptoms</th><th scope="col">Protein</th><th scope="col">Fluids</th><th scope="col">Fiber</th><th scope="col">Strength</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="results-empty" id="log-empty">No days saved yet.</p>
+            <div class="toolbar">
+              <button type="button" id="btn-export">Export log to CSV</button>
+              <button type="button" id="btn-sample" class="ghost">Add 3 sample days</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- 2. Targets -->
+      <section class="tabpanel" role="tabpanel" id="panel-targets" aria-labelledby="tab-targets" tabindex="0" hidden>
+        <div class="panel-grid">
+          <section class="card">
+            <h2>Protein: commonly cited general ranges</h2>
+            <p class="small">These are general reference numbers from published guidance, <strong>not a prescription</strong>.
+              Your needs depend on your health (for example, kidney disease can change protein advice). <strong>Ask your clinician or a registered dietitian</strong> what is right for you.</p>
+            <div class="form-grid">
+              <label>Your weight <input type="number" id="p-weight" min="20" max="1500" step="0.1" inputmode="decimal" /></label>
+              <label>Unit
+                <select id="p-unit"><option value="lb">pounds (lb)</option><option value="kg">kilograms (kg)</option></select>
+              </label>
+            </div>
+            <div id="p-out" class="p-out" aria-live="polite"></div>
+            <p class="small">A 2025 joint advisory from four nutrition and obesity-medicine societies notes: the general adult recommended daily allowance is
+              <strong>0.8 g of protein per kg</strong> of body weight per day; higher targets such as <strong>1.2–1.6 g/kg/day</strong> “have also been proposed during active weight reduction”;
+              and it is <em>unclear</em> whether these should be based on actual, adjusted, or ideal body weight — using actual weight can overestimate needs.
+              <a href="#src-advisory">Source: Mozaffarian et al., Am J Clin Nutr 2025</a>.</p>
+          </section>
+
+          <section class="card">
+            <h2>Today’s checklist</h2>
+            <p class="small">Tick what you did today. It resets each day and is saved only in this browser.</p>
+            <div class="check-grid" id="daily-checklist"></div>
+            <p class="small mt"><strong>Fiber:</strong> MedlinePlus lists <strong>21–38 grams a day</strong> as the general recommendation for adults (most Americans eat about 16 g).
+              The 2025 advisory suggests increasing fiber <em>gradually</em>, and that avoiding fatty or high-fiber foods in the first few days of treatment may ease nausea.
+              <a href="#src-fiber">MedlinePlus fiber</a> · <a href="#src-advisory">advisory</a>.</p>
+            <p class="small"><strong>Fluids:</strong> the Wegovy and Zepbound Medication Guides say it is important to drink fluids to help reduce the chance of dehydration.
+              Ask your clinician how much is right for you — some heart and kidney conditions require fluid limits.
+              <a href="#src-wegovy">Wegovy label</a> · <a href="#src-zepbound">Zepbound label</a>.</p>
+          </section>
+        </div>
+      </section>
+
+      <!-- 3. Strength -->
+      <section class="tabpanel" role="tabpanel" id="panel-strength" aria-labelledby="tab-strength" tabindex="0" hidden>
+        <div class="panel-grid">
+          <section class="card">
+            <h2>This week’s activity</h2>
+            <p class="small">The CDC’s general guideline for adults is at least <strong>150 minutes</strong> of moderate activity a week, plus
+              <strong>muscle-strengthening on 2 or more days</strong> that works all major muscle groups (legs, hips, back, abdomen, chest, shoulders, arms).
+              <a href="#src-cdc">Source: CDC</a>. Ask your clinician before starting or increasing exercise if you have health conditions.</p>
+            <p class="week-label" id="week-label"></p>
+            <div class="week-grid" id="week-grid"></div>
+            <div id="week-sum" class="summary" aria-live="polite"></div>
+            <div class="toolbar"><button type="button" id="btn-week-prev" class="ghost">← Previous week</button><button type="button" id="btn-week-next" class="ghost">Next week →</button></div>
+          </section>
+          <section class="card">
+            <h2>Muscle-preservation checklist</h2>
+            <p class="small">GLP-1 weight loss can include loss of muscle and bone. The 2025 advisory emphasizes preserving muscle and bone through
+              <strong>resistance training and appropriate diet</strong>, and suggests muscle strength and body-composition assessment as part of care.
+              <a href="#src-advisory">Source</a>. These are prompts to discuss — not an exercise prescription.</p>
+            <div class="check-grid" id="strength-checklist"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- 4. Plan -->
+      <section class="tabpanel" role="tabpanel" id="panel-plan" aria-labelledby="tab-plan" tabindex="0" hidden>
+        <div class="panel-grid">
+          <form class="card" id="plan-form" novalidate>
+            <h2>My maintenance / transition plan</h2>
+            <p class="small"><strong>Only your prescriber decides whether and how to change or stop your medicine.</strong>
+              Use this page to write down the plan you agree on together and the habits you want to keep.</p>
+            <div class="form-grid">
+              <label class="span-2">Where I am now
+                <select id="pl-status">
+                  <option value="">—</option>
+                  <option>Just starting</option>
+                  <option>Continuing</option>
+                  <option>Prescriber is changing my dose</option>
+                  <option>Thinking about stopping — want to discuss</option>
+                  <option>Prescriber and I agreed to stop</option>
+                  <option>Already stopped</option>
+                  <option>My coverage is changing or ending</option>
+                </select>
+              </label>
+              <fieldset class="span-2 plain-fieldset">
+                <legend>Reasons I want to talk about (tick any)</legend>
+                <div class="chip-grid" id="pl-reasons"></div>
+              </fieldset>
+              <label>Date of change (if any) <input type="date" id="pl-change" /></label>
+              <label>Next prescriber visit <input type="date" id="pl-visit" /></label>
+              <label class="span-2">What my prescriber and I agreed (in my own words)
+                <textarea id="pl-agreed" rows="3" maxlength="800"></textarea></label>
+              <label class="span-2">Signs we agreed I should call about
+                <textarea id="pl-signals" rows="2" maxlength="600" placeholder="e.g. anything my prescriber asked me to watch for"></textarea></label>
+              <fieldset class="span-2 plain-fieldset">
+                <legend>Habits I want to keep</legend>
+                <div class="chip-grid" id="pl-habits"></div>
+              </fieldset>
+              <label>Dietitian (name / phone) <input type="text" id="pl-rd" maxlength="80" autocomplete="off" /></label>
+              <label>Trainer or physical therapist <input type="text" id="pl-pt" maxlength="80" autocomplete="off" /></label>
+              <label class="span-2">Primary care / prescriber contact <input type="text" id="pl-pcp" maxlength="100" autocomplete="off" /></label>
+            </div>
+            <div class="toolbar">
+              <button type="button" class="primary" id="btn-plan-save">Save plan</button>
+              <button type="button" id="btn-plan-dl">Download plan (.txt)</button>
+              <button type="button" class="ghost" id="btn-plan-print">Print</button>
+            </div>
+          </form>
+          <section class="card">
+            <h2>Check-in dates</h2>
+            <p class="small">If a change date is set, here are 30 / 60 / 90-day check-in reminders to review your log and plan with your care team.</p>
+            <ul id="pl-checkins" class="plain-list"></ul>
+            <h2 class="mt">What the research says (general, not about you)</h2>
+            <ul class="plain-list small">
+              <li>NIDDK: you will probably regain some weight after stopping weight-management medicine; healthy eating habits and more physical activity may help you regain less. <a href="#src-niddk">NIDDK</a></li>
+              <li>STEP 1 trial extension: one year after stopping semaglutide 2.4 mg and the trial’s lifestyle program, participants regained about two-thirds of their prior weight loss on average. <a href="#src-step1">Wilding et al., 2022</a></li>
+              <li>SURMOUNT-4 trial: people switched from tirzepatide to placebo regained substantial weight, while those who continued maintained their loss. <a href="#src-surmount4">Aronne et al., JAMA 2024</a></li>
+              <li>The 2025 advisory notes individual responses vary widely, and that nutrition priorities after stopping still need more study. <a href="#src-advisory">Advisory</a></li>
+            </ul>
+          </section>
+        </div>
+      </section>
+
+      <!-- 5. Insurance -->
+      <section class="tabpanel" role="tabpanel" id="panel-ins" aria-labelledby="tab-ins" tabindex="0" hidden>
+        <div class="panel-grid">
+          <section class="card">
+            <h2>Questions to ask your health plan, pharmacy, or benefits team</h2>
+            <p class="small"><strong>Prior authorization</strong> means approval from a health plan that may be required before you fill a prescription for it to be covered
+              (<a href="#src-pa">HealthCare.gov</a>). NIDDK notes that some, but not all, plans cover these medicines — contact your plan to find out (<a href="#src-niddk">NIDDK</a>).
+              This is a checklist, not insurance advice.</p>
+            <div class="check-grid" id="ins-checklist"></div>
+          </section>
+          <section class="card">
+            <h2>My coverage &amp; refill details</h2>
+            <form id="ins-form" novalidate>
+              <div class="form-grid">
+                <label>Prior-auth reference # <input type="text" id="in-pa" maxlength="60" autocomplete="off" /></label>
+                <label>Prior-auth expires <input type="date" id="in-pa-exp" /></label>
+                <label>Next refill date <input type="date" id="in-refill" /></label>
+                <label>Plan-year / renewal date <input type="date" id="in-renew" /></label>
+                <label>Pharmacy (name / phone) <input type="text" id="in-pharm" maxlength="80" autocomplete="off" /></label>
+                <label>Health plan phone <input type="text" id="in-plan" maxlength="60" autocomplete="off" /></label>
+                <label class="span-2">Notes (who I spoke with, dates, what they said)
+                  <textarea id="in-notes" rows="3" maxlength="800"></textarea></label>
+              </div>
+              <div id="ins-reminders" class="summary" aria-live="polite"></div>
+              <div class="toolbar"><button type="button" class="primary" id="btn-ins-save">Save details</button></div>
+            </form>
+            <div class="alert alert-info mt">
+              <strong>Stay safe:</strong> the FDA recommends getting a prescription from your doctor and filling it at a
+              <strong>state-licensed pharmacy</strong>. It warns about unapproved, counterfeit, and “for research purposes only” versions, and red flags such as sellers
+              that don’t require a prescription, prices that seem too good to be true, or medicine that looks different from what you received before.
+              <a href="#src-fda-unapproved">FDA</a>. Talk to your prescriber before switching products.
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- 6. Questions -->
+      <section class="tabpanel" role="tabpanel" id="panel-q" aria-labelledby="tab-q" tabindex="0" hidden>
+        <div class="panel-grid">
+          <section class="card">
+            <h2>Pick what you want to talk about</h2>
+            <div class="chip-grid" id="q-topics"></div>
+            <label class="check-inline mt"><input type="checkbox" id="q-include-log" checked /> Add a short summary of my last 14 days from the log</label>
+            <div class="toolbar">
+              <button type="button" class="primary" id="btn-q-gen">Make my question list</button>
+            </div>
+          </section>
+          <section class="card">
+            <h2>My questions</h2>
+            <div id="q-out" class="q-out" aria-live="polite"><p class="results-empty">Choose topics and select “Make my question list”.</p></div>
+            <div class="toolbar">
+              <button type="button" id="btn-q-copy">Copy</button>
+              <button type="button" id="btn-q-dl">Download (.txt)</button>
+              <button type="button" class="ghost" id="btn-q-print">Print</button>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <section class="section" aria-labelledby="privacy-title">
+      <h2 id="privacy-title">Your data stays with you</h2>
+      <div class="card">
+        <p class="small">Everything you type is saved only in this browser’s local storage on this device. Nothing is uploaded, there is no account,
+          no analytics, and this page is set to block network requests. Anyone who uses this browser profile could see it — use
+          <strong>Clear my data</strong> on a shared device.</p>
+        <div class="toolbar">
+          <button type="button" id="btn-export-all">Export everything (CSV)</button>
+          <button type="button" class="danger" id="btn-clear">Clear my data</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sources" aria-labelledby="src-title">
+      <h2 id="src-title">Sources</h2>
+      <div class="card">
+        <ol class="sources">
+          <li id="src-wegovy">Wegovy (semaglutide) prescribing information and Medication Guide, via DailyMed (U.S. National Library of Medicine).
+            <a href="https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ee06186f-2aa3-4990-a760-757579d8f77b" rel="noopener noreferrer">dailymed.nlm.nih.gov</a></li>
+          <li id="src-zepbound">Zepbound (tirzepatide) prescribing information and Medication Guide, via DailyMed.
+            <a href="https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=487cd7e7-434c-4925-99fa-aa80b1cc776b" rel="noopener noreferrer">dailymed.nlm.nih.gov</a></li>
+          <li id="src-mp-sema">MedlinePlus: Semaglutide Injection. <a href="https://medlineplus.gov/druginfo/meds/a618008.html" rel="noopener noreferrer">medlineplus.gov</a></li>
+          <li id="src-mp-tirz">MedlinePlus: Tirzepatide Injection. <a href="https://medlineplus.gov/druginfo/meds/a622044.html" rel="noopener noreferrer">medlineplus.gov</a></li>
+          <li id="src-fda-unapproved">U.S. FDA: FDA’s Concerns with Unapproved GLP-1 Drugs Used for Weight Loss.
+            <a href="https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fdas-concerns-unapproved-glp-1-drugs-used-weight-loss" rel="noopener noreferrer">fda.gov</a></li>
+          <li id="src-niddk">NIDDK (NIH): Prescription Medications to Treat Overweight &amp; Obesity.
+            <a href="https://www.niddk.nih.gov/health-information/weight-management/prescription-medications-treat-overweight-obesity" rel="noopener noreferrer">niddk.nih.gov</a></li>
+          <li id="src-cdc">CDC: Adult Activity — An Overview. <a href="https://www.cdc.gov/physical-activity-basics/guidelines/adults.html" rel="noopener noreferrer">cdc.gov</a></li>
+          <li id="src-advisory">Mozaffarian D, et al. Nutritional priorities to support GLP-1 therapy for obesity: a joint Advisory from the American College of Lifestyle Medicine,
+            the American Society for Nutrition, the Obesity Medicine Association, and The Obesity Society. <em>Am J Clin Nutr</em>. 2025;122(1):344–367 (corrigendum published 2026).
+            <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12612741/" rel="noopener noreferrer">Full text (PMC)</a> ·
+            <a href="https://doi.org/10.1016/j.ajcnut.2025.04.023" rel="noopener noreferrer">doi</a></li>
+          <li id="src-fiber">MedlinePlus: Fiber. <a href="https://medlineplus.gov/ency/article/002470.htm" rel="noopener noreferrer">medlineplus.gov</a></li>
+          <li id="src-step1">Wilding JPH, et al. Weight regain and cardiometabolic effects after withdrawal of semaglutide: The STEP 1 trial extension. <em>Diabetes Obes Metab</em>. 2022.
+            <a href="https://pubmed.ncbi.nlm.nih.gov/35441470/" rel="noopener noreferrer">PubMed 35441470</a></li>
+          <li id="src-surmount4">Aronne LJ, et al. Continued Treatment With Tirzepatide for Maintenance of Weight Reduction in Adults With Obesity: The SURMOUNT-4 Randomized Clinical Trial. <em>JAMA</em>. 2024.
+            <a href="https://pubmed.ncbi.nlm.nih.gov/38078870/" rel="noopener noreferrer">PubMed 38078870</a></li>
+          <li id="src-pa">HealthCare.gov glossary: Prior authorization. <a href="https://www.healthcare.gov/glossary/prior-authorization/" rel="noopener noreferrer">healthcare.gov</a></li>
+          <li id="src-988">988 Suicide &amp; Crisis Lifeline. <a href="https://988lifeline.org/" rel="noopener noreferrer">988lifeline.org</a></li>
+        </ol>
+        <p class="small">Sources checked September 2026. Guidance changes — your prescriber and your product’s current Medication Guide come first.</p>
+      </div>
+    </section>
+
+    <aside class="notice notice-medical" role="note" aria-labelledby="bottom-notice-title">
+      <h2 id="bottom-notice-title">Reminder: educational and organizing tool only</h2>
+      <p>GLP-1 Support does not diagnose, does not suggest doses, and does not recommend starting, stopping, or changing medicine.
+        It does not replace your prescriber, pharmacist, or dietitian. It never points to places to get medicine.
+        For severe symptoms, <strong>call 911</strong> or seek care right away (<a href="#red-flags">red-flag list</a>).
+        For thoughts of self-harm, call or text <strong>988</strong>.</p>
+    </aside>
+
+    <footer class="site-footer">
+      <div>Built by <strong class="text-strong">Arup Kumar Banerjee · Little Elm, Texas</strong> · Arup Banerjee Labs · free, no paid tier</div>
+      <div class="footer-disclaimer">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
+    </footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

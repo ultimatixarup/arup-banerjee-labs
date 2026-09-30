@@ -5,8 +5,24 @@ Free-forever, client-side scorecards:
 1. `agent-health-checker/` — AI Agent Health Checker (SCORECARD-SPEC, 8 checks)
 2. `cloud-bill-smell/` — Cloud Bill Smell Detector (user-owned CSV/JSON only)
 3. `observability-gap-finder/` — Observability Gap Finder
+4. `glp1-support/` — GLP-1 Support (free, private organizer; not medical advice)
 
 Hub: `index.html`
+
+## GLP-1 Support (`glp1-support/`)
+
+A free, browser-only organizer for people on, changing, or coming off GLP-1 medicines (Wegovy, Ozempic, Zepbound, Mounjaro and similar).
+Educational/organizing tool only — it does not diagnose, suggest doses, or recommend medication changes, and never points to sources of medication.
+
+- Daily symptom / side-effect log (dose field is "as written on your prescription" only), red-flag alert, 7-day summary, CSV export
+- Protein / fluids / fiber checklist with commonly cited general ranges (linked sources, "ask your clinician")
+- Strength & muscle-preservation checklist + weekly activity tracker (CDC general guideline)
+- Maintenance / coming-off planner with 30/60/90-day check-ins (download as .txt)
+- Insurance, prior-auth & refill question checklist + reminders
+- "Questions for my prescriber" generator (copy / download / print)
+
+Privacy: localStorage only (`abl_glp1_*` keys), "Clear my data" button, export-to-CSV, no analytics, no network calls
+(a Content-Security-Policy with `connect-src 'none'` enforces this). Sources (FDA, DailyMed, MedlinePlus, NIDDK, CDC, peer-reviewed) are listed on the page.
 
 ## Open locally
 

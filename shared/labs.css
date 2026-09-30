@@ -150,7 +150,7 @@ button.ghost { background: transparent; }
   padding: .65rem 1rem; border-radius: 999px; font-size: .85rem; transition: transform .25s ease; z-index: 50;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
-.hub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
 @media (max-width: 800px) { .hub-grid { grid-template-columns: 1fr; } }
 .hub-card h3 { margin: 0 0 .4rem; font-size: 1.05rem; }
 .hub-card p { margin: 0 0 .85rem; color: var(--muted); font-size: .9rem; }
