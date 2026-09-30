@@ -38,17 +38,17 @@
     <section class="hub-grid" style="margin-bottom:2rem">
       <article class="card hub-card">
         <h3>AI Agent Health Checker</h3>
-        <p>Paste LangGraph / agent JSON or YAML. Score retries, timeouts, tracing, secret smells, injection sinks, tool auth, evals, LLM SPOF.</p>
+        <p>Paste an agent config, system prompt or chat transcript. Engineering checks (retries, timeouts, tracing, secrets, injection sinks, tool auth, evals, LLM fallback) plus customer-safety red flags: made-up prices, missing handoffs, dosing advice, leaked notes, bots posing as people. Heuristic checker, not a security audit.</p>
         <a class="open" href="agent-health-checker/index.html">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Cloud Bill Smell Detector</h3>
-        <p>Paste your AWS/GCP/Azure cost CSV or JSON export. Heuristic smells for egress, NAT, idle-ish lines, metrics creep. No cloud login.</p>
+        <p>Paste your AWS/GCP/Azure cost CSV or JSON export. Heuristic smells for egress, NAT, idle-ish lines, metrics creep. No cloud login. Heuristic checker, not a security audit.</p>
         <a class="open" href="cloud-bill-smell/index.html">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Observability Gap Finder</h3>
-        <p>Paste a stack description or tick what you run. Gaps across OTel, Langfuse, Prometheus, Splunk + starter snippets.</p>
+        <p>Paste a stack description or tick what you run. Gaps across OTel, Langfuse, Prometheus, Splunk + starter snippets. Heuristic checker, not a security audit.</p>
         <a class="open" href="observability-gap-finder/index.html">Open tool →</a>
       </article>
       <article class="card hub-card">
@@ -56,6 +56,16 @@
         <p>For people on or coming off Wegovy, Ozempic, Zepbound, Mounjaro and similar: symptom log, protein/fluids/fiber checklist, strength tracker, maintenance planner, insurance &amp; refill checklist, questions for your prescriber. Not medical advice; data stays in your browser.</p>
         <a class="open" href="glp1-support/">Open tool →</a>
       </article>
+    </section>
+
+    <section class="section">
+      <div class="card">
+        <h2 style="margin-top:0">Case study: testing a customer-service chatbot (fictional business)</h2>
+        <p style="color:var(--muted);margin:0 0 .75rem;font-size:.92rem">
+          A controlled local test: a scripted bot for a made-up dental office, 20 risky customer messages, and what the Agent Health Checker caught and missed before and after I fixed it.
+        </p>
+        <a class="open" href="case-study/">Read the case study →</a>
+      </div>
     </section>
 
     <section class="section" id="why" aria-labelledby="why-title">

@@ -1,5 +1,5 @@
 # Sanitized DEMO observability snippet for Arup Banerjee Labs — Observability Gap Finder
-# Fictional. Safe for demos. Intentional gaps: missing SLIs, no tracing, high-cardinality risk.
+# Fictional. Safe for demos. Comments below are notes for humans; the checker ignores # comments and only matches keywords (it does not evaluate SLIs or metric cardinality).
 
 apiVersion: labs.demo/v1
 kind: ServiceObservabilityInventory
@@ -63,7 +63,7 @@ services:
       - name: queue-depth
         expr: queue_depth > 10000
 
-# Global gaps intentional for demo scorecard:
+# Global notes for humans (not scored by the checker):
 # - no organization-wide SLO objects
 # - no cardinality guards / metric relabel drop rules
 # - no synthetic checks

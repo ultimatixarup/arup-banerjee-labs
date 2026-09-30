@@ -2,10 +2,11 @@
 
 Free-forever, client-side scorecards:
 
-1. `agent-health-checker/` — AI Agent Health Checker (SCORECARD-SPEC, 8 checks)
+1. `agent-health-checker/` — AI Agent Health Checker: config / prompt mode (8 engineering checks + 9 customer-safety checks) and chat-transcript mode (9 checks). Heuristic keyword checker, not a security audit.
 2. `cloud-bill-smell/` — Cloud Bill Smell Detector (user-owned CSV/JSON only)
 3. `observability-gap-finder/` — Observability Gap Finder
 4. `glp1-support/` — GLP-1 Support (free, private organizer; not medical advice)
+5. `case-study/` — Controlled local test of a scripted chatbot for a fictional business (Example Family Dental); not a real customer
 
 Hub: `index.html`
 

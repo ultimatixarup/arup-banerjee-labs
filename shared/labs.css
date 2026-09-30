@@ -194,3 +194,38 @@ ol.howto { list-style: none; margin: 0; padding: 0; }
 .why-line strong { color: var(--text); }
 .jump-links { font-size: .88rem; color: var(--muted); margin: -.5rem 0 1.25rem; }
 .howto .card p strong { color: var(--text); }
+
+/* Heuristic label shown on every dev tool page */
+.heuristic-label {
+  font-size: .9rem; color: var(--muted); background: rgba(245,197,66,.08);
+  border: 1px solid rgba(245,197,66,.35); border-radius: 10px; padding: .55rem .75rem; margin: .75rem 0;
+}
+.heuristic-label strong { color: var(--warn); }
+/* Agent Health Checker: grouped results, evidence, mode select, red-team list */
+.check-group { font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 1rem 0 .4rem; }
+.check-list .check-group:first-child { margin-top: .25rem; }
+.evidence { grid-column: 1 / -1; font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+.evidence summary { cursor: pointer; color: var(--accent); }
+.evidence ul { margin: .35rem 0 0 1.1rem; padding: 0; }
+.evidence li { margin: .15rem 0; word-break: break-word; }
+select.input.mode-select {
+  width: 100%; background: var(--bg-elev); color: var(--text); border: 1px solid var(--border);
+  border-radius: 10px; padding: .5rem .6rem; font: inherit; margin-bottom: .75rem;
+}
+textarea.input.kb-input { min-height: 90px; }
+.check-names { margin: 0 0 .5rem 1.1rem; padding: 0; color: var(--muted); font-size: .9rem; }
+.check-names li { margin: .15rem 0; }
+.redteam-list { margin: 0 0 .75rem 1.2rem; padding: 0; font-size: .9rem; }
+.redteam-list li { margin: .45rem 0; }
+.redteam-list .hint { margin: .1rem 0 0; font-size: .82rem; }
+/* Case study page */
+.case-body { max-width: 760px; }
+.case-body p, .case-body li { color: var(--text); line-height: 1.6; }
+.case-body h2 { margin-top: 2rem; }
+.case-body figure { margin: 1rem 0; }
+.case-body figure img { width: 100%; max-width: 440px; display: block; border: 1px solid var(--border); border-radius: 10px; }
+.case-body figcaption { font-size: .82rem; color: var(--muted); margin-top: .35rem; }
+.case-body table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: .75rem 0; }
+.case-body th, .case-body td { border: 1px solid var(--border); padding: .4rem .5rem; text-align: left; vertical-align: top; }
+.case-body th { background: var(--bg-elev); }
+.fictional-banner { border: 1px solid rgba(91,140,255,.45); background: rgba(91,140,255,.08); border-radius: 10px; padding: .6rem .8rem; font-size: .92rem; }

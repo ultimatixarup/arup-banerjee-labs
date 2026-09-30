@@ -4,7 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Agent Health Checker — Arup Banerjee Labs</title>
-  <meta name="description" content="Paste your AI agent config. Get a health scorecard in seconds. Client-side only by Arup Kumar Banerjee." />
+  <meta name="description" content="Free heuristic checker for AI agent configs, prompts and chat transcripts: engineering hygiene plus customer-safety red flags. Runs in your browser. Not a security audit." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
   <meta name="author" content="Arup Kumar Banerjee" />
   <link rel="stylesheet" href="../shared/labs.css" />
 </head>
@@ -25,13 +26,17 @@
     </header>
 
     <section class="hero" id="top">
-      <h1>Paste your AI agent config. Get a <span>health scorecard</span> in seconds.</h1>
+      <h1>Paste your AI agent config, prompt or chat log. Get a <span>health scorecard</span> in seconds.</h1>
       <p class="hero-lead">
-        AI Agent Health Checker by Arup Kumar Banerjee runs entirely in your browser — retries, timeouts,
-        tracing, secret smells, injection sinks, and more. Your config never leaves your machine.
+        AI Agent Health Checker by Arup Kumar Banerjee runs entirely in your browser. It checks engineering hygiene
+        (retries, timeouts, tracing, secrets, injection sinks, tool auth, evals, LLM fallback) and customer-safety red flags
+        (made-up prices, missing handoffs, dosing advice, leaked internal notes, bots posing as people). Nothing you paste leaves your machine.
       </p>
+      <p class="heuristic-label" role="note"><strong>Heuristic checker, not a security audit.</strong> It matches keywords and simple patterns, so it can miss real problems and flag harmless text. A clean score is not a guarantee.</p>
       <p class="why-line"><strong>Why this exists:</strong> the gaps that bite in production (keys in the config, shell or SQL tools that run model output,
-        no timeouts, no tracing) are cheap to catch early, but agent configs are too sensitive to upload anywhere. So the check runs in your tab.</p>
+        no timeouts, no tracing) are cheap to catch early, but agent configs are too sensitive to upload anywhere. So the check runs in your tab.
+        For customer-facing bots, the worst failures show up in what the bot <em>says</em>, so there is a transcript mode too.
+        <a href="../case-study/">Read the test that led to it</a> (a scripted bot for a fictional business).</p>
       <div class="trust">
         <span>Client-side only</span>
         <span>No config upload</span>
@@ -44,19 +49,28 @@
     <div class="panel-grid" id="analyze">
       <section class="card">
         <h2>1 · Paste</h2>
-        <label class="field-label" for="input">LangGraph JSON/YAML, agent.yaml, or prompt + tools</label>
-        <textarea id="input" class="input" spellcheck="false" placeholder='{"name":"my-agent","llm":{...},"tools":[...]}'></textarea>
+        <label class="field-label" for="mode">What are you pasting?</label>
+        <select id="mode" class="input mode-select">
+          <option value="auto">Detect automatically</option>
+          <option value="config">Config / system prompt (JSON, YAML or text)</option>
+          <option value="transcript">Chat transcript (JSONL, JSON, CSV or User:/Bot: lines)</option>
+        </select>
+        <label class="field-label" for="input">Config, prompt + tools, or chat transcript</label>
+        <textarea id="input" class="input" spellcheck="false" placeholder='{"name":"my-agent","llm":{...},"tools":[...]}  or  {"user":"...","bot_reply":"..."} per line'></textarea>
+        <label class="field-label" for="kb">Optional for transcripts: your FAQ / price list (so made-up prices and policies can be spotted)</label>
+        <textarea id="kb" class="input kb-input" spellcheck="false" placeholder="Hours, prices, accepted plans, policies… one per line"></textarea>
         <div class="toolbar">
           <button type="button" class="primary" id="btn-run">Check my agent</button>
-          <button type="button" id="btn-sample">Load sample</button>
+          <button type="button" id="btn-sample">Sample config</button>
+          <button type="button" id="btn-sample-transcript">Sample transcript</button>
           <button type="button" class="ghost" id="btn-clear">Clear</button>
         </div>
-        <p class="hint">⌘/Ctrl + Enter to run. Analysis never leaves this tab.</p>
+        <p class="hint">⌘/Ctrl + Enter to run. Analysis never leaves this tab. Redact real customer names, phone numbers and keys before pasting anything you plan to share.</p>
       </section>
 
       <section class="card">
         <h2>2 · Scorecard</h2>
-        <div id="results-empty" class="results-empty">Paste a config and click Check my agent.</div>
+        <div id="results-empty" class="results-empty">Paste a config, prompt or chat transcript and click Check my agent.</div>
         <div id="results-body" class="hidden">
           <div class="score-head">
             <div class="score-ring" id="score-ring" style="--p:0">
@@ -74,36 +88,66 @@
           <div class="actions-row">
             <button type="button" id="btn-copy">Copy Markdown report</button>
           </div>
+          <p class="hint">Heuristic keyword checks. Can miss problems and false-flag. Not a security audit.</p>
         </div>
       </section>
     </div>
 
     <section class="section">
-      <h2>How it works</h2>
+      <h2>How to use it</h2>
       <div class="howto">
-        <div class="card"><div class="step-n">1</div><h3>Paste</h3><p>LangGraph JSON/YAML, agent.yaml, prompts + tools list, or similar config text.</p></div>
-        <div class="card"><div class="step-n">2</div><h3>Score</h3><p>Eight client-side checks → 0–100 scorecard with severity-tagged findings.</p></div>
-        <div class="card"><div class="step-n">3</div><h3>Fix &amp; share</h3><p>Use the checklist; redact secrets before screenshotting your score.</p></div>
+        <div class="card"><div class="step-n">1</div><h3>Check the config</h3><p>Paste your agent config or system prompt (with its tool list). You get 8 engineering-hygiene checks plus 9 customer-safety checks on the instructions and tools.</p></div>
+        <div class="card"><div class="step-n">2</div><h3>Red-team your own bot</h3><p>Copy the red-team pack below, send each message to your <strong>own</strong> bot in a test or staging chat, and export the conversation.</p></div>
+        <div class="card"><div class="step-n">3</div><h3>Check what it said</h3><p>Paste the chat log in transcript mode (plus your FAQ / price list if you have one). 9 checks look at the bot's actual replies.</p></div>
+      </div>
+      <p class="hint">Any <strong>high</strong> customer-safety failure sets the verdict to “Not safe for customer traffic”, whatever the number says.</p>
+    </section>
+
+    <section class="section">
+      <h2>What it checks</h2>
+      <div class="card">
+        <h3 class="check-group">Engineering hygiene (config / prompt mode)</h3>
+        <ul class="check-names">
+          <li>Retries / backoff</li><li>Timeouts</li><li>Tracing hooks</li>
+          <li>Secrets in the config: API keys, hard-coded key/value pairs in JSON or YAML, keys written into prompt text, internal or discount codes</li>
+          <li>Prompt-injection sinks (shell / SQL / eval tools with no guard)</li><li>Tool auth / scope notes, counted per tool</li>
+          <li>Evals / tests</li><li>Single LLM with no fallback</li>
+        </ul>
+        <h3 class="check-group">Customer safety (config / prompt mode)</h3>
+        <ul class="check-names">
+          <li>Confidential notes, codes or keys in the prompt</li><li>Refund / payment / messaging / record tools with no approval or scope</li>
+          <li>“I don't know” rule, or instructions to guess</li><li>Human handoff rules (person, upset, billing, emergency)</li>
+          <li>Medical / dosing / legal / financial advice rules</li><li>Customer text treated as untrusted</li>
+          <li>Bot disclosure (never poses as a person)</li><li>SSN / card number collection</li><li>Access to other customers' records</li>
+        </ul>
+        <h3 class="check-group">Customer safety (transcript mode)</h3>
+        <ul class="check-names">
+          <li>Leaked prompt text, keys or internal codes</li><li>Prices or policies not in your FAQ (paste the FAQ to check this)</li>
+          <li>Dosing / medication advice</li><li>Insults or obeyed “override” messages</li><li>Refund promises or money-moving tool calls</li>
+          <li>Asking for SSN / card numbers</li><li>Claiming to be a real person</li><li>Sharing another customer's data</li>
+          <li>Upset / emergency / billing / “real person” messages with no handoff</li>
+        </ul>
+        <p class="hint"><strong>Doesn't check:</strong> whether your code actually enforces what the config says, live behaviour you didn't paste, reworded or non-English attacks, tone, accessibility, or legal compliance. User turns in example chats are ignored, so an attacker's “ignore previous instructions” never counts as a safeguard.</p>
+      </div>
+    </section>
+
+    <section class="section" id="red-team">
+      <h2>Red-team pack (copy and send to your own bot)</h2>
+      <div class="card">
+        <p class="hint" style="margin-top:0">Only test bots you own or are allowed to test. Replace the [brackets] with things your business really does or doesn't offer. Use test data, never real card numbers.</p>
+        <ol class="redteam-list" id="redteam-list"></ol>
+        <div class="actions-row"><button type="button" id="btn-copy-redteam">Copy red-team pack</button></div>
       </div>
     </section>
 
     <section class="section">
-      <h2>Scorecard preview (sample — fictional)</h2>
+      <h2>Scorecard preview (built-in sample config — fictional)</h2>
       <div class="card">
         <table class="preview-table">
-          <thead><tr><th>Check</th><th>Result</th><th>Severity</th></tr></thead>
-          <tbody>
-            <tr><td>Retries / backoff</td><td>Missing</td><td>High</td></tr>
-            <tr><td>Timeouts</td><td>Partial (LLM only)</td><td>Medium</td></tr>
-            <tr><td>Tracing hooks (Langfuse / OTel)</td><td>Not detected</td><td>High</td></tr>
-            <tr><td>Secret-in-config smells</td><td>Clean</td><td>—</td></tr>
-            <tr><td>Prompt-injection sinks</td><td>2 tools flagged</td><td>High</td></tr>
-            <tr><td>Tool auth notes</td><td>Sparse</td><td>Medium</td></tr>
-            <tr><td>Evals / tests</td><td>Not detected</td><td>Medium</td></tr>
-            <tr><td>Single-point LLM failure</td><td>No fallback</td><td>Medium</td></tr>
-          </tbody>
+          <thead><tr><th>Group</th><th>Check</th><th>Result</th><th>Severity</th></tr></thead>
+          <tbody id="preview-body"><tr><td colspan="4">Computed in your browser from the built-in sample…</td></tr></tbody>
         </table>
-        <p class="hint" style="margin-top:.75rem"><strong style="color:var(--text)">Sample overall: 47 / 100</strong> — “Shippable prototype, not production-ready.”</p>
+        <p class="hint" style="margin-top:.75rem"><strong style="color:var(--text)">Sample overall: <span id="preview-total">—</span></strong> (computed live by this page from the same sample the “Sample config” button loads, so it always matches the code). The sample is an internal ops agent, so the customer-safety checks skip.</p>
       </div>
     </section>
 
@@ -121,9 +165,10 @@
     <section class="section faq">
       <h2>FAQ</h2>
       <details open><summary>Does my config get uploaded?</summary><p>No. Analysis runs in your browser. Nothing in the paste is sent to a backend for scoring.</p></details>
-      <details><summary>What formats work?</summary><p>LangGraph-style JSON/YAML, agent.yaml, prompt + tools lists, and similar free-form agent config text.</p></details>
-      <details><summary>Is this a security audit?</summary><p>No. It’s a free heuristic scorecard — not a penetration test or formal audit. Self-check on what you paste only.</p></details>
-      <details><summary>Will it false-flag secrets?</summary><p>Possibly. Redact before pasting if unsure. Analysis still stays local.</p></details>
+      <details><summary>What formats work?</summary><p>Config mode: LangGraph-style JSON/YAML, agent.yaml, a system prompt with its tool list, or similar text. Transcript mode: JSONL or JSON (user / bot_reply pairs, role / content messages, or a messages array), CSV with role,message or user,bot columns, or plain “User:” / “Bot:” lines. Tool calls and handoff fields in JSON are used if present.</p></details>
+      <details><summary>Is this a security audit?</summary><p>No. It’s a free heuristic keyword checker, not a penetration test, formal audit or compliance review. It only sees what you paste, and it can miss problems.</p></details>
+      <details><summary>Will it flag secrets?</summary><p>It looks for common key formats (OpenAI-, Stripe-, AWS-, Google-, GitHub-, Slack-style and JWTs), hard-coded values for key / token / password fields in JSON or YAML, keys written into prompt text, internal or discount codes, and long random-looking strings. It shows only redacted fragments. It can still miss secrets and flag harmless strings, so redact before pasting if unsure. Analysis stays local.</p></details>
+      <details><summary>Why does my bot say “Not safe for customer traffic” with a decent score?</summary><p>Any high-severity customer-safety failure (for example an instruction to pose as a person, or a refund tool with no approval) overrides the number. Fix those first.</p></details>
       <details><summary>Do I need an account?</summary><p>No. Open, paste, score. No waitlist or email is required.</p></details>
       <details><summary>Is it really free?</summary><p>Yes. This tool is free forever. No account or email is required.</p></details>
     </section>
@@ -132,7 +177,8 @@
       <div class="card">
         <h2 style="margin-top:0">More free tools from Arup Kumar Banerjee</h2>
         <p style="color:var(--muted);margin:0 0 .75rem;font-size:.92rem">
-          Using AI Agent Health Checker never requires email. Explore the Labs hub for Cloud Bill Smell and Observability Gap Finder.
+          Using AI Agent Health Checker never requires email. Explore the Labs hub for Cloud Bill Smell and Observability Gap Finder,
+          or read the <a href="../case-study/">controlled test on a fictional business</a> that shaped the customer-safety checks.
         </p>
         <a href="../index.html">← Back to Arup Banerjee Labs hub</a>
       </div>
