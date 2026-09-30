@@ -26,6 +26,7 @@
         (Global SRE · LangGraph / AI agents · Observability · OpenShift).
         Also here: <strong>GLP-1 Support</strong>, a free, private organizer for people on or coming off GLP-1 medicines (educational only — not medical advice).
       </p>
+      <p class="jump-links"><a href="#why">Why this exists</a> · <a href="#how">How to use it</a></p>
       <div class="trust">
         <span>Client-side only</span>
         <span>Free forever</span>
@@ -55,6 +56,30 @@
         <p>For people on or coming off Wegovy, Ozempic, Zepbound, Mounjaro and similar: symptom log, protein/fluids/fiber checklist, strength tracker, maintenance planner, insurance &amp; refill checklist, questions for your prescriber. Not medical advice; data stays in your browser.</p>
         <a class="open" href="glp1-support/">Open tool →</a>
       </article>
+    </section>
+
+    <section class="section" id="why" aria-labelledby="why-title">
+      <h2 id="why-title">Why this exists</h2>
+      <div class="card why-card">
+        <p>What breaks in production is usually boring: an API key left in an agent’s config, a shell or SQL tool that runs whatever the model says
+          (prompt injection is the first entry in the <a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" rel="noopener noreferrer">OWASP Top 10 for LLM apps</a>),
+          tool calls with no timeout, a service failing silently because nothing traces it, and a cloud or AI bill nobody can explain.
+          That last one is growing: in a <a href="https://www.cloudzero.com/press-releases/20260624/" rel="noopener noreferrer">CloudZero survey of 260 finance leaders</a> (June 2026),
+          <strong>87%</strong> said they need to tie AI spend to business outcomes within a year, but only <strong>22%</strong> can today.</p>
+        <p>Checking for these is cheap. The catch is that the files you’d check are full of secrets. As an SRE, I wanted a first pass that never
+          leaves the browser tab, so these tools have no backend. They’re heuristics, not an audit.</p>
+        <p><strong>GLP-1 Support</strong> is for a different gap: most patients get medication instructions, but few get help with everything around them.
+          <a href="glp1-support/#why">Read why it exists</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" id="how" aria-labelledby="how-title">
+      <h2 id="how-title">How to use it</h2>
+      <ol class="howto">
+        <li class="card"><div class="step-n" aria-hidden="true">1</div><h3>Pick a tool</h3><p>Agent config → Agent Health Checker. Cost export → Cloud Bill Smell Detector. Monitoring stack → Observability Gap Finder.</p></li>
+        <li class="card"><div class="step-n" aria-hidden="true">2</div><h3>Paste your own text</h3><p>A config, a cost CSV/JSON you exported yourself, or a short stack description. Or tap “Load sample” to try a fictional one first.</p></li>
+        <li class="card"><div class="step-n" aria-hidden="true">3</div><h3>Fix the high findings first</h3><p>Work down from high severity, then copy the Markdown report. Redact secrets before you share a screenshot.</p></li>
+      </ol>
     </section>
 
     <section class="section">
