@@ -6,7 +6,7 @@
   <title>Case study: testing a fictional dental office's chatbot — Arup Banerjee Labs</title>
   <meta name="description" content="Controlled local test on a fictional business (Example Family Dental) using a scripted bot; not a real customer. What a free, browser-only AI agent checker caught and missed, before and after the fix." />
   <meta name="author" content="Arup Kumar Banerjee" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://*.goatcounter.com; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
   <link rel="stylesheet" href="../shared/labs.css" />
 </head>
 <body>
@@ -120,7 +120,7 @@
 </ul>
 <figure><img src="img/before-old-checker-vulnerable-transcripts.png" alt="Old checker on the unsafe bot's transcripts: 38, &quot;Shippable prototype, not production-ready&quot;" /><figcaption>Old checker on the unsafe bot's transcripts: 38, &quot;Shippable prototype, not production-ready&quot; (fictional test data)</figcaption></figure>
 <h2>What I changed</h2>
-<p>The checker is still free, still runs only in your browser (no uploads, no network calls, no AI model), and is still a <strong>heuristic keyword checker, not a security audit</strong>.</p>
+<p>The checker is still free, still runs only in your browser (no uploads, nothing you paste leaves the tab, no AI model), and is still a <strong>heuristic keyword checker, not a security audit</strong>.</p>
 <ul>
 <li><strong>Fixed the 8 engineering checks.</strong><ul>
 <li>Secret detection now covers:<ul>
@@ -240,8 +240,11 @@
     </main>
     <footer class="site-footer">
       <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Cookieless, anonymous visit counts only (GoatCounter). No personal data.</div>
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>
+  <script src="../shared/labs-config.js"></script>
+  <script src="../shared/labs-counts.js" data-page="case-study"></script>
 </body>
 </html>

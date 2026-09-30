@@ -18,8 +18,9 @@
 2026-08-01,2026-08-31,gcp,demo-gcp,Compute Engine,us-central1,gce-demo-idle,notebook-leftover,N2-standard-4,720,hours,140.00,USD,,,,no labels leftover notebook
 `;
 
-  // No analytics: intentionally a no-op. Nothing is sent anywhere.
-  function track() {}
+  // Anonymous counts only: fixed event names + score range, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets or agent tool names here.
+  function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
 
   function parseCSV(text) {
     const lines = text.trim().split(/\r?\n/).filter(Boolean);
@@ -285,10 +286,10 @@
 
   function run() {
     const text = document.getElementById("input").value;
-    track("analyze_clicked", { input_kind: text.trim().startsWith("{") || text.trim().startsWith("[") ? "json" : "csv" });
+    track("analyze_clicked");
     const r = analyzeText(text);
     render(r);
-    if (!r.error) track("score_bucket", { bucket: r.bucket });
+    if (!r.error) track("score_bucket", r.bucket);
   }
 
   function bind() {
@@ -320,12 +321,11 @@
       const md = ["# Cloud Bill Smell Report", "", "**Score:** " + r.score + " (" + r.bucket + ")", "**Verdict:** " + r.headline, "",
         "## Smells", ""].concat(r.smells.map((s) => "- **" + s.title + "** [" + s.severity + "]: " + s.message + " (" + s.evidence + ")"))
         .concat(["", "_Client-side only. Your export was not uploaded. Not a billing audit._", ""]);
-      try { await navigator.clipboard.writeText(md.join("\n")); toast("Copied"); track("share_clicked", { surface: "copy_link" }); }
+      try { await navigator.clipboard.writeText(md.join("\n")); toast("Copied"); track("copy_clicked", "report"); }
       catch { toast("Clipboard blocked"); }
     };
     let n = 0; try { n = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0; } catch (_) {}
     const el = document.getElementById("local-runs"); if (el) el.textContent = String(n);
-    track("pageview");
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
   window.__ABL_BILL__ = analyzeText;

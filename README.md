@@ -22,8 +22,25 @@ Educational/organizing tool only — it does not diagnose, suggest doses, or rec
 - Insurance, prior-auth & refill question checklist + reminders
 - "Questions for my prescriber" generator (copy / download / print)
 
-Privacy: localStorage only (`abl_glp1_*` keys), "Clear my data" button, export-to-CSV, no analytics, no network calls
+Privacy: localStorage only (`abl_glp1_*` keys), "Clear my data" button, export-to-CSV, no analytics, no email signup, no network calls
 (a Content-Security-Policy with `connect-src 'none'` enforces this). Sources (FDA, DailyMed, MedlinePlus, NIDDK, CDC, peer-reviewed) are listed on the page.
+
+## Usage counts, updates signup and feedback (all optional)
+
+All account values live in one file: **`shared/labs-config.js`**. While a value is still a placeholder
+(`GOATCOUNTER_CODE`, `LIST_FORM_ACTION`, `FEEDBACK_FORM_URL`, `GLP1_FEEDBACK_FORM_URL`) that feature is off.
+
+- **Counts** (`shared/labs-counts.js`, [GoatCounter](https://www.goatcounter.com/), cookieless): hub, case study and the three dev
+  tools only. Sent: the page path, plus fixed event names `<page>/analyze_clicked`, `<page>/score_bucket/0-24|25-49|50-74|75-100`,
+  `<page>/copy_clicked/report|redteam`, and `hub/glp1_link_clicked`. Never sent: pasted text, findings, secrets, agent tool names,
+  page title, referrer, query string. Only on `https://ultimatixarup.github.io`; skipped with Do Not Track / Global Privacy Control.
+- **Get updates** (`shared/labs-forms.js`): optional email form on the hub and the three dev tools, posting to a double-opt-in list
+  (Buttondown). Opens in a new tab; the tools work the same without it.
+- **Share feedback / testimonial**: a link to a separate hosted form. Nothing is published automatically; quotes are hand-approved
+  and only used with the OK-to-quote box ticked.
+- **GLP-1 Support**: no counts, no email signup. Only a plain link to a separate usability form (no health questions).
+
+Test the counting allow-list: `node tests/labs-counts.test.js` (no network; checks that nothing but the fixed strings above can be sent).
 
 ## Report a problem
 

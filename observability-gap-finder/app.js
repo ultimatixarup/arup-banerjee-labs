@@ -41,8 +41,9 @@
     { id: "ck_runbook", dim: "runbooks_alerts", label: "Pages include runbook links for agent failures" }
   ];
 
-  // No analytics: intentionally a no-op. Nothing is sent anywhere.
-  function track() {}
+  // Anonymous counts only: fixed event names + score range, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets or agent tool names here.
+  function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
 
   function analyze(text, checked) {
     // Drop YAML/shell-style # comments first, so notes like "# Missing: Langfuse / OTel hooks" don't count as signals.
@@ -133,10 +134,10 @@
     if (text.trim().length < 5 && !Object.values(checkedMap()).some(Boolean)) {
       return render({ error: "Paste a stack description and/or tick checklist items you already have." });
     }
-    track("analyze_clicked", { input_kind: "text" });
+    track("analyze_clicked");
     const r = analyze(text, checkedMap());
     render(r);
-    track("score_bucket", { bucket: r.bucket });
+    track("score_bucket", r.bucket);
   }
 
   function toast(m) {
@@ -181,14 +182,13 @@
       const lines = ["# Observability Gap Report", "", "**Score:** " + r.score + " (" + r.bucket + ")", r.headline, "", "## Findings"];
       r.findings.forEach((f) => lines.push("- **" + f.title + "** — " + f.status + ": " + f.message));
       lines.push("", "_Arup Banerjee Labs · client-side self-check only_", "");
-      try { await navigator.clipboard.writeText(lines.join("\n")); toast("Copied"); track("share_clicked", { surface: "copy_link" }); }
+      try { await navigator.clipboard.writeText(lines.join("\n")); toast("Copied"); track("copy_clicked", "report"); }
       catch { toast("Clipboard blocked"); }
     };
     // Preload sample text for file:// fallback
     fetch("sample-observability.yaml").then((r) => r.text()).then((t) => { FALLBACK_SAMPLE = t; }).catch(() => {});
     let n = 0; try { n = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0; } catch (_) {}
     const el = document.getElementById("local-runs"); if (el) el.textContent = String(n);
-    track("pageview");
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
   window.__ABL_OBS__ = analyze;

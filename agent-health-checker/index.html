@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI Agent Health Checker — Arup Banerjee Labs</title>
   <meta name="description" content="Free heuristic checker for AI agent configs, prompts and chat transcripts: engineering hygiene plus customer-safety red flags. Runs in your browser. Not a security audit." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.goatcounter.com; connect-src 'none'; form-action https://buttondown.com https://*.buttondown.com; frame-src 'none'; object-src 'none'; base-uri 'none'" />
   <meta name="author" content="Arup Kumar Banerjee" />
   <link rel="stylesheet" href="../shared/labs.css" />
 </head>
@@ -170,7 +170,7 @@
       <details><summary>Is this a security audit?</summary><p>No. It’s a free heuristic keyword checker, not a penetration test, formal audit or compliance review. It only sees what you paste, and it can miss problems.</p></details>
       <details><summary>Will it flag secrets?</summary><p>It looks for common key formats (OpenAI-, Stripe-, AWS-, Google-, GitHub-, Slack-style and JWTs), hard-coded values for key / token / password fields in JSON or YAML, keys written into prompt text, internal or discount codes, and long random-looking strings. It shows only redacted fragments. It can still miss secrets and flag harmless strings, so redact before pasting if unsure. Analysis stays local.</p></details>
       <details><summary>Why does my bot say “Not safe for customer traffic” with a decent score?</summary><p>Any high-severity customer-safety failure (for example an instruction to pose as a person, or a refund tool with no approval) overrides the number. Fix those first.</p></details>
-      <details><summary>Do I need an account?</summary><p>No. Open, paste, score. No waitlist or email is required.</p></details>
+      <details><summary>Do I need an account?</summary><p>No. Open, paste, score. No waitlist or email is required. The “Get updates” signup at the bottom is optional.</p></details>
       <details><summary>Is it really free?</summary><p>Yes. This tool is free forever. No account or email is required.</p></details>
     </section>
 
@@ -185,14 +185,35 @@
       </div>
     </section>
 
+    <section class="section labs-optional" id="labs-optional" aria-labelledby="labs-optional-title" hidden>
+      <div class="card">
+        <h2 id="labs-optional-title">Optional: get updates or share feedback</h2>
+        <form id="labs-signup" method="post" target="_blank" hidden>
+          <label class="field-label" for="labs-signup-email">Email me when Labs tools change. Every tool works without this.</label>
+          <div class="signup-row">
+            <input type="email" id="labs-signup-email" name="email" autocomplete="email" required aria-describedby="labs-signup-note" />
+            <input type="hidden" name="embed" value="1" />
+            <button type="submit" class="primary">Get updates</button>
+          </div>
+          <p class="hint signup-note" id="labs-signup-note">Optional. Used only to send Labs updates; unsubscribe anytime; never sold.
+            You’ll get a confirmation email first, and you’re only added if you click its link. Opens in a new tab, so nothing on this page is lost or sent.</p>
+        </form>
+        <p class="hint" id="labs-feedback" hidden><a href="#" target="_blank" rel="noopener noreferrer">Share feedback / testimonial →</a>
+          Opens a separate form. Please don’t paste configs, bills or secrets. Nothing is published automatically; I only quote you if you tick the OK-to-quote box, and I approve each one by hand.</p>
+      </div>
+    </section>
+
     <footer class="site-footer">
       <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
-      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong> · No analytics or tracking</div>
+      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong> · Cookieless, anonymous visit counts only. What you paste never leaves your browser.</div>
       <div>If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">tell me on GitHub</a>. Please redact secrets before you post.</div>
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>
   <div class="toast" id="toast" role="status"></div>
+  <script src="../shared/labs-config.js"></script>
+  <script src="../shared/labs-counts.js" data-page="agent-health-checker"></script>
+  <script src="../shared/labs-forms.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

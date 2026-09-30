@@ -664,4 +664,13 @@
   $("btn-export-all").addEventListener("click", exportAll);
   $("btn-clear").addEventListener("click", clearAll);
 
+  // Optional feedback link (plain link to a separate form; no request is made from this page).
+  (function () {
+    var url = (window.LABS_CONFIG || {}).GLP1_FEEDBACK_FORM_URL;
+    var p = $("glp1-feedback");
+    if (!p || typeof url !== "string" || !/^https:\/\/[^\s"'<>]+$/.test(url)) return;
+    p.querySelector("a").href = url;
+    p.hidden = false;
+  })();
+
 })();

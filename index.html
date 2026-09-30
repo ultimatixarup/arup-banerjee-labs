@@ -13,7 +13,7 @@
     <header class="site-header">
       <div class="brand">
         <div class="brand-mark">AB</div>
-        <div>Arup Banerjee Labs<span class="brand-sub">Free-forever utilities · browser-only · no signup</span></div>
+        <div>Arup Banerjee Labs<span class="brand-sub">Free-forever utilities · browser-only · no signup needed</span></div>
       </div>
       <div class="badge-privacy">Nothing uploaded · no cloud login</div>
     </header>
@@ -54,7 +54,7 @@
       <article class="card hub-card">
         <h3>GLP-1 Support</h3>
         <p>For people on or coming off Wegovy, Ozempic, Zepbound, Mounjaro and similar: symptom log, protein/fluids/fiber checklist, strength tracker, maintenance planner, insurance &amp; refill checklist, questions for your prescriber. Not medical advice; data stays in your browser.</p>
-        <a class="open" href="glp1-support/">Open tool →</a>
+        <a class="open" href="glp1-support/" data-count="glp1_link_clicked">Open tool →</a>
       </article>
     </section>
 
@@ -79,7 +79,7 @@
         <p>Checking for these is cheap. The catch is that the files you’d check are full of secrets. As an SRE, I wanted a first pass that never
           leaves the browser tab, so these tools have no backend. They’re heuristics, not an audit.</p>
         <p><strong>GLP-1 Support</strong> is for a different gap: most patients get medication instructions, but most aren’t referred to any other support.
-          <a href="glp1-support/#why">Read why it exists</a>.</p>
+          <a href="glp1-support/#why" data-count="glp1_link_clicked">Read why it exists</a>.</p>
       </div>
     </section>
 
@@ -103,12 +103,33 @@
       </div>
     </section>
 
+    <section class="section labs-optional" id="labs-optional" aria-labelledby="labs-optional-title" hidden>
+      <div class="card">
+        <h2 id="labs-optional-title">Optional: get updates or share feedback</h2>
+        <form id="labs-signup" method="post" target="_blank" hidden>
+          <label class="field-label" for="labs-signup-email">Email me when Labs tools change. Every tool works without this.</label>
+          <div class="signup-row">
+            <input type="email" id="labs-signup-email" name="email" autocomplete="email" required aria-describedby="labs-signup-note" />
+            <input type="hidden" name="embed" value="1" />
+            <button type="submit" class="primary">Get updates</button>
+          </div>
+          <p class="hint signup-note" id="labs-signup-note">Optional. Used only to send Labs updates; unsubscribe anytime; never sold.
+            You’ll get a confirmation email first, and you’re only added if you click its link. Opens in a new tab, so nothing on this page is lost or sent.</p>
+        </form>
+        <p class="hint" id="labs-feedback" hidden><a href="#" target="_blank" rel="noopener noreferrer">Share feedback / testimonial →</a>
+          Opens a separate form. Please don’t paste configs, bills or secrets. Nothing is published automatically; I only quote you if you tick the OK-to-quote box, and I approve each one by hand.</p>
+      </div>
+    </section>
+
     <section class="section">
       <h2>Privacy</h2>
       <div class="card">
         <p style="margin:0;color:var(--muted);font-size:.92rem">
           Scoring runs in your browser. Pasted configs and bill exports are not sent to a backend for analysis.
-          No analytics or tracking scripts. Every tool here is free forever.
+          Cookieless, anonymous visit counts only. What you paste never leaves your browser. The hub, the case study and the three dev tools count page visits, and the tools and hub count a few clicks (Analyze, score range, Copy, and the GLP-1 Support link here) with
+          <a href="https://www.goatcounter.com/" rel="noopener noreferrer">GoatCounter</a>: no cookies, no personal data, never your text or findings. Skipped if your browser sends Do Not Track or Global Privacy Control.
+          The optional “Get updates” form sends only your email address to the list provider (Buttondown).
+          GLP-1 Support has no analytics and no signup at all. Every tool here is free forever.
         </p>
         <p style="margin:.75rem 0 0;color:var(--muted);font-size:.92rem">
           If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new/choose" rel="noopener noreferrer">tell me on GitHub</a>.
@@ -123,5 +144,8 @@
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>
+  <script src="shared/labs-config.js"></script>
+  <script src="shared/labs-counts.js" data-page="hub"></script>
+  <script src="shared/labs-forms.js"></script>
 </body>
 </html>

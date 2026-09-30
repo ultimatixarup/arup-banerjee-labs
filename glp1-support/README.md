@@ -4,7 +4,9 @@ Free, browser-only organizer for people on, changing, or coming off GLP-1 medici
 **Not medical advice.** Educational/organizing tool only: no diagnosis, no dosing, no medication-change advice,
 no sources of medication. Talk to your prescriber. Emergencies: call 911.
 
-Files: `index.html`, `styles.css`, `app.js` (no dependencies, no network calls, no analytics).
+Files: `index.html`, `styles.css`, `app.js` (no dependencies, no network calls, no analytics, no email signup).
+It also loads the data-only `../shared/labs-config.js` to read `GLP1_FEEDBACK_FORM_URL`; when set, a plain link to a
+separate usefulness/usability form appears (hidden while it is a placeholder). The page never loads `labs-counts.js`.
 Data: `localStorage` keys prefixed `abl_glp1_`; "Clear my data" removes them; CSV export for the log and everything.
 
 Sources are cited on the page (FDA, DailyMed labels, MedlinePlus, NIDDK, CDC, Mozaffarian et al. 2025 AJCN advisory,
