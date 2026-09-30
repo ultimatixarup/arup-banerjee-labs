@@ -41,9 +41,8 @@
     { id: "ck_runbook", dim: "runbooks_alerts", label: "Pages include runbook links for agent failures" }
   ];
 
-  function track(name, props) {
-    try { if (typeof window.plausible === "function") window.plausible(name, { props: props || {} }); } catch (_) {}
-  }
+  // No analytics: intentionally a no-op. Nothing is sent anywhere.
+  function track() {}
 
   function analyze(text, checked) {
     const raw = String(text || "");

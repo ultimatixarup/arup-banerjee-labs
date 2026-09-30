@@ -133,13 +133,8 @@
     return "10k_plus";
   }
 
-  /** Plausible hooks — metadata only. Domain placeholder until deploy. */
+  /** No analytics: local debug logging only (set window.__ABL_DEBUG__ = true). Nothing is sent anywhere. */
   function track(name, props) {
-    try {
-      if (typeof window.plausible === "function") {
-        window.plausible(name, { props: props || {} });
-      }
-    } catch (_) {}
     if (window.__ABL_DEBUG__) console.debug("[abl]", name, props);
   }
 

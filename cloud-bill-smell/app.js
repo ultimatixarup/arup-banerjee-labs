@@ -18,9 +18,8 @@
 2026-08-01,2026-08-31,gcp,demo-gcp,Compute Engine,us-central1,gce-demo-idle,notebook-leftover,N2-standard-4,720,hours,140.00,USD,,,,no labels leftover notebook
 `;
 
-  function track(name, props) {
-    try { if (typeof window.plausible === "function") window.plausible(name, { props: props || {} }); } catch (_) {}
-  }
+  // No analytics: intentionally a no-op. Nothing is sent anywhere.
+  function track() {}
 
   function parseCSV(text) {
     const lines = text.trim().split(/\r?\n/).filter(Boolean);
