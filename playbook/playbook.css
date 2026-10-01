@@ -414,3 +414,17 @@ button, .btn { max-width: 100%; white-space: normal; text-align: center; }
     scroll-behavior: auto !important;
   }
 }
+
+/* Mission / Vision / Values block. */
+.mvv h2.mvv-punch { font-size: clamp(1.5rem, 3.6vw, 2.1rem); line-height: 1.15; letter-spacing: -.02em; margin: 0 0 .35rem; }
+.mvv-accent { color: var(--accent-2); }
+.mvv-values-title { margin: 1.25rem 0 .6rem; font-size: 1.05rem; }
+.mvv-values {
+  list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+}
+.mvv .prose h3 { margin-top: 0; }
+.mvv-values li { display: flex; flex-direction: column; gap: .3rem; border-left: 3px solid var(--accent-2); min-width: 0; }
+.mvv-values strong { color: var(--text); font-size: 1rem; }
+.mvv-values span { overflow-wrap: anywhere; }
+.mvv-cta h3 { margin-top: 0; }
