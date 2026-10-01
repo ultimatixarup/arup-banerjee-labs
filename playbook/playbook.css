@@ -36,15 +36,36 @@
 /* Links in text must not rely on color alone. */
 a { text-decoration: underline; text-underline-offset: .14em; }
 a:hover { text-decoration: underline; }
-a.open { text-decoration: none; }
-a.open:hover { text-decoration: none; }
-a.open, button.primary {
+/* Same shape as the hub’s .hub-card .open buttons. The blue is a step darker
+   so white text still clears 4.5:1; the hub gradient’s lighter stop does not. */
+a.open,
+button.primary {
   display: inline-block;
-  background: #2451b0;
+  font-weight: 700;
+  font-size: .88rem;
+  line-height: 1.2;
   color: #fff;
-  border-color: #2451b0;
+  background-color: #2f5bb5;
+  background-image: linear-gradient(135deg, #3d6adf, #2f5bb5);
+  border: 1px solid transparent;
+  padding: .55rem .95rem;
+  border-radius: 10px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  max-width: 100%;
+  white-space: normal;
 }
-button.primary { background: #2451b0; }
+a.open:hover,
+button.primary:hover {
+  text-decoration: none;
+  filter: brightness(1.08);
+}
+a.open:focus-visible,
+button.primary:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 3px;
+}
 
 a:focus-visible,
 button:focus-visible,
