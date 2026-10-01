@@ -519,7 +519,7 @@ they can contact you."</code></pre>
           <fieldset>
             <legend>Round</legend>
             <div class="choices">
-              <label class="choice"><input type="radio" name="round" value="1" checked="checked" /> <span>Round 1. Fix the bug. No added twist.</span></label>
+              <label class="choice"><input type="radio" name="round" value="1" checked /> <span>Round 1. Fix the bug. No added twist.</span></label>
               <label class="choice"><input type="radio" name="round" value="2" /> <span>Rematch. Add the twist for your card.</span></label>
             </div>
           </fieldset>
@@ -555,7 +555,7 @@ they can contact you."</code></pre>
             <p>Rank: <strong id="rank-display" class="rank-name rank-eyes">Eyes Closed</strong></p>
             <p>Owner Score: <strong id="owner-display" class="owner-num">0/10</strong></p>
             <p id="rank-detail">Not a win. Zero typing without checking isn’t ownership; it’s hoping.</p>
-            <p id="caught-line" hidden="hidden"></p>
+            <p id="caught-line" hidden></p>
           </div>
           <div class="toolbar">
             <button type="button" id="btn-copy-results">Copy results</button>
@@ -703,14 +703,14 @@ ______________________________________________________________</code></pre>
 
         <h3 id="brief-tool">Brief Card</h3>
         <p>Fill in the five lines and the two checkpoints. Copy brief gives you the text. What you type is saved only on this device until you clear it.</p>
-        <label class="stack" for="brief-intent"><span>Intent</span><textarea id="brief-intent"></textarea></label>
-        <label class="stack" for="brief-context"><span>Context</span><textarea id="brief-context"></textarea></label>
-        <label class="stack" for="brief-constraints"><span>Constraints</span><textarea id="brief-constraints"></textarea></label>
-        <label class="stack" for="brief-done"><span>Done when</span><textarea id="brief-done"></textarea></label>
-        <label class="stack" for="brief-examples"><span>Examples</span><textarea id="brief-examples"></textarea></label>
-        <label class="stack" for="brief-before"><span>Before you change anything</span><textarea id="brief-before"></textarea></label>
+        <label class="stack"><span>Intent</span><textarea id="brief-intent"></textarea></label>
+        <label class="stack"><span>Context</span><textarea id="brief-context"></textarea></label>
+        <label class="stack"><span>Constraints</span><textarea id="brief-constraints"></textarea></label>
+        <label class="stack"><span>Done when</span><textarea id="brief-done"></textarea></label>
+        <label class="stack"><span>Examples</span><textarea id="brief-examples"></textarea></label>
+        <label class="stack"><span>Before you change anything</span><textarea id="brief-before"></textarea></label>
         <p class="hint">Checkpoint: tell me in one sentence what you think is wrong.</p>
-        <label class="stack" for="brief-after"><span>After</span><textarea id="brief-after"></textarea></label>
+        <label class="stack"><span>After</span><textarea id="brief-after"></textarea></label>
         <p class="hint">Checkpoint: list every change you made, and why.</p>
         <div class="toolbar">
           <button type="button" class="primary" id="btn-copy-brief">Copy brief</button>
@@ -719,7 +719,8 @@ ______________________________________________________________</code></pre>
 
         <h3 id="ownership-log">Ownership Log</h3>
         <p>After every delegation that matters, write one line: date, what you asked for, what changed and why, how you checked, and whether you would undo it. Add a row for the next one. Copy as text when you want a copy outside this browser.</p>
-        <div class="table-scroll" tabindex="0" aria-label="Ownership Log. Scroll sideways if the table is wider than the screen.">
+        <section class="table-scroll" tabindex="0" aria-labelledby="log-scroll-title">
+          <h4 id="log-scroll-title" class="sr-only">Ownership Log entries</h4>
           <table class="log-table">
             <caption>Your Ownership Log, saved on this device only</caption>
             <thead>
@@ -743,7 +744,7 @@ ______________________________________________________________</code></pre>
               </tr>
             </tbody>
           </table>
-        </div>
+        </section>
         <div class="toolbar">
           <button type="button" id="btn-add-row">Add a row</button>
           <button type="button" id="btn-copy-log">Copy log as text</button>
@@ -794,6 +795,6 @@ ______________________________________________________________</code></pre>
       <div class="footer-links"><a href="../terms.html">Terms</a> · <a href="../privacy.html">Privacy</a> · <a href="../">Playbook</a> · <a href="../../index.html">Labs hub</a></div>
     </footer>
   </div>
-  <script src="../playbook.js" defer="defer"></script>
+  <script src="../playbook.js" defer></script>
 </body>
 </html>

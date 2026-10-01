@@ -197,14 +197,22 @@ pre {
   border-radius: 10px;
   padding: .75rem .8rem;
 }
-pre code { font-family: inherit; font-size: inherit; color: var(--text); }
+pre code {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 
 .table-scroll {
   display: block;
-  width: 100%;
+  width: 0;
+  min-width: 100%;
   max-width: 100%;
-  min-width: 0;
   overflow-x: auto;
+  position: relative;
   margin: .75rem 0;
   border: 1px solid var(--border);
   border-radius: 10px;
