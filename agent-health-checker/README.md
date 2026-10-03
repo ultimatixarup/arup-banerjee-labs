@@ -1,7 +1,8 @@
 # AI Agent Health Checker — Arup Banerjee Labs
 
-Heuristic keyword checker, not a security audit. Client-side only: no network calls (the page sets
+Heuristic keyword checker, not a security audit. Client-side only: nothing you paste leaves the tab (the page sets
 `connect-src 'none'`), no LLM, no account. It can miss problems and it can flag harmless text.
+The only outside request is an anonymous, cookieless GoatCounter count (see the root README), off until configured.
 
 ## Modes
 

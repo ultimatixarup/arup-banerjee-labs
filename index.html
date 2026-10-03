@@ -13,7 +13,7 @@
     <header class="site-header">
       <div class="brand">
         <div class="brand-mark">AB</div>
-        <div>Arup Banerjee Labs<span class="brand-sub">Free-forever utilities · browser-only · no signup</span></div>
+        <div>Arup Banerjee Labs<span class="brand-sub">Free-forever utilities · browser-only · no signup needed</span></div>
       </div>
       <div class="badge-privacy">Nothing uploaded · no cloud login</div>
     </header>
@@ -39,27 +39,27 @@
       <article class="card hub-card">
         <h3>AI Agent Health Checker</h3>
         <p>Paste an agent config, system prompt or chat transcript. Engineering checks (retries, timeouts, tracing, secrets, injection sinks, tool auth, evals, LLM fallback) plus customer-safety red flags: made-up prices, missing handoffs, dosing advice, leaked notes, bots posing as people. Heuristic checker, not a security audit.</p>
-        <a class="open" href="agent-health-checker/index.html">Open tool →</a>
+        <a class="open" href="agent-health-checker/index.html" data-count="nav_clicked" data-detail="agent-health-checker">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Cloud Bill Smell Detector</h3>
         <p>Paste your AWS/GCP/Azure cost CSV or JSON export. Heuristic smells for egress, NAT, idle-ish lines, metrics creep. No cloud login. Heuristic checker, not a security audit.</p>
-        <a class="open" href="cloud-bill-smell/index.html">Open tool →</a>
+        <a class="open" href="cloud-bill-smell/index.html" data-count="nav_clicked" data-detail="cloud-bill-smell">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Observability Gap Finder</h3>
         <p>Paste a stack description or tick what you run. Gaps across OTel, Langfuse, Prometheus, Splunk + starter snippets. Heuristic checker, not a security audit.</p>
-        <a class="open" href="observability-gap-finder/index.html">Open tool →</a>
+        <a class="open" href="observability-gap-finder/index.html" data-count="nav_clicked" data-detail="observability-gap-finder">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>The Agentic AI Career Playbook</h3>
         <p>A free playbook for anyone who can communicate: people returning to work, including homemakers, career changers, professionals outside software, and developers. Unlearn the “I’ll just do it myself” reflex, write a clear brief, and stay the owner. Module 1 is ready. No signup and nothing to buy.</p>
-        <a class="open" href="playbook/">Open playbook →</a>
+        <a class="open" href="playbook/" data-count="nav_clicked" data-detail="playbook">Open playbook →</a>
       </article>
       <article class="card hub-card">
         <h3>GLP-1 Support</h3>
         <p>For people on or coming off Wegovy, Ozempic, Zepbound, Mounjaro and similar: symptom log, protein/fluids/fiber checklist, strength tracker, maintenance planner, insurance &amp; refill checklist, questions for your prescriber. Not medical advice; data stays in your browser.</p>
-        <a class="open" href="glp1-support/">Open tool →</a>
+        <a class="open" href="glp1-support/" data-count="glp1_link_clicked">Open tool →</a>
       </article>
     </section>
 
@@ -69,7 +69,7 @@
         <p style="color:var(--muted);margin:0 0 .75rem;font-size:.92rem">
           A controlled local test: a scripted bot for a made-up dental office, 20 risky customer messages, and what the Agent Health Checker caught and missed before and after I fixed it.
         </p>
-        <a class="open" href="case-study/">Read the case study →</a>
+        <a class="open" href="case-study/" data-count="nav_clicked" data-detail="case-study">Read the case study →</a>
       </div>
     </section>
 
@@ -84,7 +84,7 @@
         <p>Checking for these is cheap. The catch is that the files you’d check are full of secrets. As an SRE, I wanted a first pass that never
           leaves the browser tab, so these tools have no backend. They’re heuristics, not an audit.</p>
         <p><strong>GLP-1 Support</strong> is for a different gap: most patients get medication instructions, but most aren’t referred to any other support.
-          <a href="glp1-support/#why">Read why it exists</a>.</p>
+          <a href="glp1-support/#why" data-count="glp1_link_clicked">Read why it exists</a>.</p>
       </div>
     </section>
 
@@ -108,12 +108,35 @@
       </div>
     </section>
 
+    <section class="section labs-optional" id="labs-optional" aria-labelledby="labs-optional-title" hidden>
+      <div class="card">
+        <h2 id="labs-optional-title">Optional: get updates or share feedback</h2>
+        <form id="labs-signup" method="post" target="_blank" hidden>
+          <label class="field-label" for="labs-signup-email">Email me when Labs tools change. Every tool works without this.</label>
+          <div class="signup-row">
+            <input type="email" id="labs-signup-email" name="email" autocomplete="email" required aria-describedby="labs-signup-note" />
+            <input type="hidden" name="embed" value="1" />
+            <button type="submit" class="primary">Get updates</button>
+          </div>
+          <p class="hint signup-note" id="labs-signup-note">Optional. Used only to send Labs updates; unsubscribe anytime; never sold.
+            You’ll get a confirmation email first, and you’re only added if you click its link. Opens in a new tab, so nothing on this page is lost or sent.</p>
+        </form>
+        <p class="hint" id="labs-feedback" hidden><a href="#" target="_blank" rel="noopener noreferrer">Share feedback / testimonial →</a>
+          Opens a separate form. Please don’t paste configs, bills or secrets. Nothing is published automatically; I only quote you if you tick the OK-to-quote box, and I approve each one by hand.</p>
+      </div>
+    </section>
+
     <section class="section">
       <h2>Privacy</h2>
       <div class="card">
         <p style="margin:0;color:var(--muted);font-size:.92rem">
           Scoring runs in your browser. Pasted configs and bill exports are not sent to a backend for analysis.
-          No analytics or tracking scripts. Every tool here is free forever.
+          Anonymous, cookieless step counts are collected on this hub, the playbook, the case study, and the three dev tools.
+          They record which page you opened, which section you reached, how far you scrolled, and which buttons you used (for example sample, analyze, copy, or a link to another page).
+          They never include pasted text, findings, secrets, account IDs, names, costs, the page title, or the address you came from. No cookies and no account.
+          Counts use <a href="https://www.goatcounter.com/" rel="noopener noreferrer">GoatCounter</a> and are skipped if your browser sends Do Not Track or Global Privacy Control.
+          The optional “Get updates” form sends only your email address to the list provider (Buttondown).
+          GLP-1 Support has no counts and no signup at all. Every tool here is free forever.
         </p>
         <p style="margin:.75rem 0 0;color:var(--muted);font-size:.92rem">
           If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new/choose" rel="noopener noreferrer">tell me on GitHub</a>.
@@ -128,5 +151,8 @@
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>
+  <script src="shared/labs-config.js"></script>
+  <script src="shared/labs-counts.js" data-page="hub"></script>
+  <script src="shared/labs-forms.js"></script>
 </body>
 </html>

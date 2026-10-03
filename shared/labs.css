@@ -229,3 +229,12 @@ textarea.input.kb-input { min-height: 90px; }
 .case-body th, .case-body td { border: 1px solid var(--border); padding: .4rem .5rem; text-align: left; vertical-align: top; }
 .case-body th { background: var(--bg-elev); }
 .fictional-banner { border: 1px solid rgba(91,140,255,.45); background: rgba(91,140,255,.08); border-radius: 10px; padding: .6rem .8rem; font-size: .92rem; }
+/* Optional updates signup + feedback link (hidden until configured in shared/labs-config.js) */
+.labs-optional .signup-row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.labs-optional input[type="email"] {
+  flex: 1 1 16rem; min-width: 0; background: var(--bg); color: var(--text); border: 1px solid var(--border);
+  border-radius: 10px; padding: .55rem .7rem; font: inherit; font-size: .9rem;
+}
+.labs-optional input[type="email"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,140,255,.2); }
+.labs-optional .signup-note { margin: .5rem 0 0; }
+.labs-optional[hidden], .labs-optional [hidden], .labs-feedback-link[hidden] { display: none !important; }

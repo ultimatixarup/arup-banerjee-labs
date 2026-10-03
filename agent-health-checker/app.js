@@ -1,6 +1,7 @@
 /**
  * AI Agent Health Checker — Arup Banerjee Labs
- * Heuristic keyword checker. Client-side only: no network calls, no LLM, nothing uploaded.
+ * Heuristic keyword checker. Client-side only: no LLM, nothing you paste is uploaded. The only request is an
+ * optional anonymous GoatCounter count (fixed event names + score range) via ../shared/labs-counts.js.
  * It can miss problems and it can false-flag. It is not a security audit.
  *
  * Two modes:
@@ -194,8 +195,16 @@
     if (/^[\s]*[\w"-]+:\s/m.test(t) && !t.startsWith("<")) return "yaml";
     return "text";
   }
-  function pasteLenBucket(n) { return n < 1000 ? "lt1k" : n < 10000 ? "1k_10k" : "10k_plus"; }
-  function track(name, props) { if (window.__ABL_DEBUG__) console.debug("[abl]", name, props); }
+  // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
+  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
+  function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
+  let ownNoted = false;
+  function noteOwn() {
+    if (ownNoted) return;
+    ownNoted = true;
+    track("input_kind", "own");
+  }
 
   function stripComments(text) {
     return text.split(/\r?\n/).map((line) => {
@@ -1022,6 +1031,8 @@
     const lines = [
       "# AI Agent Health Checker Report",
       "",
+      "> " + SHARE_WARNING,
+      "",
       "**Overall:** " + r.score + "/100 (" + r.bucket + ")",
       "**Verdict:** " + r.headline,
       "**Mode:** " + (r.mode === "transcript" ? "Chat transcript" : "Config / prompt") + " (" + r.format + ")" + (r.mode === "transcript" ? (r.kbProvided ? ", FAQ pasted" : ", no FAQ pasted") : ""),
@@ -1105,13 +1116,14 @@
 
   function runAnalyze() {
     const text = $("input").value;
-    track("analyze_clicked", { input_kind: inputKind(text), paste_len_bucket: pasteLenBucket(text.length), mode: currentMode() });
+    if (String(text || "").trim() && text !== FALLBACK_SAMPLE && text !== SAMPLE_TRANSCRIPT) noteOwn();
+    track("analyze_clicked");
     const result = analyze(text, { mode: currentMode(), kb: currentKb() });
     render(result);
-    if (!result.error) track("score_bucket", { bucket: result.bucket, not_safe: result.notSafe });
+    if (!result.error) track("score_bucket", result.bucket);
   }
-  async function copy(text, okMsg) {
-    try { await navigator.clipboard.writeText(text); toast(okMsg); } catch (_) { toast("Clipboard blocked"); }
+  async function copy(text, okMsg, kind) {
+    try { await navigator.clipboard.writeText(text); toast(okMsg); track("copy_clicked", kind); } catch (_) { toast("Clipboard blocked"); }
   }
 
   function bind() {
@@ -1130,23 +1142,26 @@
     $("btn-sample").addEventListener("click", () => {
       $("input").value = FALLBACK_SAMPLE;
       if ($("mode")) $("mode").value = "config";
+      track("input_kind", "sample");
       runAnalyze();
     });
     if ($("btn-sample-transcript")) $("btn-sample-transcript").addEventListener("click", () => {
       $("input").value = SAMPLE_TRANSCRIPT;
       if ($("kb")) $("kb").value = SAMPLE_TRANSCRIPT_KB;
       if ($("mode")) $("mode").value = "transcript";
+      track("input_kind", "sample_transcript");
       runAnalyze();
     });
     $("btn-copy").addEventListener("click", () => {
       const md = reportMarkdown(window.__lastReport);
       if (!md) return toast("Run a check first");
-      copy(md, "Markdown report copied — redact anything else before you post it");
+      copy(md, "Markdown report copied — redact anything else before you post it", "report");
     });
-    if ($("btn-copy-redteam")) $("btn-copy-redteam").addEventListener("click", () => copy(redTeamText(), "Red-team pack copied"));
+    if ($("btn-copy-redteam")) $("btn-copy-redteam").addEventListener("click", () => copy(redTeamText(), "Red-team pack copied", "redteam"));
     $("input").addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") runAnalyze(); });
+    $("input").addEventListener("paste", function () { noteOwn(); });
+    if ($("kb")) $("kb").addEventListener("paste", function () { noteOwn(); });
     loadRuns();
-    track("pageview");
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);

@@ -16,7 +16,7 @@
         <div>Observability Gap Finder<span class="brand-sub">Arup Banerjee Labs · self-check only · no remote scan</span></div>
       </div>
       <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
-        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <a class="hub-link" href="../index.html" data-count="nav_clicked" data-detail="hub">← Labs hub</a>
         <div class="badge-privacy">Paste or checklist · in-browser</div>
       </div>
     </header>
@@ -56,18 +56,41 @@
           <h2 style="font-size:.95rem;margin-top:1rem">Starter snippets (for gaps)</h2>
           <div id="snippets"></div>
           <div class="actions-row"><button type="button" id="btn-copy">Copy Markdown report</button></div>
+          <p class="hint">Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.</p>
           <p class="hint">If a gap looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">tell me on GitHub</a>. Please redact secrets before you post — a short snippet, not a full config.</p>
         </div>
       </section>
     </div>
+    <section class="section labs-optional" id="labs-optional" aria-labelledby="labs-optional-title" hidden>
+      <div class="card">
+        <h2 id="labs-optional-title">Optional: get updates or share feedback</h2>
+        <form id="labs-signup" method="post" target="_blank" hidden>
+          <label class="field-label" for="labs-signup-email">Email me when Labs tools change. Every tool works without this.</label>
+          <div class="signup-row">
+            <input type="email" id="labs-signup-email" name="email" autocomplete="email" required aria-describedby="labs-signup-note" />
+            <input type="hidden" name="embed" value="1" />
+            <button type="submit" class="primary">Get updates</button>
+          </div>
+          <p class="hint signup-note" id="labs-signup-note">Optional. Used only to send Labs updates; unsubscribe anytime; never sold.
+            You’ll get a confirmation email first, and you’re only added if you click its link. Opens in a new tab, so nothing on this page is lost or sent.</p>
+        </form>
+        <p class="hint" id="labs-feedback" hidden><a href="#" target="_blank" rel="noopener noreferrer">Share feedback / testimonial →</a>
+          Opens a separate form. Please don’t paste configs, bills or secrets. Nothing is published automatically; I only quote you if you tick the OK-to-quote box, and I approve each one by hand.</p>
+      </div>
+    </section>
+
     <footer class="site-footer">
       <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
-      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong></div>
+      <div>Also on Labs: <a href="../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">Agent Health Checker</a> · <a href="../cloud-bill-smell/" data-count="nav_clicked" data-detail="cloud-bill-smell">Cloud Bill Smell Detector</a> · <a href="../case-study/" data-count="nav_clicked" data-detail="case-study">Case study</a> · <a href="../playbook/" data-count="nav_clicked" data-detail="playbook">Playbook</a></div>
+      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong> · Anonymous, cookieless step counts only (page, scroll, sample or your own input, analyze, score range, copy). Never your pasted text, findings, account IDs, names, or costs.</div>
       <div>If a gap looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">tell me on GitHub</a>. Please redact secrets before you post.</div>
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>
   <div class="toast" id="toast"></div>
+  <script src="../shared/labs-config.js"></script>
+  <script src="../shared/labs-counts.js" data-page="observability-gap-finder"></script>
+  <script src="../shared/labs-forms.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

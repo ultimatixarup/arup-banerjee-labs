@@ -1,5 +1,6 @@
 /* Hands-Off Challenge, Brief Card, and Ownership Log.
-   Saved only in localStorage. No network calls. */
+   Saved only in localStorage. This file does not send what you type.
+   Anonymous step counts, if configured, live in shared/labs-counts.js. */
 (function () {
   "use strict";
 
@@ -166,6 +167,17 @@
   function setStatus(message) {
     var el = byId("action-status");
     if (el) el.textContent = message;
+  }
+
+  var CARD_COPY = { A: "card-a", B: "card-b", C: "card-c", D: "card-d" };
+  var CARD_DOWNLOAD = { A: "download-a", B: "download-b", C: "download-c", D: "download-d" };
+
+  function count(name, detail) {
+    try {
+      if (window.LabsCount && typeof window.LabsCount.event === "function") window.LabsCount.event(name, detail);
+    } catch (err) {
+      /* Counts are optional and must never block the activity. */
+    }
   }
 
   function cardText(letter) {
@@ -558,6 +570,7 @@
       button.addEventListener("click", function () {
         var letter = button.getAttribute("data-copy");
         copyText(cardText(letter));
+        if (CARD_COPY[letter]) count("copy_clicked", CARD_COPY[letter]);
       });
     });
     document.querySelectorAll("[data-download]").forEach(function (button) {
@@ -565,6 +578,7 @@
         var letter = button.getAttribute("data-download");
         var meta = CARDS[letter];
         downloadText(meta.file, meta.mime, cardText(letter));
+        if (CARD_DOWNLOAD[letter]) count("copy_clicked", CARD_DOWNLOAD[letter]);
       });
     });
 
@@ -573,6 +587,7 @@
         renderPreview();
         renderTwist();
         saveDom();
+        if (!hydrating && CARD_COPY[radio.value]) count("card_picked", radio.value.toLowerCase());
       });
     });
 
@@ -580,6 +595,7 @@
       radio.addEventListener("change", function () {
         if (hydrating) return;
         switchRound(radio.value);
+        if (radio.value === "1" || radio.value === "2") count("round_picked", radio.value);
       });
     });
 
@@ -611,6 +627,7 @@
         return;
       }
       copyText(cardText(card));
+      if (CARD_COPY[card]) count("copy_clicked", CARD_COPY[card]);
     });
     byId("btn-download-card").addEventListener("click", function () {
       var card = selectedCard();
@@ -619,13 +636,16 @@
         return;
       }
       downloadText(CARDS[card].file, CARDS[card].mime, cardText(card));
+      if (CARD_DOWNLOAD[card]) count("copy_clicked", CARD_DOWNLOAD[card]);
     });
     byId("btn-copy-results").addEventListener("click", function () {
       copyText(resultsText());
+      count("copy_clicked", "results");
     });
 
     byId("btn-copy-brief").addEventListener("click", function () {
       copyText(briefText());
+      count("copy_clicked", "brief");
     });
     BRIEF_IDS.forEach(function (id) {
       byId(id).addEventListener("input", saveDom);
@@ -649,6 +669,7 @@
     });
     byId("btn-copy-log").addEventListener("click", function () {
       copyText(logText());
+      count("copy_clicked", "log");
     });
     byId("btn-clear-log").addEventListener("click", function () {
       renderLog([emptyLogRow()]);
@@ -661,6 +682,7 @@
       templateBtn.addEventListener("click", function () {
         var pre = byId("page-one-template");
         copyText(pre ? pre.textContent.replace(/^\n/, "").replace(/\s+$/, "") + "\n" : "");
+        count("copy_clicked", "template");
       });
     }
 
