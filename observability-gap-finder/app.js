@@ -43,7 +43,6 @@
 
   // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
   // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
-  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
   let sampleLoadedText = null;
   let ownNoted = false;
@@ -173,6 +172,14 @@
     if (embedded) toast("Loaded embedded sample (fetch blocked on file://)");
   }
 
+  function reportMarkdown(r) {
+    if (!r || r.error) return "";
+    const lines = ["# Observability Gap Report", "", window.LABS_PRIVATE_REPORT_LINE, "", "**Score:** " + r.score + " (" + r.bucket + ")", r.headline, "", "## Findings"];
+    r.findings.forEach((f) => lines.push("- **" + f.title + "** — " + f.status + ": " + f.message));
+    lines.push("", "_Arup Banerjee Labs · client-side self-check only_", "");
+    return lines.join("\n");
+  }
+
   function bind() {
     const box = document.getElementById("checklist");
     CHECKLIST.forEach((c) => {
@@ -195,10 +202,7 @@
     document.getElementById("input").addEventListener("paste", function () { noteOwn(); });
     document.getElementById("btn-copy").onclick = async () => {
       const r = window.__lastObs; if (!r || r.error) return toast("Run first");
-      const lines = ["# Observability Gap Report", "", "> " + SHARE_WARNING, "", "**Score:** " + r.score + " (" + r.bucket + ")", r.headline, "", "## Findings"];
-      r.findings.forEach((f) => lines.push("- **" + f.title + "** — " + f.status + ": " + f.message));
-      lines.push("", "_Arup Banerjee Labs · client-side self-check only_", "");
-      try { await navigator.clipboard.writeText(lines.join("\n")); toast("Copied"); track("copy_clicked", "report"); }
+      try { await navigator.clipboard.writeText(reportMarkdown(r)); toast("Copied"); track("copy_clicked", "report"); }
       catch { toast("Clipboard blocked"); }
     };
     // Preload sample text for file:// fallback
@@ -208,4 +212,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
   window.__ABL_OBS__ = analyze;
+  window.__ABL_OBS_MD__ = reportMarkdown;
 })();

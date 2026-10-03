@@ -355,12 +355,66 @@ assert.ok(/script-src 'self'/.test(glp) && /script-src 'none'/.test(fs.readFileS
 assert.ok(/script-src 'none'/.test(fs.readFileSync(R + 'playbook/privacy.html', 'utf8')));
 assert.ok(/script-src 'none'/.test(fs.readFileSync(R + 'playbook/terms.html', 'utf8')));
 
+const PRIVATE_LINE = "> **Private report:** redact secrets, account IDs, hostnames and customer data before sharing or pasting into a chatbot.";
+assert.strictEqual(
+  fs.readFileSync(R + 'shared/private-report.js', 'utf8').match(/window\.LABS_PRIVATE_REPORT_LINE = "([^"]+)";/)[1],
+  PRIVATE_LINE
+);
+
+function loadTool(rel) {
+  const sb = {
+    console: console,
+    document: {
+      readyState: 'loading',
+      getElementById: function () { return null; },
+      querySelector: function () { return null; },
+      querySelectorAll: function () { return []; },
+      addEventListener: function () {},
+      createElement: function () { return { style: {}, classList: { add: function () {}, remove: function () {} }, appendChild: function () {}, setAttribute: function () {} }; }
+    },
+    navigator: {},
+    localStorage: { getItem: function () { return null; }, setItem: function () {} },
+    setTimeout: function () {},
+    fetch: function () { return Promise.reject(new Error('offline')); }
+  };
+  sb.window = sb;
+  vm.createContext(sb);
+  vm.runInContext(fs.readFileSync(R + 'shared/private-report.js', 'utf8'), sb);
+  vm.runInContext(fs.readFileSync(R + rel, 'utf8'), sb, { filename: rel });
+  return sb;
+}
+
+function assertReportLine(md, title, label) {
+  assert.ok(typeof md === 'string' && md.length > 0, label + ' empty');
+  const lines = md.split('\n');
+  assert.strictEqual(lines[0], title, label + ' title');
+  assert.strictEqual(lines[2], PRIVATE_LINE, label + ' line under title');
+  assert.strictEqual(md.split(PRIVATE_LINE).length - 1, 1, label + ' appears once');
+}
+
 ['cloud-bill-smell', 'observability-gap-finder', 'agent-health-checker'].forEach(function (dir) {
   const html = fs.readFileSync(R + dir + '/index.html', 'utf8');
   const js = fs.readFileSync(R + dir + '/app.js', 'utf8');
   assert.ok(html.indexOf(WARN) !== -1, dir + ' page warning');
-  assert.ok(js.indexOf(WARN) !== -1, dir + ' report warning');
+  assert.ok(html.indexOf('../shared/private-report.js') !== -1, dir + ' loads shared line');
+  assert.ok(js.indexOf('window.LABS_PRIVATE_REPORT_LINE') !== -1, dir + ' uses shared line');
+  assert.ok(js.indexOf('copy_clicked') !== -1, dir + ' still counts copy');
 });
+assert.ok(fs.readFileSync(R + 'glp1-support/index.html', 'utf8').indexOf('private-report.js') === -1, 'glp1 does not load the scorecard line');
+assert.ok(fs.readFileSync(R + 'glp1-support/app.js', 'utf8').indexOf('LABS_PRIVATE_REPORT_LINE') === -1, 'glp1 export unchanged');
+
+const ahc = loadTool('agent-health-checker/app.js');
+assertReportLine(ahc.__ABL_REPORT_MD__(ahc.__ABL_ANALYZE__(ahc.__ABL_SAMPLE__.config, { mode: 'config' })), '# AI Agent Health Checker Report', 'agent-health-checker config');
+assertReportLine(ahc.__ABL_REPORT_MD__(ahc.__ABL_ANALYZE__(ahc.__ABL_SAMPLE__.transcript, { mode: 'transcript', kb: ahc.__ABL_SAMPLE__.kb })), '# AI Agent Health Checker Report', 'agent-health-checker transcript');
+
+const bill = loadTool('cloud-bill-smell/app.js');
+assertReportLine(bill.__ABL_BILL_MD__(bill.__ABL_BILL__(fs.readFileSync(R + 'cloud-bill-smell/sample-cloud-bill.csv', 'utf8'))), '# Cloud Bill Smell Report', 'cloud-bill-smell');
+
+const obs = loadTool('observability-gap-finder/app.js');
+const obsSample = fs.existsSync(R + 'observability-gap-finder/sample-observability.yaml')
+  ? fs.readFileSync(R + 'observability-gap-finder/sample-observability.yaml', 'utf8')
+  : 'service: checkout-api\nlogs: fluent-bit -> splunk\nmetrics: prometheus\n';
+assertReportLine(obs.__ABL_OBS_MD__(obs.__ABL_OBS__(obsSample, {})), '# Observability Gap Report', 'observability-gap-finder');
 
 console.log('labs-counts: ALL PASS');
 
