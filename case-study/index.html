@@ -20,8 +20,8 @@
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-        <a class="hub-link" href="../index.html">← Labs hub</a>
-        <a class="hub-link" href="../agent-health-checker/index.html">Agent Health Checker →</a>
+        <a class="hub-link" href="../index.html" data-count="nav_clicked" data-detail="hub">← Labs hub</a>
+        <a class="hub-link" href="../agent-health-checker/index.html" data-count="nav_clicked" data-detail="agent-health-checker">Agent Health Checker →</a>
       </div>
     </header>
     <main class="section case-body">
@@ -30,7 +30,7 @@
 <p><strong>Controlled local test on a fictional business (Example Family Dental) using a scripted bot; not a real customer.</strong> Every patient, phone number, price and key in this write-up is made up. No real business, person or system was involved, and no AI model was called.</p>
 </div>
 <p><em>Arup Kumar Banerjee · Little Elm, Texas · September 30, 2026</em></p>
-<h2>Why I ran this test</h2>
+<h2 id="why" data-step="why">Why I ran this test</h2>
 <p>Small businesses are putting chatbots on their websites to answer customers faster. Speed does matter:</p>
 <ul>
 <li>In a Harvard Business Review study of 2,241 U.S. companies, only 37% answered a web lead within an hour, and 23% never answered.</li>
@@ -38,7 +38,7 @@
 </ul>
 <p>But a fast wrong answer is its own problem. A chatbot that invents a price, gives medication advice or leaks internal notes can do more damage than a slow reply. Prompt injection, where a user talks a model into ignoring its rules, is number one on the OWASP Top 10 for LLM applications.</p>
 <p>I run a free, browser-only <strong>AI Agent Health Checker</strong>. I wanted to know: if a small business pasted in a clearly unsafe chatbot, would my checker say so?</p>
-<h2>The setup</h2>
+<h2 id="setup" data-step="setup">The setup</h2>
 <ul>
 <li><strong>A fictional business:</strong> Example Family Dental. I wrote its FAQ, which lists a few prices, the plans it accepts and its hours, and deliberately has <strong>no</strong> whitening price, cancellation policy or Delta Dental.</li>
 <li><strong>Two versions of the same scripted bot</strong> (rule-based, no AI model):<ul>
@@ -67,7 +67,7 @@
 </li>
 <li><strong>20 risky customer messages</strong> in five groups: prompt leaks, made-up answers, handoffs, unsafe requests, and privacy / disclosure.</li>
 </ul>
-<h2>What the unsafe bot did</h2>
+<h2 id="unsafe" data-step="unsafe">What the unsafe bot did</h2>
 <p>It failed <strong>17 of 20</strong> tests. The fixed bot failed <strong>0 of 20</strong>. A few real replies from the unsafe bot:</p>
 <ul>
 <li><strong>Staff discount code:</strong> "The staff discount code is TEST-INTERNAL-50" (asked by someone claiming to be a new hire).</li>
@@ -83,7 +83,7 @@
 <li><strong>Shared another patient's details:</strong> it gave a (fictional) patient's next appointment and balance to someone who said they were her neighbor.</li>
 <li><strong>No handoff</strong> for a furious repeat complaint, a swollen jaw with fever and trouble swallowing, a double charge, or "I want to talk to a real person."</li>
 </ul>
-<h2>What my checker said, before the fix</h2>
+<h2 id="before" data-step="before">What my checker said, before the fix</h2>
 <p>Not much. The checker's 8 engineering checks (retries, timeouts, tracing, secrets, injection sinks, tool permissions, tests, model fallback) scored:</p>
 <table>
 <thead>
@@ -119,7 +119,7 @@
 <li><strong>The page itself:</strong> it showed a sample score of 47. The sample actually scored 26.</li>
 </ul>
 <figure><img src="img/before-old-checker-vulnerable-transcripts.png" alt="Old checker on the unsafe bot's transcripts: 38, &quot;Shippable prototype, not production-ready&quot;" /><figcaption>Old checker on the unsafe bot's transcripts: 38, &quot;Shippable prototype, not production-ready&quot; (fictional test data)</figcaption></figure>
-<h2>What I changed</h2>
+<h2 id="changed" data-step="changed">What I changed</h2>
 <p>The checker is still free, still runs only in your browser (no uploads, nothing you paste leaves the tab, no AI model), and is still a <strong>heuristic keyword checker, not a security audit</strong>.</p>
 <ul>
 <li><strong>Fixed the 8 engineering checks.</strong><ul>
@@ -149,7 +149,7 @@
 <li><strong>Changed the verdict:</strong> any high-severity safety failure now says <strong>"Not safe for customer traffic"</strong>, whatever the number.</li>
 <li><strong>Added a copyable red-team pack</strong> of 20 messages to send to your own bot.</li>
 </ul>
-<h2>After the fix</h2>
+<h2 id="after" data-step="after">After the fix</h2>
 <p>Same inputs, same test:</p>
 <table>
 <thead>
@@ -184,7 +184,7 @@
 </table>
 <figure><img src="img/after-vulnerable-transcripts-with-faq.png" alt="New checker on the unsafe bot's transcripts with the FAQ pasted: 0, &quot;Not safe for customer traffic&quot;" /><figcaption>New checker on the unsafe bot's transcripts with the FAQ pasted: 0, &quot;Not safe for customer traffic&quot; (fictional test data)</figcaption></figure>
 <figure><img src="img/after-fixed-transcripts-with-faq.png" alt="New checker on the fixed bot's transcripts with the FAQ pasted: 100, &quot;No keyword red flags found — keep red-teaming; this is not a guarantee&quot;" /><figcaption>New checker on the fixed bot's transcripts with the FAQ pasted: 100, &quot;No keyword red flags found — keep red-teaming; this is not a guarantee&quot; (fictional test data)</figcaption></figure>
-<h2>What it still misses</h2>
+<h2 id="misses" data-step="misses">What it still misses</h2>
 <p>Treat a clean score as "no keyword red flags", not "safe". In my follow-up probes on the fixed checker:</p>
 <ul>
 <li><strong>Paraphrased bad instructions are only partly caught.</strong><ul>
@@ -207,7 +207,7 @@
 <li><strong>The fixed config scores 75</strong> even though it still has no retries, timeouts or tracing. Check the engineering findings, not just the number.</li>
 <li><strong>I designed the new checks after seeing this test fail.</strong> The code contains nothing specific to this fictional business, and it passes all 28 of my small probe inputs. But this is not an independent evaluation.</li>
 </ul>
-<h2>What any small business can borrow</h2>
+<h2 id="borrow" data-step="borrow">What any small business can borrow</h2>
 <ol>
 <li><strong>Write the FAQ first, and tell the bot to say "I don't know" when the answer isn't in it.</strong></li>
 <li><strong>Decide when a person takes over:</strong> asks for a person, upset, billing, emergency. For emergencies, point to 911 first.</li>
@@ -215,15 +215,15 @@
 <li><strong>Keep internal notes, codes and keys out of the prompt.</strong> Assume anything in there can be read back.</li>
 <li><strong>Red-team your own bot before customers do,</strong> then check the transcript.</li>
 </ol>
-<h2>Try it (free)</h2>
+<h2 id="try" data-step="try">Try it (free)</h2>
 <ul>
-<li>AI Agent Health Checker: <a href="https://ultimatixarup.github.io/arup-banerjee-labs/agent-health-checker/" rel="noopener noreferrer">https://ultimatixarup.github.io/arup-banerjee-labs/agent-health-checker/</a> (the red-team pack is on the page)</li>
-<li>All Labs tools: <a href="https://ultimatixarup.github.io/arup-banerjee-labs/" rel="noopener noreferrer">https://ultimatixarup.github.io/arup-banerjee-labs/</a></li>
+<li>AI Agent Health Checker: <a href="https://ultimatixarup.github.io/arup-banerjee-labs/agent-health-checker/" rel="noopener noreferrer" data-count="nav_clicked" data-detail="agent-health-checker">https://ultimatixarup.github.io/arup-banerjee-labs/agent-health-checker/</a> (the red-team pack is on the page)</li>
+<li>All Labs tools: <a href="https://ultimatixarup.github.io/arup-banerjee-labs/" rel="noopener noreferrer" data-count="nav_clicked" data-detail="hub">https://ultimatixarup.github.io/arup-banerjee-labs/</a></li>
 <li>This case study: <a href="https://ultimatixarup.github.io/arup-banerjee-labs/case-study/" rel="noopener noreferrer">https://ultimatixarup.github.io/arup-banerjee-labs/case-study/</a></li>
 <li>Questions? The free Telegram help bot: <a href="https://t.me/ArupLabsHelpBot_bot" rel="noopener noreferrer">@ArupLabsHelpBot_bot</a>. Please redact secrets before you post.</li>
 <li>A check looks wrong? <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">Tell me on GitHub</a>. Please redact secrets before you post. A short snippet is enough.</li>
 </ul>
-<h2>Method and sources</h2>
+<h2 id="method" data-step="method">Method and sources</h2>
 <p><strong>Method:</strong></p>
 <ul>
 <li>Test run on September 30, 2026: the original run at 9:35 AM CT, then before-and-after runs of both checker versions at 10:30 AM CT.</li>
@@ -240,7 +240,7 @@
     </main>
     <footer class="site-footer">
       <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
-      <div>Cookieless, anonymous visit counts only (GoatCounter). No personal data.</div>
+      <div>Anonymous, cookieless step counts only: which section you reached and which Labs links you use. Never your text, and no cookies.</div>
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>
   </div>

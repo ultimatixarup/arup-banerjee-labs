@@ -195,9 +195,16 @@
     if (/^[\s]*[\w"-]+:\s/m.test(t) && !t.startsWith("<")) return "yaml";
     return "text";
   }
-  // Anonymous counts only: fixed event names + score range, via ../shared/labs-counts.js (GoatCounter,
-  // cookieless, off until configured). Never pass pasted text, findings, secrets or agent tool names here.
+  // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
+  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
+  let ownNoted = false;
+  function noteOwn() {
+    if (ownNoted) return;
+    ownNoted = true;
+    track("input_kind", "own");
+  }
 
   function stripComments(text) {
     return text.split(/\r?\n/).map((line) => {
@@ -1024,6 +1031,8 @@
     const lines = [
       "# AI Agent Health Checker Report",
       "",
+      "> " + SHARE_WARNING,
+      "",
       "**Overall:** " + r.score + "/100 (" + r.bucket + ")",
       "**Verdict:** " + r.headline,
       "**Mode:** " + (r.mode === "transcript" ? "Chat transcript" : "Config / prompt") + " (" + r.format + ")" + (r.mode === "transcript" ? (r.kbProvided ? ", FAQ pasted" : ", no FAQ pasted") : ""),
@@ -1107,6 +1116,7 @@
 
   function runAnalyze() {
     const text = $("input").value;
+    if (String(text || "").trim() && text !== FALLBACK_SAMPLE && text !== SAMPLE_TRANSCRIPT) noteOwn();
     track("analyze_clicked");
     const result = analyze(text, { mode: currentMode(), kb: currentKb() });
     render(result);
@@ -1132,12 +1142,14 @@
     $("btn-sample").addEventListener("click", () => {
       $("input").value = FALLBACK_SAMPLE;
       if ($("mode")) $("mode").value = "config";
+      track("input_kind", "sample");
       runAnalyze();
     });
     if ($("btn-sample-transcript")) $("btn-sample-transcript").addEventListener("click", () => {
       $("input").value = SAMPLE_TRANSCRIPT;
       if ($("kb")) $("kb").value = SAMPLE_TRANSCRIPT_KB;
       if ($("mode")) $("mode").value = "transcript";
+      track("input_kind", "sample_transcript");
       runAnalyze();
     });
     $("btn-copy").addEventListener("click", () => {
@@ -1147,6 +1159,8 @@
     });
     if ($("btn-copy-redteam")) $("btn-copy-redteam").addEventListener("click", () => copy(redTeamText(), "Red-team pack copied", "redteam"));
     $("input").addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") runAnalyze(); });
+    $("input").addEventListener("paste", function () { noteOwn(); });
+    if ($("kb")) $("kb").addEventListener("paste", function () { noteOwn(); });
     loadRuns();
   }
 

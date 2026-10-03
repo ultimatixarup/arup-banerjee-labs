@@ -10,9 +10,18 @@ Everything is switched off until you edit **`shared/labs-config.js`**. Each valu
 3. Set `GOATCOUNTER_CODE: "arup-labs"` in `shared/labs-config.js`. No other file needs editing
    (the CSPs already allow `https://*.goatcounter.com` images).
 
-What shows up: page paths (`/`, `/case-study/`, `/agent-health-checker/`, `/cloud-bill-smell/`, `/observability-gap-finder/`)
-and events `<page>/analyze_clicked`, `<page>/score_bucket/<0-24|25-49|50-74|75-100>`, `<page>/copy_clicked/<report|redteam>`,
-`hub/glp1_link_clicked`. Counts only come from `https://ultimatixarup.github.io`.
+What shows up: page paths for the hub, the case study, the three dev tools, and the playbook (`/playbook/`, `/playbook/module-01/` … `/playbook/module-04/`), plus the fixed events in **`shared/EVENTS.md`** (section reached, scroll depth, volunteer, navigation, copy, sample vs own input, analyze, score range). Counts only come from `https://ultimatixarup.github.io`.
+
+### Reading the funnel
+
+Open `https://arup-labs.goatcounter.com` (your code, not this example). **Pages** are the pageviews. **Events** are the action paths (`playbook-m1/step_viewed/challenge`, `cloud-bill-smell/input_kind/own`, and the rest of the list in `shared/EVENTS.md`). GoatCounter lists events apart from pages because these counts are sent with `e=true`.
+
+Read a funnel top to bottom, as totals, not as one person’s session (there is no session id):
+
+- Playbook: `/playbook/` then `playbook/step_viewed/mission` → `modules` → `nav_clicked/module-01`. On Module 1, compare `playbook-m1/step_viewed/step-0` with `challenge`, `quiz`, `artifact`, and `next`. `scroll_depth/25` versus `scroll_depth/100` is the coarse drop-off on long pages.
+- Tools: pageview, then `input_kind/sample` or `input_kind/own`, then `analyze_clicked`, then `score_bucket/…`, then `copy_clicked/report`. `nav_clicked/…` is someone leaving for another tool, the case study, or the playbook.
+
+Settings → Data collection: you can untick region and language. That does not change the event names.
 
 ## 2. Buttondown (double-opt-in "Get updates") → `LIST_FORM_ACTION`
 

@@ -39,22 +39,22 @@
       <article class="card hub-card">
         <h3>AI Agent Health Checker</h3>
         <p>Paste an agent config, system prompt or chat transcript. Engineering checks (retries, timeouts, tracing, secrets, injection sinks, tool auth, evals, LLM fallback) plus customer-safety red flags: made-up prices, missing handoffs, dosing advice, leaked notes, bots posing as people. Heuristic checker, not a security audit.</p>
-        <a class="open" href="agent-health-checker/index.html">Open tool →</a>
+        <a class="open" href="agent-health-checker/index.html" data-count="nav_clicked" data-detail="agent-health-checker">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Cloud Bill Smell Detector</h3>
         <p>Paste your AWS/GCP/Azure cost CSV or JSON export. Heuristic smells for egress, NAT, idle-ish lines, metrics creep. No cloud login. Heuristic checker, not a security audit.</p>
-        <a class="open" href="cloud-bill-smell/index.html">Open tool →</a>
+        <a class="open" href="cloud-bill-smell/index.html" data-count="nav_clicked" data-detail="cloud-bill-smell">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>Observability Gap Finder</h3>
         <p>Paste a stack description or tick what you run. Gaps across OTel, Langfuse, Prometheus, Splunk + starter snippets. Heuristic checker, not a security audit.</p>
-        <a class="open" href="observability-gap-finder/index.html">Open tool →</a>
+        <a class="open" href="observability-gap-finder/index.html" data-count="nav_clicked" data-detail="observability-gap-finder">Open tool →</a>
       </article>
       <article class="card hub-card">
         <h3>The Agentic AI Career Playbook</h3>
         <p>A free playbook for anyone who can communicate: people returning to work, including homemakers, career changers, professionals outside software, and developers. Unlearn the “I’ll just do it myself” reflex, write a clear brief, and stay the owner. Module 1 is ready. No signup and nothing to buy.</p>
-        <a class="open" href="playbook/">Open playbook →</a>
+        <a class="open" href="playbook/" data-count="nav_clicked" data-detail="playbook">Open playbook →</a>
       </article>
       <article class="card hub-card">
         <h3>GLP-1 Support</h3>
@@ -69,7 +69,7 @@
         <p style="color:var(--muted);margin:0 0 .75rem;font-size:.92rem">
           A controlled local test: a scripted bot for a made-up dental office, 20 risky customer messages, and what the Agent Health Checker caught and missed before and after I fixed it.
         </p>
-        <a class="open" href="case-study/">Read the case study →</a>
+        <a class="open" href="case-study/" data-count="nav_clicked" data-detail="case-study">Read the case study →</a>
       </div>
     </section>
 
@@ -131,10 +131,12 @@
       <div class="card">
         <p style="margin:0;color:var(--muted);font-size:.92rem">
           Scoring runs in your browser. Pasted configs and bill exports are not sent to a backend for analysis.
-          Cookieless, anonymous visit counts only. What you paste never leaves your browser. The hub, the case study and the three dev tools count page visits, and the tools and hub count a few clicks (Analyze, score range, Copy, and the GLP-1 Support link here) with
-          <a href="https://www.goatcounter.com/" rel="noopener noreferrer">GoatCounter</a>: no cookies, no personal data, never your text or findings. Skipped if your browser sends Do Not Track or Global Privacy Control.
+          Anonymous, cookieless step counts are collected on this hub, the playbook, the case study, and the three dev tools.
+          They record which page you opened, which section you reached, how far you scrolled, and which buttons you used (for example sample, analyze, copy, or a link to another page).
+          They never include pasted text, findings, secrets, account IDs, names, costs, the page title, or the address you came from. No cookies and no account.
+          Counts use <a href="https://www.goatcounter.com/" rel="noopener noreferrer">GoatCounter</a> and are skipped if your browser sends Do Not Track or Global Privacy Control.
           The optional “Get updates” form sends only your email address to the list provider (Buttondown).
-          GLP-1 Support has no analytics and no signup at all. Every tool here is free forever.
+          GLP-1 Support has no counts and no signup at all. Every tool here is free forever.
         </p>
         <p style="margin:.75rem 0 0;color:var(--muted);font-size:.92rem">
           If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new/choose" rel="noopener noreferrer">tell me on GitHub</a>.

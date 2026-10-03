@@ -41,9 +41,17 @@
     { id: "ck_runbook", dim: "runbooks_alerts", label: "Pages include runbook links for agent failures" }
   ];
 
-  // Anonymous counts only: fixed event names + score range, via ../shared/labs-counts.js (GoatCounter,
-  // cookieless, off until configured). Never pass pasted text, findings, secrets or agent tool names here.
+  // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
+  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
+  let sampleLoadedText = null;
+  let ownNoted = false;
+  function noteOwn() {
+    if (ownNoted) return;
+    ownNoted = true;
+    track("input_kind", "own");
+  }
 
   function analyze(text, checked) {
     // Drop YAML/shell-style # comments first, so notes like "# Missing: Langfuse / OTel hooks" don't count as signals.
@@ -134,6 +142,7 @@
     if (text.trim().length < 5 && !Object.values(checkedMap()).some(Boolean)) {
       return render({ error: "Paste a stack description and/or tick checklist items you already have." });
     }
+    if (text !== sampleLoadedText && text.trim().length >= 5) noteOwn();
     track("analyze_clicked");
     const r = analyze(text, checkedMap());
     render(r);
@@ -146,17 +155,22 @@
   }
 
   async function loadSample() {
+    let text = FALLBACK_SAMPLE ||
+      "service: checkout-api\nlogs: fluent-bit -> splunk\nmetrics: jvm /metrics (no ServiceMonitor)\nllm: langgraph without langfuse\non_call: pagerduty\n";
+    let embedded = true;
     try {
       const res = await fetch("sample-observability.yaml");
-      FALLBACK_SAMPLE = await res.text();
-      document.getElementById("input").value = FALLBACK_SAMPLE;
-      run();
+      text = await res.text();
+      FALLBACK_SAMPLE = text;
+      embedded = false;
     } catch {
-      document.getElementById("input").value = FALLBACK_SAMPLE ||
-        "service: checkout-api\nlogs: fluent-bit -> splunk\nmetrics: jvm /metrics (no ServiceMonitor)\nllm: langgraph without langfuse\non_call: pagerduty\n";
-      run();
-      toast("Loaded embedded sample (fetch blocked on file://)");
+      embedded = true;
     }
+    sampleLoadedText = text;
+    document.getElementById("input").value = text;
+    track("input_kind", "sample");
+    run();
+    if (embedded) toast("Loaded embedded sample (fetch blocked on file://)");
   }
 
   function bind() {
@@ -172,14 +186,16 @@
     document.getElementById("btn-run").onclick = run;
     document.getElementById("btn-sample").onclick = loadSample;
     document.getElementById("btn-clear").onclick = () => {
+      sampleLoadedText = null;
       document.getElementById("input").value = "";
       CHECKLIST.forEach((c) => { const el = document.getElementById(c.id); if (el) el.checked = false; });
       document.getElementById("results-empty").classList.remove("hidden");
       document.getElementById("results-body").classList.add("hidden");
     };
+    document.getElementById("input").addEventListener("paste", function () { noteOwn(); });
     document.getElementById("btn-copy").onclick = async () => {
       const r = window.__lastObs; if (!r || r.error) return toast("Run first");
-      const lines = ["# Observability Gap Report", "", "**Score:** " + r.score + " (" + r.bucket + ")", r.headline, "", "## Findings"];
+      const lines = ["# Observability Gap Report", "", "> " + SHARE_WARNING, "", "**Score:** " + r.score + " (" + r.bucket + ")", r.headline, "", "## Findings"];
       r.findings.forEach((f) => lines.push("- **" + f.title + "** — " + f.status + ": " + f.message));
       lines.push("", "_Arup Banerjee Labs · client-side self-check only_", "");
       try { await navigator.clipboard.writeText(lines.join("\n")); toast("Copied"); track("copy_clicked", "report"); }

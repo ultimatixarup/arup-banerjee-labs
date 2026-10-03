@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
   <meta name="referrer" content="no-referrer" />
   <title>The Agentic AI Career Playbook — Arup Banerjee Labs</title>
   <meta name="description" content="A free playbook for anyone who can communicate. Unlearn doing it yourself, write a clear brief, and stay the owner. No signup and nothing to buy. Module 1 is available." />
@@ -35,15 +35,15 @@
         <div class="brand-name">The Agentic AI Career Playbook<span class="brand-sub">Arup Banerjee Labs · free · no signup</span></div>
       </div>
       <div class="header-right">
-        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <a class="hub-link" href="../index.html" data-count="nav_clicked" data-detail="hub">← Labs hub</a>
         <div class="badge-privacy">Free · No signup · Nothing to buy</div>
       </div>
       <nav class="playbook-nav" aria-label="Playbook">
         <a href="./" aria-current="page">Playbook</a>
-        <a href="module-01/">Module 1</a>
-        <a href="module-02/">Module 2</a>
-        <a href="module-03/">Module 3</a>
-        <a href="module-04/">Module 4</a>
+        <a href="module-01/" data-count="nav_clicked" data-detail="module-01">Module 1</a>
+        <a href="module-02/" data-count="nav_clicked" data-detail="module-02">Module 2</a>
+        <a href="module-03/" data-count="nav_clicked" data-detail="module-03">Module 3</a>
+        <a href="module-04/" data-count="nav_clicked" data-detail="module-04">Module 4</a>
         <a href="terms.html">Terms</a>
         <a href="privacy.html">Privacy</a>
       </nav>
@@ -63,10 +63,10 @@
           <span>Runs in your browser</span>
         </div>
         <p class="jump-links"><a href="#volunteer">Volunteer</a> · <a href="#who">Who it’s for</a> · <a href="#paths">Two paths</a> · <a href="#modules">Modules</a> · <a href="#see-the-tool">See the tool</a></p>
-        <p><a class="open" href="module-01/">Start Module 1</a></p>
+        <p><a class="open" href="module-01/" data-count="nav_clicked" data-detail="module-01">Start Module 1</a></p>
       </section>
 
-      <section class="section mvv" id="mission" aria-labelledby="mission-title">
+      <section class="section mvv" id="mission" data-step="mission" aria-labelledby="mission-title">
         <h2 id="mission-title" class="mvv-punch">Unlearn, relearn, <span class="mvv-accent">stay relevant.</span></h2>
         <p class="tagline">See the tool, then learn the craft.</p>
         <div class="path-grid">
@@ -90,20 +90,20 @@
         </ul>
         <div class="card prose follow-card mvv-cta">
           <h3>Volunteer as a tester</h3>
-          <p>Module 1 is live. Modules 2–4 are coming by Oct 17. I’m looking for volunteer testers, coders and non-coders alike, for about an hour per module. Email <a href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20tester">arupkumar.banerjee@gmail.com</a> and tell me which path you’d try.</p>
-          <p class="small">Also free on Labs: <a href="../case-study/">my case study testing a fictional small-business chatbot</a>.</p>
+          <p>Module 1 is live. Modules 2–4 are coming by Oct 17. I’m looking for volunteer testers, coders and non-coders alike, for about an hour per module. Email <a href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20tester" data-count="volunteer_clicked" data-detail="mission">arupkumar.banerjee@gmail.com</a> and tell me which path you’d try.</p>
+          <p class="small">Also free on Labs: <a href="../case-study/" data-count="nav_clicked" data-detail="case-study">my case study testing a fictional small-business chatbot</a>.</p>
         </div>
       </section>
 
-      <section class="section volunteer" id="volunteer" aria-labelledby="volunteer-title">
+      <section class="section volunteer" id="volunteer" data-step="volunteer" aria-labelledby="volunteer-title">
         <h2 id="volunteer-title">Volunteer as a tester</h2>
         <div class="card prose">
           <p>Help test this free playbook. Coders and non-coders both welcome. Takes about an hour per module.</p>
-          <p><a class="open" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
+          <p><a class="open" data-count="volunteer_clicked" data-detail="top" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
         </div>
       </section>
 
-      <section class="section" id="who" aria-labelledby="who-title">
+      <section class="section" id="who" data-step="who" aria-labelledby="who-title">
         <h2 id="who-title">Who it’s for</h2>
         <div class="card prose">
           <p>Anyone who can communicate. That includes:</p>
@@ -120,12 +120,12 @@
       <section class="section" id="free" aria-labelledby="free-title">
         <h2 id="free-title">Free, on this site</h2>
         <div class="card prose">
-          <p>No signup on this site, no account here, nothing to buy. The Hands-Off Challenge can save a score in this browser only. It does not ask for an email, and it does not send what you type anywhere.</p>
+          <p>No signup on this site, no account here, nothing to buy. The Hands-Off Challenge can save a score in this browser only. It does not ask for an email, and it does not send what you type. Anonymous, cookieless step counts may record which section you reached and which buttons you used, never your words or your score.</p>
           <p class="small">Read the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a> notes.</p>
         </div>
       </section>
 
-      <section class="section" id="paths" aria-labelledby="paths-title">
+      <section class="section" id="paths" data-step="paths" aria-labelledby="paths-title">
         <h2 id="paths-title">Two paths, one shared core</h2>
         <div class="path-grid">
           <article class="card">
@@ -147,24 +147,24 @@
         </div>
       </section>
 
-      <section class="section" id="modules" aria-labelledby="modules-title">
+      <section class="section" id="modules" data-step="modules" aria-labelledby="modules-title">
         <h2 id="modules-title">Modules</h2>
         <div class="module-list">
           <article class="card module-card" id="module-1">
             <p class="module-kicker"><span class="pill pill-ready">Available</span><span>60–90 min</span><span>Shared core</span></p>
-            <h3><a href="module-01/">1. Hands Off the Keyboard</a></h3>
+            <h3><a href="module-01/" data-count="nav_clicked" data-detail="module-01">1. Hands Off the Keyboard</a></h3>
             <p>Catch your “I’ll just fix it myself” reflex and swap it for a five-line brief.</p>
             <ul>
               <li><strong>You’ll learn:</strong> the three unlearnings; the five-line Brief Card (Intent, Context, Constraints, Done when, Examples); the Ownership Log; the Explain-It-Back test.</li>
               <li><strong>Activity:</strong> Hands-Off Challenge Level 1 (four bug cards), then see the tool (two bot briefs in the Agent Health Checker).</li>
               <li><strong>You leave with:</strong> My Playbook, page 1.</li>
             </ul>
-            <a class="open" href="module-01/">Start Module 1</a>
+            <a class="open" href="module-01/" data-count="nav_clicked" data-detail="module-01">Start Module 1</a>
           </article>
 
           <article class="card module-card" id="module-2">
             <p class="module-kicker"><span class="pill pill-soon">Coming soon</span><span>No-code 45 min · Dev 1.5–2 h</span></p>
-            <h3><a href="module-02/">2. See the Tool: what an agent is made of</a></h3>
+            <h3><a href="module-02/" data-count="nav_clicked" data-detail="module-02">2. See the Tool: what an agent is made of</a></h3>
             <p>Open up a real agent, name its parts, and watch a free checker grade it.</p>
             <ul>
               <li><strong>You’ll learn:</strong> the parts of an agent (model, instructions, tools, loop, memory, guardrails, evals, plus observability and cost), what each can get wrong, and how to read a Health Checker scorecard.</li>
@@ -172,31 +172,31 @@
               <li><strong>Developer (Java/Spring):</strong> a primer mapping agent parts to Spring ideas, plus running the sample agent on a mock model.</li>
               <li><strong>You leave with:</strong> an anatomy sketch.</li>
             </ul>
-            <p><a href="module-02/">Module 2 promise</a></p>
+            <p><a href="module-02/" data-count="nav_clicked" data-detail="module-02">Module 2 promise</a></p>
           </article>
 
           <article class="card module-card" id="module-3">
             <p class="module-kicker"><span class="pill pill-soon">Coming soon</span><span>60–120 min</span></p>
-            <h3><a href="module-03/">3. The Hands-Off Challenge: delegate a real fix</a></h3>
+            <h3><a href="module-03/" data-count="nav_clicked" data-detail="module-03">3. The Hands-Off Challenge: delegate a real fix</a></h3>
             <p>A game against your own habits: three levels, zero lines typed.</p>
             <ul>
               <li><strong>Activity:</strong> four decks (spreadsheet, document, web page, Java) and three levels. Level 3 has a bug the agent can’t fix without context only you have.</li>
               <li><strong>Bonus:</strong> the two-player “Human Agent” game, no AI needed.</li>
               <li><strong>You leave with:</strong> a Hands-Off scorecard and Ownership Log entries.</li>
             </ul>
-            <p><a href="module-03/">Module 3 promise</a></p>
+            <p><a href="module-03/" data-count="nav_clicked" data-detail="module-03">Module 3 promise</a></p>
           </article>
 
           <article class="card module-card" id="module-4">
             <p class="module-kicker"><span class="pill pill-soon">Coming soon</span><span>60 min</span></p>
-            <h3><a href="module-04/">4. Stay the Owner: never lose the plot</a></h3>
+            <h3><a href="module-04/" data-count="nav_clicked" data-detail="module-04">4. Stay the Owner: never lose the plot</a></h3>
             <p>Let the agent type; you keep the whole picture and can prove it.</p>
             <ul>
               <li><strong>You’ll learn:</strong> before/during/after checkpoints, the Ownership Log, the Explain-It-Back test, and when to take the keyboard back.</li>
               <li><strong>Activity:</strong> “Spot the sneaky change,” where the agent fixed the bug and quietly changed something else.</li>
               <li><strong>You leave with:</strong> a “what changed and why” note.</li>
             </ul>
-            <p><a href="module-04/">Module 4 promise</a></p>
+            <p><a href="module-04/" data-count="nav_clicked" data-detail="module-04">Module 4 promise</a></p>
           </article>
 
           <article class="card module-card" id="module-5">
@@ -230,28 +230,31 @@
         </div>
       </section>
 
-      <section class="section" id="see-the-tool" aria-labelledby="tool-title">
+      <section class="section" id="see-the-tool" data-step="tool" aria-labelledby="tool-title">
         <h2 id="tool-title">See the tool, then learn the craft</h2>
         <div class="card prose">
           <p>The free Agent Health Checker on this site runs in your browser, and nothing you paste leaves your tab. Module 1 uses it with two briefs for a fictional bike shop.</p>
-          <p><a class="open" href="../agent-health-checker/">See the tool, then learn the craft</a></p>
+          <p><a class="open" href="../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">See the tool, then learn the craft</a></p>
         </div>
       </section>
 
-      <section class="section volunteer" id="volunteer-bottom" aria-label="Volunteer as a tester, near the end of this page">
+      <section class="section volunteer" id="volunteer-bottom" data-step="volunteer-end" aria-label="Volunteer as a tester, near the end of this page">
         <h2 id="volunteer-bottom-title">Volunteer as a tester</h2>
         <div class="card prose">
           <p>Help test this free playbook. Coders and non-coders both welcome. Takes about an hour per module.</p>
-          <p><a class="open" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
+          <p><a class="open" data-count="volunteer_clicked" data-detail="bottom" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>Built by <strong class="text-strong">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Anonymous, cookieless step counts only. Never what you type, your score, or your name. <a href="privacy.html">Privacy</a>.</div>
       <div class="footer-disclaimer">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
-      <div class="footer-links"><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="../index.html">Labs hub</a></div>
+      <div class="footer-links"><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="../index.html" data-count="nav_clicked" data-detail="hub">Labs hub</a></div>
     </footer>
   </div>
+  <script src="../shared/labs-config.js"></script>
+  <script src="../shared/labs-counts.js" data-page="playbook"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://*.goatcounter.com; connect-src 'none'; form-action 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
   <meta name="referrer" content="no-referrer" />
   <title>Module 1: Hands Off the Keyboard — The Agentic AI Career Playbook</title>
   <meta name="description" content="Module 1 of The Agentic AI Career Playbook: catch the reflex to fix it yourself, write a five-line brief, and score the Hands-Off Challenge. Free, no signup." />
@@ -35,15 +35,15 @@
         <div class="brand-name">The Agentic AI Career Playbook<span class="brand-sub">Arup Banerjee Labs · free · no signup</span></div>
       </div>
       <div class="header-right">
-        <a class="hub-link" href="../../index.html">← Labs hub</a>
+        <a class="hub-link" href="../../index.html" data-count="nav_clicked" data-detail="hub">← Labs hub</a>
         <div class="badge-privacy">Free · No signup · Nothing to buy</div>
       </div>
       <nav class="playbook-nav" aria-label="Playbook">
-        <a href="../">Playbook</a>
+        <a href="../" data-count="nav_clicked" data-detail="playbook">Playbook</a>
         <a href="./" aria-current="page">Module 1</a>
-        <a href="../module-02/">Module 2</a>
-        <a href="../module-03/">Module 3</a>
-        <a href="../module-04/">Module 4</a>
+        <a href="../module-02/" data-count="nav_clicked" data-detail="module-02">Module 2</a>
+        <a href="../module-03/" data-count="nav_clicked" data-detail="module-03">Module 3</a>
+        <a href="../module-04/" data-count="nav_clicked" data-detail="module-04">Module 4</a>
         <a href="#challenge">Challenge</a>
         <a href="../terms.html">Terms</a>
         <a href="../privacy.html">Privacy</a>
@@ -84,10 +84,10 @@
       </nav>
 
       <noscript>
-        <p class="note note-warn">The Hands counter, copy buttons, and saved scores use a script that lives on this site. It does not contact the network. The lesson, the bug cards, and the templates below all work without it.</p>
+        <p class="note note-warn">The Hands counter, copy buttons, and saved scores use a script that lives on this site. That script does not send what you type. A separate counter may record which section you reached and which buttons you used, never your words or your score. The lesson, the bug cards, and the templates below all work without either script.</p>
       </noscript>
 
-      <section id="step-0" aria-labelledby="step-0-title">
+      <section id="step-0" data-step="step-0" aria-labelledby="step-0-title">
         <h2 id="step-0-title">Step 0. Before you read anything else: fix this</h2>
         <p>Don’t read ahead. Seriously. This module starts with a little trap, and it only works if you walk into it.</p>
         <p>Pick <strong>one</strong> bug card below. Choose whichever feels most like your world. Then fix the bug <strong>any way you like.</strong> Note the time when you start. Come back to the line that says “STOP HERE” when it’s fixed.</p>
@@ -177,7 +177,7 @@ public class TuneUp {
         <p>Go on. Fix your card. We’ll wait.</p>
       </section>
 
-      <section id="stop-here" aria-labelledby="stop-title">
+      <section id="stop-here" data-step="stop" aria-labelledby="stop-title">
         <h2 id="stop-title">✋ STOP HERE (only once your bug is fixed)</h2>
         <p>Now answer one question honestly. Nobody else will see your answer.</p>
         <p><strong>How many lines did you type by hand into the card itself</strong> (the cell, the flyer, the HTML, or the Java file) before you asked an AI to do it?</p>
@@ -186,7 +186,7 @@ public class TuneUp {
         <p>If you got zero on the first try: lovely, you’re ahead. If you got 1, 3, or 12: welcome to the club. Most of us have spent years being rewarded for fixing things ourselves, and the reflex is fast. It reaches for the keyboard before the thinking part of you has finished its coffee. That reflex is the first thing this playbook asks you to <strong>unlearn.</strong></p>
       </section>
 
-      <section id="two-fixers" aria-labelledby="tale-title">
+      <section id="two-fixers" data-step="tale" aria-labelledby="tale-title">
         <h2 id="tale-title">A tale of two fixers <em>(characters are fictional)</em></h2>
         <p>Picture two people with the same broken garden spreadsheet.</p>
         <p><strong>Ray</strong> has written Java for thirty years. He spots the problem in four seconds: the formula stops at row 9. He clicks the cell, types <code>B11</code>, and moves on. Total: 32. Done, he thinks. He doesn’t notice “3 hrs” sitting in Maple’s row as text, which the formula quietly skips. The real answer is 35.</p>
@@ -198,7 +198,7 @@ public class TuneUp {
         </blockquote>
       </section>
 
-      <section id="unlearning" aria-labelledby="unlearn-title">
+      <section id="unlearning" data-step="unlearn" aria-labelledby="unlearn-title">
         <h2 id="unlearn-title">Key idea 1: Unlearning is the core skill</h2>
         <p>The tools change every few months. The <strong>mindset shift</strong> is what lasts. Here are the three big unlearnings:</p>
         <div class="table-scroll">
@@ -256,7 +256,7 @@ public class TuneUp {
         <p>Developers have a different head start: you already know how to define “correct” (tests, edge cases, reviews). The unlearning for you is letting go of the keyboard.</p>
       </section>
 
-      <section id="communication" aria-labelledby="comm-title">
+      <section id="communication" data-step="comm" aria-labelledby="comm-title">
         <h2 id="comm-title">Key idea 2: Communication is the fundamental skill</h2>
         <p>You can’t get anything done with an agent unless you can get your thinking out of your head and into words. An agent can’t read your mind, and it doesn’t know what you know. It will happily fill every gap with a guess, and often a confident one.</p>
         <p>That’s why the most common frustration isn’t “AI is useless.” It’s “AI is <em>almost</em> right.” In the 2025 Stack Overflow Developer Survey, <strong>66%</strong> of developers named “AI solutions that are almost right, but not quite” as a frustration, and more developers said they distrust the accuracy of AI tools (<strong>46%</strong>) than trust it (<strong>33%</strong>) (<a href="https://survey.stackoverflow.co/2025/ai/" rel="noopener noreferrer">survey.stackoverflow.co/2025/ai</a>). “Almost right” is very often a communication problem: something the AI needed to know never got said.</p>
@@ -295,7 +295,7 @@ public class TuneUp {
         <p>This playbook joins the two. It takes clear briefs and stays the owner, and it applies them all the way through to building and testing real agents. Links are in the Sources at the end.</p>
       </section>
 
-      <section id="examples" aria-labelledby="examples-title">
+      <section id="examples" data-step="examples" aria-labelledby="examples-title">
         <h2 id="examples-title">Worked examples: a bad request vs. a good one</h2>
         <h3>For non-coders: the garden spreadsheet (Card A)</h3>
         <p><strong>❌ The “almost right” request</strong></p>
@@ -324,10 +324,10 @@ First tell me the root cause in one sentence; then make the change.</code></pre>
         <p><strong>What you should see:</strong> a one-character diff (<code>&gt;</code> becomes <code>&gt;=</code>) and an explanation like “the comparison excluded exactly 10.” If the agent proposes anything bigger, that’s your cue to ask why. Don’t grab the keyboard.</p>
       </section>
 
-      <section id="see-the-tool" aria-labelledby="tool-title">
+      <section id="see-the-tool" data-step="tool" aria-labelledby="tool-title">
         <h2 id="tool-title">See the tool, then learn the craft</h2>
         <p>Here’s something that surprises people: <strong>a customer-help bot’s instructions are just a brief.</strong> The bot reads it before every single conversation. A vague brief doesn’t just give you one “almost right” answer. It gives every customer one.</p>
-        <p>You can see this for yourself with the free <a href="../../agent-health-checker/">Agent Health Checker</a> on Arup Banerjee Labs. It runs in your browser, and nothing you paste leaves your tab. We pasted two versions of the same fictional bike-shop bot’s instructions:</p>
+        <p>You can see this for yourself with the free <a href="../../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">Agent Health Checker</a> on Arup Banerjee Labs. It runs in your browser, and nothing you paste leaves your tab. We pasted two versions of the same fictional bike-shop bot’s instructions:</p>
         <p><strong>Vague brief:</strong></p>
         <pre><code>You are Sam, the friendly helper at Example Cycle Works (FICTIONAL TEST BUSINESS).
 Be helpful and keep customers happy. Never say you don't know - always give your
@@ -375,10 +375,10 @@ they can contact you."</code></pre>
         <div class="note note-warn">
           <p><em>Honest footnote:</em> the checker is a free heuristic tool. It matches words and patterns, so it can miss real problems or flag harmless text, and a good score is not a guarantee. <strong>Try it yourself (5 minutes):</strong> open the checker, paste the vague brief, click <strong>Check my agent</strong>, then paste the five-line brief and compare.</p>
         </div>
-        <p><a class="open" href="../../agent-health-checker/">See the tool, then learn the craft</a></p>
+        <p><a class="open" href="../../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">See the tool, then learn the craft</a></p>
       </section>
 
-      <section id="stay-the-owner" aria-labelledby="owner-title">
+      <section id="stay-the-owner" data-step="owner" aria-labelledby="owner-title">
         <h2 id="owner-title">Key idea 3: Stay the owner (delegate the typing, not the responsibility)</h2>
         <p>Here’s the risk of getting good at delegating: you stop knowing what’s going on. The agent did “something,” the number looks right, and you move on. Three weeks later someone asks, “Why does this formula look like that?” and you have no idea.</p>
         <p><strong>The owner is the person who can answer for the work</strong>, whoever did the typing. Three habits keep you the owner:</p>
@@ -422,7 +422,7 @@ they can contact you."</code></pre>
         </ul>
       </section>
 
-      <section id="challenge" aria-labelledby="challenge-title">
+      <section id="challenge" data-step="challenge" aria-labelledby="challenge-title">
         <h2 id="challenge-title">The Hands-Off Challenge: rematch</h2>
         <p>Time for round two. Reset your card (copy the original again) and add the <strong>twist</strong> for your card, which forces a real brief:</p>
         <div class="table-scroll">
@@ -491,7 +491,7 @@ they can contact you."</code></pre>
         </ul>
         <p><strong>Honor rules:</strong></p>
         <ul>
-          <li>This is self-reported, and nothing is sent anywhere.</li>
+          <li>This is self-reported. Your Hands count, rank, and what you write stay on this device and are never sent. The page may count that you picked a card, switched round, or copied, as a fixed label only.</li>
           <li>An honest “3” teaches you more than a fake “0,” because the whole point is noticing your own reflex. When you catch yourself reaching for the keyboard, write <strong>TRAP</strong> in your log and smile. That’s the lesson landing.</li>
           <li>If you want proof for yourself, screen-record your attempt and keep it private.</li>
         </ul>
@@ -561,7 +561,7 @@ they can contact you."</code></pre>
             <button type="button" id="btn-copy-results">Copy results</button>
             <button type="button" id="btn-clear-data">Clear my data</button>
           </div>
-          <p class="hint">Honor system: this is self-reported, and nothing is sent anywhere. An honest “3” teaches you more than a fake “0.” Clear my data erases the challenge, the Brief Card, and the Ownership Log saved in this browser.</p>
+          <p class="hint">Honor system: this is self-reported. Your Hands count, rank, and what you write stay on this device and are never sent. The page may count that you picked a card, switched round, or copied, as a fixed label only. An honest “3” teaches you more than a fake “0.” Clear my data erases the challenge, the Brief Card, and the Ownership Log saved in this browser.</p>
         </div>
 
         <h3 id="human-agent">No AI? Play the paper version: “Human Agent”</h3>
@@ -574,7 +574,7 @@ they can contact you."</code></pre>
         <p>Two players can use the same rank and Owner Score above. Nothing about the other person is stored. If you share a browser, use <strong>Clear my data</strong> between turns.</p>
       </section>
 
-      <section id="quiz" aria-labelledby="quiz-title">
+      <section id="quiz" data-step="quiz" aria-labelledby="quiz-title">
         <h2 id="quiz-title">Self-check quiz (8 questions)</h2>
         <ol class="quiz">
           <li>
@@ -650,7 +650,7 @@ they can contact you."</code></pre>
             </ol>
           </li>
         </ol>
-        <details class="answer-key card">
+        <details class="answer-key card" data-count="quiz_opened">
           <summary>Answer key</summary>
           <ol>
             <li><strong>b.</strong> Zero is the training target. In real life, use judgment; the drill builds the reflex.</li>
@@ -666,7 +666,7 @@ they can contact you."</code></pre>
         </details>
       </section>
 
-      <section id="artifact" aria-labelledby="artifact-title">
+      <section id="artifact" data-step="artifact" aria-labelledby="artifact-title">
         <h2 id="artifact-title">Your artifact: My Playbook, page 1</h2>
         <p>Copy this into a notebook, a document, or (for developers) <code>MY-PLAYBOOK.md</code> in a new folder. You’ll keep adding to it, and it becomes part of your proof at the end of the playbook.</p>
         <pre><code id="page-one-template">MY PLAYBOOK, PAGE 1                                   Date: ________
@@ -753,13 +753,13 @@ ______________________________________________________________</code></pre>
         <p class="hint">Saved on this device only. Clear my data, in the challenge above, also erases this log and the Brief Card.</p>
       </section>
 
-      <section id="next" aria-labelledby="next-title">
+      <section id="next" data-step="next" aria-labelledby="next-title">
         <h2 id="next-title">Next steps</h2>
         <ol>
           <li><strong>Use the Brief Card once this week on something real.</strong> It could be an email, a schedule, or a bug at work (with nothing private in it). Log it.</li>
           <li><strong>Try the Human Agent game</strong> with someone at home. It’s the fastest way to feel why briefs matter.</li>
-          <li><strong>Optional, 5 minutes:</strong> paste both bike-shop briefs into the free <a href="../../agent-health-checker/">Agent Health Checker</a> and watch the verdict change.</li>
-          <li><strong>Coming up in <a href="../module-02/">Module 2, “See the Tool: what an agent is made of”</a>:</strong> you’ll open up a real (fictional-business) agent and name its parts. Then you’ll read its scorecard like a manager reads a performance review.
+          <li><strong>Optional, 5 minutes:</strong> paste both bike-shop briefs into the free <a href="../../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">Agent Health Checker</a> and watch the verdict change.</li>
+          <li><strong>Coming up in <a href="../module-02/" data-count="nav_clicked" data-detail="module-02">Module 2, “See the Tool: what an agent is made of”</a>:</strong> you’ll open up a real (fictional-business) agent and name its parts. Then you’ll read its scorecard like a manager reads a performance review.
             <ul>
               <li><strong>No-code path:</strong> nothing to install.</li>
               <li><strong>Developer path (Java/Spring track):</strong> have Java 21 ready. You’ll run the sample agent on a free built-in mock model, with no API key needed.</li>
@@ -769,7 +769,7 @@ ______________________________________________________________</code></pre>
         <p>If you share your Hands score anywhere, keep it to the score. No screenshots of real work, and no private details.</p>
       </section>
 
-      <section id="sources" aria-labelledby="sources-title">
+      <section id="sources" data-step="sources" aria-labelledby="sources-title">
         <h2 id="sources-title">Sources (checked Thu Oct 1, 2026)</h2>
         <ul>
           <li>Stack Overflow 2025 Developer Survey, AI section (66% “almost right” frustration; 46% distrust vs. 33% trust accuracy): <a href="https://survey.stackoverflow.co/2025/ai/" rel="noopener noreferrer">https://survey.stackoverflow.co/2025/ai/</a></li>
@@ -783,24 +783,27 @@ ______________________________________________________________</code></pre>
               <li>Anthropic AI Fluency: Framework &amp; Foundations: <a href="https://anthropic.skilljar.com/ai-fluency-framework-foundations" rel="noopener noreferrer">https://anthropic.skilljar.com/ai-fluency-framework-foundations</a></li>
             </ul>
           </li>
-          <li>Agent Health Checker (free, runs in your browser): <a href="../../agent-health-checker/">on this site</a>. Scores above are from our run of the checker’s own code on Oct 1, 2026.</li>
+          <li>Agent Health Checker (free, runs in your browser): <a href="../../agent-health-checker/" data-count="nav_clicked" data-detail="agent-health-checker">on this site</a>. Scores above are from our run of the checker’s own code on Oct 1, 2026.</li>
         </ul>
         <p>All businesses, groups, and people in this module are fictional. All product and course names are trademarks of their respective owners; no affiliation or endorsement is implied. Drafted with AI assistance, then reviewed and tested by me.</p>
       </section>
 
-      <section class="volunteer" id="volunteer" aria-labelledby="volunteer-title">
+      <section class="volunteer" id="volunteer" data-step="volunteer" aria-labelledby="volunteer-title">
         <h2 id="volunteer-title">Volunteer as a tester</h2>
         <p>Help test this free playbook. Coders and non-coders both welcome. Takes about an hour per module.</p>
-        <p><a class="open" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
+        <p><a class="open" data-count="volunteer_clicked" data-detail="module" href="mailto:arupkumar.banerjee@gmail.com?subject=Playbook%20volunteer%20tester&amp;body=Hi%20Arup%2C%0A%0AI%27d%20like%20to%20volunteer%20as%20a%20tester%20for%20the%20Agentic%20AI%20Career%20Playbook.%0A%0AName%3A%0ACoder%20or%20non-coder%3A%0ACurrent%20role%20%28optional%29%3A%0AAI%20assistant%20I%20use%20%28e.g.%20ChatGPT%2C%20Claude%2C%20Copilot%2C%20Gemini%2C%20Cursor%29%3A%0ATime%20I%20can%20give%20over%20the%20next%202%20weeks%3A%0A">Volunteer as a tester</a></p>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>Arup Kumar Banerjee · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
+      <div>Anonymous, cookieless step counts only. Never what you type, your score, or your name. <a href="../privacy.html">Privacy</a>.</div>
       <div class="footer-disclaimer">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
-      <div class="footer-links"><a href="../terms.html">Terms</a> · <a href="../privacy.html">Privacy</a> · <a href="../">Playbook</a> · <a href="../../index.html">Labs hub</a></div>
+      <div class="footer-links"><a href="../terms.html">Terms</a> · <a href="../privacy.html">Privacy</a> · <a href="../" data-count="nav_clicked" data-detail="playbook">Playbook</a> · <a href="../../index.html" data-count="nav_clicked" data-detail="hub">Labs hub</a></div>
     </footer>
   </div>
+  <script src="../../shared/labs-config.js"></script>
+  <script src="../../shared/labs-counts.js" data-page="playbook-m1"></script>
   <script src="../playbook.js" defer></script>
 </body>
 </html>

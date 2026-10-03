@@ -20,7 +20,7 @@
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
-        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <a class="hub-link" href="../index.html" data-count="nav_clicked" data-detail="hub">← Labs hub</a>
         <div class="badge-privacy">No upload · no account · free</div>
       </div>
     </header>
@@ -36,7 +36,7 @@
       <p class="why-line"><strong>Why this exists:</strong> the gaps that bite in production (keys in the config, shell or SQL tools that run model output,
         no timeouts, no tracing) are cheap to catch early, but agent configs are too sensitive to upload anywhere. So the check runs in your tab.
         For customer-facing bots, the worst failures show up in what the bot <em>says</em>, so there is a transcript mode too.
-        <a href="../case-study/">Read the test that led to it</a> (a scripted bot for a fictional business).</p>
+        <a href="../case-study/" data-count="nav_clicked" data-detail="case-study">Read the test that led to it</a> (a scripted bot for a fictional business).</p>
       <div class="trust">
         <span>Client-side only</span>
         <span>No config upload</span>
@@ -88,6 +88,7 @@
           <div class="actions-row">
             <button type="button" id="btn-copy">Copy Markdown report</button>
           </div>
+          <p class="hint">Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.</p>
           <p class="hint">Heuristic keyword checks. Can miss problems and false-flag. Not a security audit. The copied report masks secrets this checker already found.</p>
           <p class="hint">If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">tell me on GitHub</a>. Please redact secrets before you post. A short snippet is enough.</p>
         </div>
@@ -178,10 +179,13 @@
       <div class="card">
         <h2 style="margin-top:0">More free tools from Arup Kumar Banerjee</h2>
         <p style="color:var(--muted);margin:0 0 .75rem;font-size:.92rem">
-          Using AI Agent Health Checker never requires email. Explore the Labs hub for Cloud Bill Smell and Observability Gap Finder,
-          or read the <a href="../case-study/">controlled test on a fictional business</a> that shaped the customer-safety checks.
+          Using AI Agent Health Checker never requires email. Also on Labs:
+          <a href="../cloud-bill-smell/" data-count="nav_clicked" data-detail="cloud-bill-smell">Cloud Bill Smell Detector</a>,
+          <a href="../observability-gap-finder/" data-count="nav_clicked" data-detail="observability-gap-finder">Observability Gap Finder</a>,
+          the <a href="../playbook/" data-count="nav_clicked" data-detail="playbook">Agentic AI Career Playbook</a>,
+          or the <a href="../case-study/" data-count="nav_clicked" data-detail="case-study">controlled test on a fictional business</a> that shaped the customer-safety checks.
         </p>
-        <a href="../index.html">← Back to Arup Banerjee Labs hub</a>
+        <a href="../index.html" data-count="nav_clicked" data-detail="hub">← Back to Arup Banerjee Labs hub</a>
       </div>
     </section>
 
@@ -205,7 +209,7 @@
 
     <footer class="site-footer">
       <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Little Elm, Texas · Arup Banerjee Labs · <a href="mailto:arupkumar.banerjee@gmail.com">arupkumar.banerjee@gmail.com</a></div>
-      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong> · Cookieless, anonymous visit counts only. What you paste never leaves your browser.</div>
+      <div>Local runs: <strong id="local-runs" style="color:var(--text)">0</strong> · Anonymous, cookieless step counts only (page, scroll, sample or your own input, analyze, score range, copy). Never your pasted text, findings, account IDs, names, or costs.</div>
       <div>If a check looks wrong, <a href="https://github.com/ultimatixarup/arup-banerjee-labs/issues/new?template=01-wrong-or-missing-check.yml" rel="noopener noreferrer">tell me on GitHub</a>. Please redact secrets before you post.</div>
       <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
     </footer>

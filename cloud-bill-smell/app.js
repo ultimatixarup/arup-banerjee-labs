@@ -18,9 +18,17 @@
 2026-08-01,2026-08-31,gcp,demo-gcp,Compute Engine,us-central1,gce-demo-idle,notebook-leftover,N2-standard-4,720,hours,140.00,USD,,,,no labels leftover notebook
 `;
 
-  // Anonymous counts only: fixed event names + score range, via ../shared/labs-counts.js (GoatCounter,
-  // cookieless, off until configured). Never pass pasted text, findings, secrets or agent tool names here.
+  // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
+  // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
+  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
+  let sampleLoadedText = null;
+  let ownNoted = false;
+  function noteOwn() {
+    if (ownNoted) return;
+    ownNoted = true;
+    track("input_kind", "own");
+  }
 
   function parseCSV(text) {
     const lines = text.trim().split(/\r?\n/).filter(Boolean);
@@ -286,6 +294,7 @@
 
   function run() {
     const text = document.getElementById("input").value;
+    if (String(text || "").trim() && text !== sampleLoadedText) noteOwn();
     track("analyze_clicked");
     const r = analyzeText(text);
     render(r);
@@ -295,16 +304,20 @@
   function bind() {
     document.getElementById("btn-run").onclick = run;
     document.getElementById("btn-sample").onclick = async () => {
+      let text = SAMPLE_CSV;
       try {
         const res = await fetch("sample-cloud-bill.csv");
-        document.getElementById("input").value = await res.text();
+        text = await res.text();
       } catch {
-        document.getElementById("input").value = SAMPLE_CSV;
         toast("Loaded embedded sample (fetch blocked on file://)");
       }
+      sampleLoadedText = text;
+      document.getElementById("input").value = text;
+      track("input_kind", "sample");
       run();
     };
     document.getElementById("btn-clear").onclick = () => {
+      sampleLoadedText = null;
       document.getElementById("input").value = "";
       document.getElementById("results-empty").classList.remove("hidden");
       document.getElementById("results-body").classList.add("hidden");
@@ -313,17 +326,18 @@
       const f = e.target.files && e.target.files[0];
       if (!f) return;
       const reader = new FileReader();
-      reader.onload = () => { document.getElementById("input").value = String(reader.result || ""); run(); };
+      reader.onload = () => { document.getElementById("input").value = String(reader.result || ""); noteOwn(); run(); };
       reader.readAsText(f);
     });
     document.getElementById("btn-copy").onclick = async () => {
       const r = window.__lastBill; if (!r || r.error) return toast("Run first");
-      const md = ["# Cloud Bill Smell Report", "", "**Score:** " + r.score + " (" + r.bucket + ")", "**Verdict:** " + r.headline, "",
+      const md = ["# Cloud Bill Smell Report", "", "> " + SHARE_WARNING, "", "**Score:** " + r.score + " (" + r.bucket + ")", "**Verdict:** " + r.headline, "",
         "## Smells", ""].concat(r.smells.map((s) => "- **" + s.title + "** [" + s.severity + "]: " + s.message + " (" + s.evidence + ")"))
         .concat(["", "_Client-side only. Your export was not uploaded. Not a billing audit._", ""]);
       try { await navigator.clipboard.writeText(md.join("\n")); toast("Copied"); track("copy_clicked", "report"); }
       catch { toast("Clipboard blocked"); }
     };
+    document.getElementById("input").addEventListener("paste", function () { noteOwn(); });
     let n = 0; try { n = parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0; } catch (_) {}
     const el = document.getElementById("local-runs"); if (el) el.textContent = String(n);
   }
