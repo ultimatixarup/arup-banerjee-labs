@@ -22,6 +22,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .card-danger h2 { color: var(--bad); font-size: 1.1rem; }
 .rf-list { margin: .5rem 0; padding-left: 1.2rem; display: grid; gap: .45rem; font-size: .93rem; }
 .rf-list strong { color: var(--text); }
+.emergency-strip { border-color: var(--bad); background: rgba(255,107,122,.08); padding: .6rem 1rem; margin: 0 0 1rem; }
+.emergency-strip p { margin: .2rem 0; }
+.emergency-strip strong { color: var(--text); }
+.notice-emergency a { color: inherit; }
+.footer-links { font-size: .85rem; margin-top: .35rem; }
+.print-only { display: none; }
 
 .tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 1rem; }
 .tabs [role="tab"] { border-radius: 999px; font-size: .85rem; padding: .5rem .85rem; }
@@ -89,10 +95,19 @@ button { min-height: 44px; }
 
 @media print {
   body { background: #fff; color: #000; }
-  .site-header, .tabs, .toolbar, .hero, #red-flags, .section, .toast, .skip-link, .notice-emergency a { display: none !important; }
+  .site-header, .tabs, .toolbar, .hero, #red-flags, .section, .toast, .skip-link, .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .notice-emergency strong, .emergency-strip strong { color: #000 !important; }
+  .notice a { color: #000; text-decoration: none; }
   .tabpanel[hidden], .tabpanel[data-print="0"] { display: none !important; }
   .card { box-shadow: none; border: 1px solid #999; background: #fff; color: #000; }
   .small, .hint, legend, .form-grid label { color: #000 !important; }
   .notice { border-color: #000; background: #fff; }
   .notice h2 { color: #000; }
 }
+
+/* Terms of Use page */
+.terms h1 { font-size: 1.4rem; margin: 0 0 .25rem; }
+.terms h2 { font-size: 1rem; margin: 1.1rem 0 .3rem; }
+.terms p { margin: .3rem 0; line-height: 1.55; }
+.terms-caps { font-weight: 600; }

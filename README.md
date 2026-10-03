@@ -7,8 +7,15 @@ Free-forever, client-side scorecards:
 3. `observability-gap-finder/` — Observability Gap Finder
 4. `glp1-support/` — GLP-1 Support (free, private organizer; not medical advice)
 5. `case-study/` — Controlled local test of a scripted chatbot for a fictional business (Example Family Dental); not a real customer
+6. `playbook/` — The Agentic AI Career Playbook. Free, static, no signup, nothing to buy. Module 1 is available; modules 2–4 have coming-soon pages; modules 5–8 are listed on the playbook index only.
 
 Hub: `index.html`
+
+## The Agentic AI Career Playbook (`playbook/`)
+
+A free, browser-only playbook for anyone who can communicate. Module 1 includes the Hands-Off Challenge, a Brief Card, and an Ownership Log.
+
+Privacy: localStorage only (`abl_playbook_m1`), a visible “Clear my data” button, copy-as-text, no analytics, no network calls (Content-Security-Policy with `connect-src 'none'`). Bug cards download from a Blob in the browser. Share images live in `playbook/img/`.
 
 ## GLP-1 Support (`glp1-support/`)
 
