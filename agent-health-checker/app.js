@@ -197,7 +197,6 @@
   }
   // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
   // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
-  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
   let ownNoted = false;
   function noteOwn() {
@@ -1031,7 +1030,7 @@
     const lines = [
       "# AI Agent Health Checker Report",
       "",
-      "> " + SHARE_WARNING,
+      window.LABS_PRIVATE_REPORT_LINE,
       "",
       "**Overall:** " + r.score + "/100 (" + r.bucket + ")",
       "**Verdict:** " + r.headline,

@@ -20,7 +20,6 @@
 
   // Anonymous counts only: fixed event names, via ../shared/labs-counts.js (GoatCounter,
   // cookieless, off until configured). Never pass pasted text, findings, secrets, names, costs, or account ids.
-  const SHARE_WARNING = "Don't paste this report into a chatbot or share it publicly without redacting account IDs, names, and costs first.";
   function track(name, detail) { if (window.LabsCount) window.LabsCount.event(name, detail); }
   let sampleLoadedText = null;
   let ownNoted = false;
@@ -301,6 +300,13 @@
     if (!r.error) track("score_bucket", r.bucket);
   }
 
+  function reportMarkdown(r) {
+    if (!r || r.error) return "";
+    return ["# Cloud Bill Smell Report", "", window.LABS_PRIVATE_REPORT_LINE, "", "**Score:** " + r.score + " (" + r.bucket + ")", "**Verdict:** " + r.headline, "",
+      "## Smells", ""].concat(r.smells.map((s) => "- **" + s.title + "** [" + s.severity + "]: " + s.message + " (" + s.evidence + ")"))
+      .concat(["", "_Client-side only. Your export was not uploaded. Not a billing audit._", ""]).join("\n");
+  }
+
   function bind() {
     document.getElementById("btn-run").onclick = run;
     document.getElementById("btn-sample").onclick = async () => {
@@ -331,10 +337,7 @@
     });
     document.getElementById("btn-copy").onclick = async () => {
       const r = window.__lastBill; if (!r || r.error) return toast("Run first");
-      const md = ["# Cloud Bill Smell Report", "", "> " + SHARE_WARNING, "", "**Score:** " + r.score + " (" + r.bucket + ")", "**Verdict:** " + r.headline, "",
-        "## Smells", ""].concat(r.smells.map((s) => "- **" + s.title + "** [" + s.severity + "]: " + s.message + " (" + s.evidence + ")"))
-        .concat(["", "_Client-side only. Your export was not uploaded. Not a billing audit._", ""]);
-      try { await navigator.clipboard.writeText(md.join("\n")); toast("Copied"); track("copy_clicked", "report"); }
+      try { await navigator.clipboard.writeText(reportMarkdown(r)); toast("Copied"); track("copy_clicked", "report"); }
       catch { toast("Clipboard blocked"); }
     };
     document.getElementById("input").addEventListener("paste", function () { noteOwn(); });
@@ -343,4 +346,5 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind); else bind();
   window.__ABL_BILL__ = analyzeText;
+  window.__ABL_BILL_MD__ = reportMarkdown;
 })();
