@@ -108,8 +108,8 @@ function assertClean(urls, label) {
   });
 }
 
-// 1. Placeholder config: nothing sent, including new events.
-let t = run(null);
+// 1. A placeholder code still sends nothing, even on the public host.
+let t = run({ GOATCOUNTER_CODE: 'GOATCOUNTER_CODE' });
 const L0 = t.sb.LabsCount;
 L0.event('analyze_clicked');
 L0.event('score_bucket', '50-74');
@@ -120,6 +120,33 @@ L0.event('nav_clicked', 'case-study');
 L0.event('volunteer_clicked', 'top');
 L0.event('copy_clicked', 'card-a');
 assert.strictEqual(t.urls().length, 0, 'placeholder must send nothing');
+
+// 1b. The committed site code sends only on https://ultimatixarup.github.io.
+const liveCfg = fs.readFileSync(R + 'shared/labs-config.js', 'utf8');
+assert.ok(/GOATCOUNTER_CODE:\s*"arup-labs"/.test(liveCfg), 'live site code');
+assert.ok(/LIST_FORM_ACTION:\s*"LIST_FORM_ACTION"/.test(liveCfg), 'signup stays off');
+assert.ok(/FEEDBACK_FORM_URL:\s*"FEEDBACK_FORM_URL"/.test(liveCfg), 'feedback stays off');
+assert.ok(/GLP1_FEEDBACK_FORM_URL:\s*"GLP1_FEEDBACK_FORM_URL"/.test(liveCfg), 'glp1 form stays off');
+t = run(null);
+t.sb.LabsCount.event('analyze_clicked');
+assert.ok(t.urls().length > 0, 'live code counts on the public host');
+t.urls().forEach(function (u) {
+  assert.strictEqual(new URL(u).host, 'arup-labs.goatcounter.com');
+});
+[
+  { host: '127.0.0.1' },
+  { host: 'localhost' },
+  { host: 'ultimatixarup.github.io', proto: 'http:' },
+  { host: 'evil.example' },
+  { dnt: '1' },
+  { gpc: true },
+  { page: 'glp1-support' }
+].forEach(function (o) {
+  const x = run(null, o);
+  x.sb.LabsCount.event('analyze_clicked');
+  x.sb.LabsCount.event('step_viewed', 'challenge');
+  assert.strictEqual(x.urls().length, 0, 'live code gated: ' + JSON.stringify(o));
+});
 
 // 2. Configured: original events and the new funnel events. Secrets are dropped.
 t = run({ GOATCOUNTER_CODE: 'abl-test' });

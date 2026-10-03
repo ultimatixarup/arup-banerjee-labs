@@ -1,6 +1,6 @@
 # Usage-count events
 
-Anonymous, cookieless totals via GoatCounter. Every name below is fixed in `shared/labs-counts.js`. If a value is not on that list, it is dropped and nothing is sent. Counts stay off until `GOATCOUNTER_CODE` in `shared/labs-config.js` is a real site code, and they are sent only from `https://ultimatixarup.github.io`. Do Not Track and Global Privacy Control skip them.
+Anonymous, cookieless totals via GoatCounter. Every name below is fixed in `shared/labs-counts.js`. If a value is not on that list, it is dropped and nothing is sent. The live site code is `arup-labs`. Counts are sent only from `https://ultimatixarup.github.io`. Do Not Track and Global Privacy Control skip them.
 
 A pageview is the path (`/playbook/module-01/`). An action is an event (`e=true`) whose path is `<page-id>/<event>/<detail>`. Page ids: `hub`, `case-study`, `agent-health-checker`, `cloud-bill-smell`, `observability-gap-finder`, `playbook`, `playbook-m1`, `playbook-m2`, `playbook-m3`, `playbook-m4`.
 

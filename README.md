@@ -34,14 +34,13 @@ Privacy: localStorage only (`abl_glp1_*` keys), "Clear my data" button, export-t
 
 ## Usage counts, updates signup and feedback (all optional)
 
-All account values live in one file: **`shared/labs-config.js`**. While a value is still a placeholder
-(`GOATCOUNTER_CODE`, `LIST_FORM_ACTION`, `FEEDBACK_FORM_URL`, `GLP1_FEEDBACK_FORM_URL`) that feature is off.
+All account values live in one file: **`shared/labs-config.js`**. `GOATCOUNTER_CODE` is `arup-labs`. Counts are sent only from `https://ultimatixarup.github.io`. `LIST_FORM_ACTION`, `FEEDBACK_FORM_URL`, and `GLP1_FEEDBACK_FORM_URL` are still placeholders, so signup and feedback stay off.
 
 - **Counts** (`shared/labs-counts.js`, [GoatCounter](https://www.goatcounter.com/), cookieless): hub, case study, the three dev
   tools, and the playbook (landing page and modules 1–4). Sent: the page path, plus the fixed events in `shared/EVENTS.md`
   (section reached, scroll depth, buttons, sample vs own input, score range). Never sent: pasted text, findings, secrets,
   account IDs, names, costs, agent tool names, page title, referrer, query string. Only on `https://ultimatixarup.github.io`;
-  skipped with Do Not Track / Global Privacy Control. Off until `GOATCOUNTER_CODE` is a real site code.
+  skipped with Do Not Track / Global Privacy Control. Live site code: `arup-labs`.
 - **Get updates** (`shared/labs-forms.js`): optional email form on the hub and the three dev tools, posting to a double-opt-in list
   (Buttondown). Opens in a new tab; the tools work the same without it.
 - **Share feedback / testimonial**: a link to a separate hosted form. Nothing is published automatically; quotes are hand-approved

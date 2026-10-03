@@ -2,9 +2,11 @@
  * ============================================================================
  *  ARUP BANERJEE LABS — SHARED CONFIG (the ONE place to plug in accounts)
  * ============================================================================
- *  Every value below is a PLACEHOLDER. While a value is still a placeholder,
- *  the matching feature is switched off: nothing is counted, and the signup
- *  form and feedback links stay hidden. Replace a value to switch it on.
+ *  GOATCOUNTER_CODE is live (`arup-labs`). Counts still go out only from
+ *  https://ultimatixarup.github.io over https, and only when the browser does
+ *  not send Do Not Track or Global Privacy Control.
+ *  LIST_FORM_ACTION, FEEDBACK_FORM_URL, and GLP1_FEEDBACK_FORM_URL are still
+ *  placeholders, so the signup form and feedback links stay hidden.
  *
  *  DATA ONLY. This file must never send anything or read the page.
  *  GLP-1 Support loads it just to read GLP1_FEEDBACK_FORM_URL (a plain link);
@@ -14,7 +16,7 @@
 window.LABS_CONFIG = Object.freeze({
   // GoatCounter site code: the "mycode" part of https://mycode.goatcounter.com
   // (lowercase letters, digits, hyphens). Used by shared/labs-counts.js.
-  GOATCOUNTER_CODE: "GOATCOUNTER_CODE",
+  GOATCOUNTER_CODE: "arup-labs",
 
   // Counts are sent only when the page is served from this host (so local
   // copies, file:// and test servers never count).

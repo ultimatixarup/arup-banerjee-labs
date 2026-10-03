@@ -1,14 +1,14 @@
 # Plugging in accounts (all free)
 
-Everything is switched off until you edit **`shared/labs-config.js`**. Each value is independent.
+Counts are on for GoatCounter site code `arup-labs`. Signup and feedback stay off until you replace their placeholders in **`shared/labs-config.js`**. Each value is independent.
 
 ## 1. GoatCounter (anonymous, cookieless counts) → `GOATCOUNTER_CODE`
 
 1. Sign up at <https://www.goatcounter.com/signup> with arupkumar.banerjee@gmail.com. Pick a site code, e.g. `arup-labs`
    (your dashboard is then `https://arup-labs.goatcounter.com`). Confirm the verification email.
 2. Optional, for less data: in Settings → Data collection, untick what you don't need (e.g. region, language).
-3. Set `GOATCOUNTER_CODE: "arup-labs"` in `shared/labs-config.js`. No other file needs editing
-   (the CSPs already allow `https://*.goatcounter.com` images).
+3. `GOATCOUNTER_CODE` is already `"arup-labs"` in `shared/labs-config.js`. No other file needs editing
+   (the CSPs already allow `https://*.goatcounter.com` images). Signup and feedback values in that file are still placeholders.
 
 What shows up: page paths for the hub, the case study, the three dev tools, and the playbook (`/playbook/`, `/playbook/module-01/` … `/playbook/module-04/`), plus the fixed events in **`shared/EVENTS.md`** (section reached, scroll depth, volunteer, navigation, copy, sample vs own input, analyze, score range). Counts only come from `https://ultimatixarup.github.io`.
 
