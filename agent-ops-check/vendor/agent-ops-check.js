@@ -1886,7 +1886,7 @@ var AgentOpsCheck = (() => {
   var require_aoc_assets = __commonJS({
     "aoc:aoc-assets"(exports, module) {
       init_process();
-      module.exports = { "/aoc/rules/CHANGELOG.md": '# Rules changelog\n\nRule updates ship only through this Git repo. Refresh with `git pull` or re-run `npx github:ultimatixarup/agent-ops-check`.\n\n## 2026.10.13\n- New: 8 ADSF rules in `injection.yaml` (`llmail:` group) derived from Microsoft\'s LLMail-Inject adaptive prompt-injection challenge dataset (MIT, https://huggingface.co/datasets/microsoft/llmail-inject-challenge): tool-call/api_call syntax, fake turn delimiters, obfuscated addresses, decode-then-run instructions, post-task triggers, send-email directives, encoded text, and a low-severity "send to address" signal. Each rule carries `source` and `family` metadata.\n- New: `data/llmail/` samples (500 held-out phase 2 attacks, 300 phase 1 attacks, 203 benign emails, 30 hand-written benign emails) and `docs/LLMAIL_BENCHMARK.md` with measured detection and false-positive rates.\n- New: LLMail-style indirect-injection cases in the generated security eval set.\n\n## 2026.10.12\n- New: `injection.yaml` (ADSF document-wide prompt-injection scan): override phrases, fake system markers, hidden HTML comments, CSS-hidden text, zero-width/bidi/tag characters, base64 instructions, data-leaking image links, request-capture hosts.\n- New: `ste.yaml` (Simplified Technical English style rules, original word lists).\n- New: `data/standards/*.yaml` (offline mappings to 9 frameworks).\n- Initial: `crossover.yaml`, `actions.yaml`, `governance.yaml`.\n', "/aoc/rules/VERSION.json": '{\n  "version": "2026.10.13",\n  "date": "2026-10-13"\n}\n', "/aoc/rules/actions.yaml": `# Irreversible-action rules (case-insensitive JS regex).
+      module.exports = { "/aoc/rules/CHANGELOG.md": '# Rules changelog\n\nRule updates ship only through this Git repo. Refresh with `git pull` or re-run `npx github:ultimatixarup/agent-ops-check`.\n\n## 2026.10.13 (second update, same day: false-positive fixes)\nFalse-positive fixes from the vendor-samples campaign (`campaigns/2026-10-vendor-samples/`). Each has a regression test in `test/fp-regressions.test.js` built on short attributed excerpts of the scanned samples (`test/fixtures/fp/`).\n- New: Jupyter notebooks (`.ipynb`) are scanned: code and markdown cells only (outputs ignored), findings say "notebook cell N, line M". Raw notebook limit 8 MB, extracted text limit 2 MB.\n- Changed: `governance.unbounded_loop` only fires when the loop body calls a model (`llm_call`) or a tool (new `tool_invoke` pattern). Pagination, stream and input-prompt loops are no longer flagged.\n- Changed: injection matches in a defensive context (guardrail/detector text that describes attacks: "detect", "jailbreak", "attempts to", "never follow"...) are lowered to low, not removed.\n- Changed: `injection.fake_system` ignores `system: str`-style parameters and docstring `Args:` entries in code files, and now reports the right line for matches anchored on a newline.\n- Changed: tool-call JSON (`llmail_tool_call_syntax`, `tool_call_injection`) inside markdown code (fenced or `inline`) is low.\n- Changed: `injection.templated_url` in infrastructure-as-code (CDK, Terraform, CloudFormation, Bicep, Pulumi) is low.\n- Changed: Agent Health Checker config checks skip CI/devcontainer/package/tooling files and need a prompt/instructions key in JSON/YAML.\n- New: `placeholders:` in `crossover.yaml` (AWS example account `123456789012`, AWS example keys, test card numbers, the retired "Woolworth" SSN) are skipped by the PII and secret rules.\n- Changed: tool names that start with a read-only verb (`get_`, `list_`, `read_`, `fetch_`, `search_`...) are not irreversible unless they also contain a strong action verb (`get_and_delete_file`).\n- Changed: agent boundaries: folders such as `backend/`, `frontend/`, `ui/`, `python-backend/`, `docs/`, `.github/` belong to the root app, and files at the input root don\'t count as a separate agent for shared-credential checks when there are sub-agents.\n- Changed: STE checks only prompt/instruction files (`*prompt*`, `*instruction*`, `system*`, `AGENTS.md`, `CLAUDE.md`, ...) and prompt strings in configs by default, not every README. `--ste-all` restores the old scope.\n\n## 2026.10.13\n- New: 8 ADSF rules in `injection.yaml` (`llmail:` group) derived from Microsoft\'s LLMail-Inject adaptive prompt-injection challenge dataset (MIT, https://huggingface.co/datasets/microsoft/llmail-inject-challenge): tool-call/api_call syntax, fake turn delimiters, obfuscated addresses, decode-then-run instructions, post-task triggers, send-email directives, encoded text, and a low-severity "send to address" signal. Each rule carries `source` and `family` metadata.\n- New: `data/llmail/` samples (500 held-out phase 2 attacks, 300 phase 1 attacks, 203 benign emails, 30 hand-written benign emails) and `docs/LLMAIL_BENCHMARK.md` with measured detection and false-positive rates.\n- New: LLMail-style indirect-injection cases in the generated security eval set.\n\n## 2026.10.12\n- New: `injection.yaml` (ADSF document-wide prompt-injection scan): override phrases, fake system markers, hidden HTML comments, CSS-hidden text, zero-width/bidi/tag characters, base64 instructions, data-leaking image links, request-capture hosts.\n- New: `ste.yaml` (Simplified Technical English style rules, original word lists).\n- New: `data/standards/*.yaml` (offline mappings to 9 frameworks).\n- Initial: `crossover.yaml`, `actions.yaml`, `governance.yaml`.\n', "/aoc/rules/VERSION.json": '{\n  "version": "2026.10.13",\n  "date": "2026-10-13"\n}\n', "/aoc/rules/actions.yaml": `# Irreversible-action rules (case-insensitive JS regex).
 # Verbs that make a tool name irreversible (matched as a word part: send_email, sendEmail, slack.post).
 irreversible_verbs: 'send|post|publish|tweet|delete|remove|drop|destroy|purge|submit|pay|charge|refund|transfer|wire|purchase|buy|order|checkout|book|cancel|approve|merge|deploy|accept|sign|transact'
 tool_def_context: '"name"\\s*:|name:\\s|def\\s+\\w+\\s*\\(|function\\s+\\w+\\s*\\(|tool\\(|@tool|DynamicTool|server\\.tool\\(|registerTool|"type"\\s*:\\s*"function"|tools:'
@@ -1979,6 +1979,10 @@ pii:
     pattern: '\\b(account|acct|routing)[ _-]?(no|number|#)?["'']?\\s*[:=]?\\s*["'']?\\d{8,17}\\b'
   - id: email_address
     pattern: '\\b[A-Za-z0-9._%+-]+@(gmail|yahoo|outlook|hotmail|icloud|proton)\\.(com|me)\\b'
+# Documented placeholder / example values that match the PII and secret patterns but are not real data.
+# A match that contains one of these is skipped. Sources: AWS docs example account ID and access keys,
+# Stripe/Visa test card numbers, the SSA's retired "Woolworth" SSN. (123-45-6789 is NOT allowlisted: fixtures use it as realistic PII.)
+placeholders: '123456789012|111111111111|000000000000|210987654321|AKIAIOSFODNN7EXAMPLE|wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY|4242[ -]?4242[ -]?4242[ -]?4242|4111[ -]?1111[ -]?1111[ -]?1111|078-05-1120|EXAMPLE'
 `, "/aoc/rules/governance.yaml": `# Governance + cost rules (case-insensitive JS regex).
 providers:
   openai: '\\bopenai\\b|api\\.openai\\.com|from openai import|require\\(["'']openai'
@@ -2010,6 +2014,7 @@ max_tokens: '\\bmax_(output_)?tokens\\b|\\bmaxTokens\\b|\\bmax_completion_tokens
 timeout: '\\btimeout\\b|\\brequest_timeout\\b|AbortSignal\\.timeout|\\bdeadline\\b'
 retry_cap: '\\bmax_?retries\\b|\\bmaxRetries\\b|\\bretry[_ -]?(limit|max|attempts)\\b|\\bstop_after_attempt\\b|\\bbackoff\\b'
 recursion_cap: '\\brecursion_?limit\\b|\\bmax_?(iterations|iter|steps|turns|loops|depth)\\b|\\bmaxSteps\\b|\\bstopWhen\\b|\\bmaxTurns\\b'
+tool_invoke: '\\bcall_tool\\(|\\brun_tool\\(|\\bexecute_tool\\(|\\binvoke_tool\\(|\\btool_calls\\b|\\btool_use\\b|\\.ainvoke\\(|\\.astream\\(|\\bRunner\\.run|\\bagent\\.run\\(|\\.run_stream\\(|\\bmessages\\.stream\\(|\\b_agent_loop\\('
 loop_risk: 'while\\s*\\(\\s*true\\s*\\)|while\\s+True\\s*:|for\\s*\\(\\s*;\\s*;\\s*\\)'
 budget: '\\bbudget\\b|\\bspend[_ -]?(limit|cap|alert)|\\busage[_ -]?(limit|alert|cap)|\\bcost[_ -]?(alert|cap|limit)|\\bbilling[_ -]?alert|\\bhard[_ -]?limit'
 tracing: '\\bopentelemetry\\b|\\botel\\b|\\botlp\\b|\\blangsmith\\b|LANGCHAIN_TRACING|\\blangfuse\\b|\\bhelicone\\b|\\bphoenix\\b|\\bweave\\b|\\btraceloop\\b'
@@ -3105,9 +3110,40 @@ items:
       init_process();
       var fs = require_fs();
       var path = require_path_browserify();
-      var EXT = /* @__PURE__ */ new Set([".html", ".htm", ".xml", ".svg", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".py", ".json", ".jsonl", ".yaml", ".yml", ".toml", ".md", ".txt", ".csv", ".env", ".example"]);
+      var EXT = /* @__PURE__ */ new Set([".html", ".htm", ".xml", ".svg", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".py", ".json", ".jsonl", ".yaml", ".yml", ".toml", ".md", ".txt", ".csv", ".env", ".example", ".ipynb"]);
       var SKIP_DIRS = /* @__PURE__ */ new Set(["node_modules", ".git", "dist", "build", ".venv", "venv", "__pycache__", "report", ".next"]);
       var MAX_BYTES = 2 * 1024 * 1024;
+      var MAX_NOTEBOOK_BYTES = 8 * 1024 * 1024;
+      function notebookText(raw) {
+        let nb;
+        try {
+          nb = JSON.parse(raw);
+        } catch (_) {
+          return null;
+        }
+        const cells = Array.isArray(nb && nb.cells) ? nb.cells : null;
+        if (!cells) return null;
+        const out = [];
+        const map = [];
+        cells.forEach((c, ci) => {
+          if (!c || c.cell_type !== "code" && c.cell_type !== "markdown") return;
+          const src = Array.isArray(c.source) ? c.source.join("") : String(c.source || "");
+          src.split(/\r?\n/).forEach((ln, li) => {
+            out.push(ln);
+            map.push({ cell: ci + 1, line: li + 1, type: c.cell_type });
+          });
+          out.push("");
+          map.push(null);
+        });
+        const text = out.join("\n");
+        if (text.length > MAX_BYTES) return null;
+        return { text, map };
+      }
+      function notebookLoc(map, line) {
+        const m = map && map[line - 1];
+        return m ? "cell " + m.cell + ", line " + m.line : null;
+      }
+      var APP_PART = /^\.(github|devcontainer|vscode|agents?|claude|cursor)$|^((python|node|py|js|ts)[-_])?(backend|frontend|server|client|ui|web|webapp|app|api|src|lib|docs?|tests?|scripts|infra|cdk|deploy(ment)?|assets|static|public|config|shared|common)$/i;
       function globToRe(g) {
         const s = g.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?/g, "\0").replace(/\*/g, "[^/]*").replace(/\?/g, "[^/]").replace(/\u0000/g, ".*");
         return new RegExp("(^|/)" + s + "($|/)");
@@ -3134,6 +3170,10 @@ items:
           if (st.isDirectory()) {
             if (SKIP_DIRS.has(path.basename(p))) return;
             for (const e of fs.readdirSync(p).sort()) walk(path.join(p, e), root);
+          } else if (st.isFile() && wanted(p) && /\.ipynb$/i.test(p)) {
+            if (st.size > MAX_NOTEBOOK_BYTES) return;
+            const nb = notebookText(fs.readFileSync(p, "utf8"));
+            if (nb) out.push({ abs: p, rel, root, text: nb.text, notebook: nb.map });
           } else if (st.isFile() && wanted(p) && st.size <= MAX_BYTES) {
             out.push({ abs: p, rel, root, text: fs.readFileSync(p, "utf8") });
           }
@@ -3148,13 +3188,14 @@ items:
         }
         for (const f of out) {
           const parts = f.rel.split("/");
-          f.agent = parts.length > 1 ? parts[0] : path.basename(f.root);
+          f.agent = parts.length > 1 && !APP_PART.test(parts[0]) ? parts[0] : path.basename(f.root);
+          f.atRoot = parts.length === 1;
           const label = labels && labels[f.root];
           f.display = label ? label + "!/" + f.rel : path.relative(process.cwd(), f.abs).split(path.sep).join("/");
         }
         return out;
       }
-      module.exports = { collect, globToRe, wanted, MAX_BYTES };
+      module.exports = { collect, globToRe, wanted, notebookText, notebookLoc, APP_PART, MAX_BYTES, MAX_NOTEBOOK_BYTES };
     }
   });
 
@@ -6293,6 +6334,8 @@ items:
         const agents = {};
         const credUse = {};
         const A = (name) => agents[name] = agents[name] || { agent: name, files: [], connectors: /* @__PURE__ */ new Set(), credentials: /* @__PURE__ */ new Set(), scopes: /* @__PURE__ */ new Set(), sources: {}, sinks: {} };
+        const multi = new Set(files.filter((f) => !f.atRoot).map((f) => f.agent)).size > 1;
+        const sharedRoot = (f) => multi && f.atRoot;
         for (const f of files) {
           const a = A(f.agent);
           a.files.push(f.display);
@@ -6317,7 +6360,7 @@ items:
             const n = m.slice(1).find(Boolean);
             if (n && CRED_NAME.test(n)) {
               a.credentials.add(n);
-              (credUse[n] = credUse[n] || /* @__PURE__ */ new Set()).add(f.agent);
+              if (!sharedRoot(f)) (credUse[n] = credUse[n] || /* @__PURE__ */ new Set()).add(f.agent);
             }
           }
           const isDoc = /(^|\/)(readme|changelog|contributing|license|docs?\/|knowledge\/|kb\/)/i.test(f.rel);
@@ -6336,13 +6379,14 @@ items:
               a.connectors.add(k);
             }
           }
+          const ph = (m2) => R.placeholders && re(R.placeholders).test(m2);
           for (const h of R.hardcoded) for (const x of allMatches(f.text, h.pattern))
             findings.push(finding({ rule: "crossover." + h.id, severity: h.severity, file: f.display, line: x.line, message: h.message, evidence: h.severity === "high" ? mask(x.match) : x.match.slice(0, 80) }));
           for (const s of R.secrets) for (const x of allMatches(f.text, s.pattern)) {
-            if (/example|placeholder|your[-_]|xxxx|<|\$\{|changeme|dummy|fake|not[-_]?a[-_]?real/i.test(x.match)) continue;
+            if (ph(x.match) || /example|placeholder|your[-_]|xxxx|<|\$\{|changeme|dummy|fake|not[-_]?a[-_]?real/i.test(x.match)) continue;
             findings.push(finding({ rule: "crossover.secret." + s.id, severity: "high", file: f.display, line: x.line, message: "Possible hardcoded secret (" + s.id + "). Move it to an env var and rotate it.", evidence: mask(x.match) }));
           }
-          for (const p of R.pii) for (const x of allMatches(f.text, p.pattern))
+          for (const p of R.pii) for (const x of allMatches(f.text, p.pattern)) if (!ph(x.match))
             findings.push(finding({ rule: "crossover.pii." + p.id, severity: p.id === "email_address" ? "low" : "high", file: f.display, line: x.line, message: "Possible personal data (" + p.id + ") in agent code, prompt or fixture.", evidence: mask(x.match) }));
           if (/(^|\/)\.env$/.test(f.rel)) findings.push(finding({ rule: "crossover.env_committed", severity: "high", file: f.display, line: 1, message: ".env file present in the agent folder." }));
         }
@@ -6371,8 +6415,11 @@ items:
       "use strict";
       init_process();
       var { loadRules, re, allMatches, lines, code, finding } = require_util();
+      var READ_ONLY = /^_*(get|list|read|fetch|search|find|lookup|look_up|describe|query|check|view|show|is|has|count|load|retrieve|preview|validate|verify)(_|$)/;
+      var STRONG = /(^|_)(delete|remove|drop|destroy|purge|pay|refund|cancel|submit|wire|purchase|buy|checkout|send|transfer|publish|deploy|merge)(_|$)/;
       function isIrreversible(name, verbs) {
         const snake = name.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
+        if (READ_ONLY.test(snake) && !STRONG.test(snake.replace(READ_ONLY, ""))) return false;
         return new RegExp("(^|[_.-])(" + verbs + ")([_.-]|$)").test(snake);
       }
       function scan(files, opts) {
@@ -6427,7 +6474,7 @@ items:
         }
         return { id: "actions", title: "Irreversible actions", findings, actions };
       }
-      module.exports = { scan, isIrreversible };
+      module.exports = { scan, isIrreversible, READ_ONLY };
     }
   });
 
@@ -6437,6 +6484,31 @@ items:
       "use strict";
       init_process();
       var { loadRules, re, allMatches, code, finding } = require_util();
+      function loopBody(c, idx) {
+        const ls = c.lastIndexOf("\n", idx) + 1;
+        const head = c.slice(ls, c.indexOf("\n", idx) < 0 ? c.length : c.indexOf("\n", idx));
+        if (/while\s+True\s*:/.test(head)) {
+          const ind = head.match(/^\s*/)[0].length;
+          const out = [];
+          for (const ln of c.slice(ls).split("\n").slice(1)) {
+            if (!ln.trim()) {
+              out.push(ln);
+              continue;
+            }
+            if (ln.match(/^\s*/)[0].length <= ind) break;
+            out.push(ln);
+          }
+          return out.join("\n");
+        }
+        const open = c.indexOf("{", idx);
+        if (open < 0) return c.slice(idx, idx + 1500);
+        let d = 0;
+        for (let i = open; i < c.length && i < open + 2e4; i++) {
+          if (c[i] === "{") d++;
+          else if (c[i] === "}" && --d === 0) return c.slice(open, i + 1);
+        }
+        return c.slice(open, open + 1500);
+      }
       function scan(files, opts) {
         const R = loadRules("governance", opts && opts.rulesDir);
         const findings = [];
@@ -6448,7 +6520,7 @@ items:
           a.text += "\n" + c;
           a.files.push(f);
           for (const [k, src] of Object.entries(R.providers)) if (re(src).test(c)) (inv.providers[k] = inv.providers[k] || /* @__PURE__ */ new Set()).add(f.display);
-          for (const [k, src] of Object.entries(R.frameworks)) if (/\.(js|mjs|cjs|ts|tsx|py|json|toml)$/i.test(f.rel) && re(src).test(c)) (inv.frameworks[k] = inv.frameworks[k] || /* @__PURE__ */ new Set()).add(f.display);
+          for (const [k, src] of Object.entries(R.frameworks)) if (/\.(js|mjs|cjs|ts|tsx|py|ipynb|json|toml)$/i.test(f.rel) && re(src).test(c)) (inv.frameworks[k] = inv.frameworks[k] || /* @__PURE__ */ new Set()).add(f.display);
           for (const x of allMatches(c, R.model_ref)) {
             const name = x.match;
             (inv.models[name] = inv.models[name] || []).push(f.display + ":" + x.line);
@@ -6456,6 +6528,8 @@ items:
           for (const x of allMatches(c, R.llm_call)) a.llmCalls.push({ file: f.display, line: x.line });
           for (const x of allMatches(c, R.loop_risk)) {
             const after = c.slice(x.index, x.index + 1500);
+            const body = loopBody(c, x.index);
+            if (!re(R.llm_call).test(body) && !re(R.tool_invoke).test(body)) continue;
             if (!re(R.recursion_cap).test(after) && !/\bbreak\b/.test(after.slice(0, 600)))
               findings.push(finding({ rule: "governance.unbounded_loop", severity: "high", file: f.display, line: x.line, message: "Infinite loop with no step cap or break nearby. A stuck agent here burns tokens until someone notices." }));
           }
@@ -6490,7 +6564,7 @@ items:
         };
         return { id: "governance", title: "Governance + cost", findings, inventory };
       }
-      module.exports = { scan };
+      module.exports = { scan, loopBody };
     }
   });
 
@@ -8582,10 +8656,13 @@ items:
         return { health: W.hc.__ABL_ANALYZE__, healthMd: W.hc.__ABL_REPORT_MD__, bill: W.bill.__ABL_BILL__, obs: W.obs.__ABL_OBS__, redteam: W.hc.__ABL_REDTEAM__ };
       }
       var SEV = { high: "high", medium: "medium", low: "low" };
+      var NOT_AGENT = /(^|\/)(\.github|\.devcontainer|\.vscode|\.circleci|\.gitlab)(\/|$)|(^|\/)(devcontainer|package(-lock)?|tsconfig|jsconfig|composer|renovate|dependabot|\.?pre-commit-config|docker-compose|compose|mkdocs|azure-pipelines|\.gitlab-ci|codecov|vercel|netlify|app\.json|manifest|cdk|cdk\.context|launch|settings|extensions)\.(json|ya?ml)$|(^|\/)workflows\//i;
+      var AGENT_KEYS = /["']?\b(system_prompt|systemPrompt|system_message|systemMessage|instructions|system|prompt|prompts)\b["']?\s*:/;
       function healthTarget(f) {
+        if (NOT_AGENT.test(f.rel)) return null;
         if (/\.jsonl$/i.test(f.rel)) return "transcript";
         if (/transcript|chat[-_]?log|conversations?/i.test(f.rel)) return "transcript";
-        if (/\.(json|ya?ml)$/i.test(f.rel) && /tools|system_prompt|instructions|prompt|llm|model/i.test(f.text) && !/mcpServers/.test(f.text) && !/^\s*\{\s*"name"\s*:\s*"[^"]+"\s*,\s*"version"/.test(f.text)) return "config";
+        if (/\.(json|ya?ml)$/i.test(f.rel) && AGENT_KEYS.test(f.text) && !/mcpServers/.test(f.text) && !/^\s*\{\s*"name"\s*:\s*"[^"]+"\s*,\s*"version"/.test(f.text)) return "config";
         if (/\.(md|txt)$/i.test(f.rel) && /prompt|instruction|system/i.test(f.rel)) return "config";
         return null;
       }
@@ -8613,7 +8690,7 @@ items:
           runs.push({ tool: "Cloud Bill Smell Detector", file: f.display, score: r.score, verdict: r.headline });
           for (const s of r.smells || []) findings.push({ rule: "bill." + (s.id || "smell"), severity: s.severity === "high" ? "high" : "medium", file: f.display, line: 0, message: (s.title || s.label || "Bill smell") + (s.message ? ": " + s.message : ""), evidence: s.evidence });
         }
-        const obsText = files.filter((f) => /\.(js|mjs|cjs|ts|py|ya?ml|toml|json|md)$/i.test(f.rel)).map((f) => f.text).join("\n");
+        const obsText = files.filter((f) => /\.(js|mjs|cjs|ts|py|ipynb|ya?ml|toml|json|md)$/i.test(f.rel)).map((f) => f.text).join("\n");
         if (obsText.trim()) {
           const r = T.obs(obsText, {});
           runs.push({ tool: "Observability Gap Finder", file: "(whole input)", score: r.score, verdict: r.headline });
@@ -8621,7 +8698,7 @@ items:
         }
         return { id: "labs", title: "Agent Health Checker + Labs tools", findings, runs, redteam: T.redteam ? T.redteam() : "" };
       }
-      module.exports = { scan, tools };
+      module.exports = { scan, tools, healthTarget };
     }
   });
 
@@ -8796,8 +8873,9 @@ items:
         }
         return out;
       }
-      function proseOf(f) {
-        if (/\.(md|txt)$/i.test(f.rel)) return f.text;
+      var PROMPT_FILE = /(^|\/|[-_.])(prompts?|instructions?|system|persona|agents?|claude|copilot-instructions|rules|policy|playbook|sop|runbook|guidelines?)([-_.]|\/|$)|\.prompt(\.md)?$/i;
+      function proseOf(f, all) {
+        if (/\.(md|txt)$/i.test(f.rel)) return all || PROMPT_FILE.test(f.rel) ? f.text : null;
         if (/\.(json|ya?ml)$/i.test(f.rel) && /prompt|instruction|agent|system/i.test(f.rel + f.text.slice(0, 2e3))) {
           try {
             const obj = /\.json$/i.test(f.rel) ? JSON.parse(f.text) : require_js_yaml().load(f.text);
@@ -8825,7 +8903,7 @@ items:
           findings.push(...r.findings);
         };
         for (const f of files || []) {
-          const t = proseOf(f);
+          const t = proseOf(f, o.steAll);
           if (t) run(t, f.display);
         }
         for (const x of o.steInputs || []) run(x.text, x.name);
@@ -8846,7 +8924,7 @@ items:
           note: "Style checks inspired by ASD-STE100 writing rules. Not a certified ASD-STE100 checker; no specification text or dictionary is included."
         };
       }
-      module.exports = { scan, proseOf, loadDict };
+      module.exports = { scan, proseOf, loadDict, PROMPT_FILE };
     }
   });
 
@@ -8876,7 +8954,67 @@ items:
           return null;
         }
       }
+      var DEFENSIVE = /\b(detect(s|ed|ing)?|guardrail|jailbreak|classif(y|ier|ies)|attempts? to|tries to|trying to|is_safe|refuse|reject|flag (it|this|them)|block(ed)?|do not (follow|obey|comply)|don'?t (follow|obey|comply)|never (follow|obey|comply)|ignore any (request|instruction)s? (to|that)|if (the )?(user|message|input|document|email) (asks?|tries|says|contains))\b/i;
+      var CODE_EXT = /\.(py|ipynb|js|mjs|cjs|ts|tsx)$/i;
+      var IAC = /(^|\/)(cdk|infra|infrastructure|terraform|cloudformation|iac|stacks?|bicep|pulumi|helm)(\/|$)|\.(tf|bicep)$|(^|\/)(cdk\.json|template\.ya?ml|serverless\.ya?ml)$/i;
+      var IAC_TEXT = /from ["']aws-cdk-lib|require\(["']aws-cdk-lib|from aws_cdk|import \* as cdk|AWSTemplateFormatVersion|@pulumi\//;
+      var TYPED_PARAM = /^\s*(system|assistant)\s*:\s*(str|string|Optional|list|List|dict|Dict|Any|bool|int|None|Union|[A-Z][\w.]*(\[|\s*[|=,)]|$))/;
+      function inArgsDoc(L, line) {
+        if (!/^\s+(system|assistant)\s*:\s*\w/.test(L[line - 1] || "")) return false;
+        for (let i = line - 2; i >= 0 && i >= line - 25; i--) {
+          if (/^\s*(Args|Arguments|Parameters|Params|Attributes|Keyword Args)\s*:\s*$/.test(L[i])) return true;
+          if (/"""|'''/.test(L[i])) return false;
+        }
+        return false;
+      }
+      function fencedLines(text) {
+        const set = /* @__PURE__ */ new Set();
+        let inF = false;
+        text.split(/\r?\n/).forEach((ln, i) => {
+          if (/^\s*(```|~~~)/.test(ln)) {
+            inF = !inF;
+            set.add(i + 1);
+          } else if (inF) set.add(i + 1);
+        });
+        return set;
+      }
+      function inInlineCode(ln, ev) {
+        const i = ev ? ln.indexOf(ev) : -1;
+        return i >= 0 && (ln.slice(0, i).match(/`/g) || []).length % 2 === 1;
+      }
+      function adjust(F, text, file) {
+        const L = text.split(/\r?\n/);
+        const isMd = /\.(md|markdown|mdx|rst|txt)$/i.test(file);
+        const fenced = isMd ? fencedLines(text) : null;
+        const iac = IAC.test(file) || IAC_TEXT.test(text);
+        const out = [];
+        for (const f of F) {
+          const lead = /^\n+/.exec(f.evidence || "");
+          if (lead) {
+            f.line += lead[0].length;
+            f.evidence = f.evidence.slice(lead[0].length);
+          }
+          const ln = L[f.line - 1] || "";
+          const ctx = L.slice(Math.max(0, f.line - 3), f.line).join("\n");
+          if (f.rule === "injection.fake_system" && CODE_EXT.test(file) && (TYPED_PARAM.test(ln) || inArgsDoc(L, f.line))) continue;
+          if (f.rule === "injection.templated_url" && iac) {
+            f.severity = "low";
+            f.message += " (infrastructure-as-code template: lowered)";
+          } else if (/^injection\.(llmail_tool_call_syntax|tool_call_injection)$/.test(f.rule) && fenced && (fenced.has(f.line) || inInlineCode(ln, f.evidence))) {
+            f.severity = "low";
+            f.message += " (inside a docs code block: lowered)";
+          } else if (/^injection\.(ignore_previous|role_reassign|fake_system|hidden_task|secrecy|exfil_instruction|tool_call_injection)$/.test(f.rule) && DEFENSIVE.test(ctx)) {
+            f.severity = "low";
+            f.message += " (defensive context, e.g. a guardrail describing attacks: lowered)";
+          }
+          out.push(f);
+        }
+        return out;
+      }
       function scanText(text, file, R) {
+        return adjust(scanRaw(text, file, R), text, String(file || ""));
+      }
+      function scanRaw(text, file, R) {
         const F = [];
         const add = (rule, severity, line, message, evidence) => F.push({ rule: "injection." + rule, severity, file, line, message, evidence: String(evidence || "").replace(/[\u200B-\u200D\u2060\uFEFF\u202A-\u202E\u2066-\u2069]/g, "\uFFFD").slice(0, 160) });
         for (const grp of ["instructions", "exfil_links", "hidden_text", "llmail"]) for (const r of R[grp] || [])
@@ -8891,7 +9029,7 @@ items:
         for (const m of allMatches(text, "[A-Za-z0-9+/]{40,}={0,2}")) {
           const dec = decodeB64(m.match);
           if (!dec) continue;
-          const inner = scanText(dec, file, { instructions: R.instructions, exfil_links: R.exfil_links, hidden_text: [] });
+          const inner = scanRaw(dec, file, { instructions: R.instructions, exfil_links: R.exfil_links, hidden_text: [] });
           if (inner.length || /\b(ignore|instruction|system|assistant|send|password|token)\b/i.test(dec))
             add("base64_instruction", "high", m.line, 'Base64 blob decodes to text with instructions: "' + dec.slice(0, 80) + '"', m.match.slice(0, 40) + "\u2026");
         }
@@ -8923,7 +9061,7 @@ items:
           note: "Regex and Unicode checks over every file. It flags suspicious content; a clean result does not prove a file is safe."
         };
       }
-      module.exports = { scan, scanText };
+      module.exports = { scan, scanText, DEFENSIVE };
     }
   });
 
@@ -9217,7 +9355,7 @@ items:
       "use strict";
       init_process();
       var path = require_path_browserify();
-      var { collect } = require_files();
+      var { collect, notebookLoc } = require_files();
       var crossover = require_crossover();
       var actions = require_actions();
       var governance = require_governance();
@@ -9258,6 +9396,15 @@ items:
         if (!o.noLabs && !steOnly) groups.push(labs.scan(files));
         if (!o.noInjection && (files.length || o.docs && o.docs.length)) groups.push(injection.scan(files, o));
         if (!o.noSte) groups.push(ste.scan(files, o));
+        const nbs = {};
+        for (const f of files) if (f.notebook) nbs[f.display] = f.notebook;
+        if (Object.keys(nbs).length) for (const g of groups) for (const f of g.findings) {
+          const loc = nbs[f.file] && f.line > 0 ? notebookLoc(nbs[f.file], f.line) : null;
+          if (loc) {
+            f.notebookCell = loc;
+            f.message = f.message + " (notebook " + loc + ")";
+          }
+        }
         for (const g of groups) {
           g.findings.sort((a, b) => W[b.severity] - W[a.severity] || String(a.file).localeCompare(b.file) || a.line - b.line);
           g.score = groupScore(g.findings);
@@ -9408,7 +9555,7 @@ items:
         const rules = /* @__PURE__ */ new Map();
         for (const g of r.groups) for (const f of g.findings) {
           rules.set(f.rule, { id: f.rule, shortDescription: { text: f.rule } });
-          const loc = f.line > 0 ? [{ physicalLocation: { artifactLocation: { uri: f.file }, region: { startLine: f.line } } }] : [{ physicalLocation: { artifactLocation: { uri: f.file.startsWith("(") ? "." : f.file } } }];
+          const loc = f.line > 0 && !f.notebookCell ? [{ physicalLocation: { artifactLocation: { uri: f.file }, region: { startLine: f.line } } }] : [{ physicalLocation: { artifactLocation: { uri: f.file.startsWith("(") ? "." : f.file } } }];
           results.push({ ruleId: f.rule, level: LVL[f.severity] || "note", message: { text: f.message }, locations: loc });
         }
         return JSON.stringify({ $schema: "https://json.schemastore.org/sarif-2.1.0.json", version: "2.1.0", runs: [{ tool: { driver: { name: "agent-ops-check", version: r.version, informationUri: "https://github.com/ultimatixarup/agent-ops-check", rules: [...rules.values()] } }, results }] }, null, 2);
@@ -9526,7 +9673,8 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
         o.inputsLabel = (req.inputs || []).map((i) => i.name);
         return analyze(inputs, o);
       }
-      var { wanted, MAX_BYTES } = require_files();
+      var { wanted, MAX_BYTES, MAX_NOTEBOOK_BYTES } = require_files();
+      var maxBytes = (p) => /\.ipynb$/i.test(p) ? MAX_NOTEBOOK_BYTES : MAX_BYTES;
       async function readZip(JSZip, data) {
         const z = await JSZip.loadAsync(data);
         const all = Object.values(z.files);
@@ -9542,7 +9690,7 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
           const size = f._data && f._data.uncompressedSize || 0;
           total += size;
           if (total > 200 * 1024 * 1024) throw new Error("Zip expands to more than 200 MB");
-          if (!wanted(norm) || size > MAX_BYTES) continue;
+          if (!wanted(norm) || size > maxBytes(norm)) continue;
           out.push({ path: norm, text: await f.async("string") });
         }
         return out;
@@ -9563,7 +9711,7 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
         return out;
       }
       var ste = { check: (text, name, dict) => steCore.check(text, loadRules("ste"), { file: name || "(pasted)", dict: dict || null }), compare: (a, b) => steCore.compare(a, b) };
-      module.exports = { scan, outputs, readZip, wanted, MAX_BYTES, ste, rulesInfo, version: pkg.version };
+      module.exports = { scan, outputs, readZip, wanted, MAX_BYTES, MAX_NOTEBOOK_BYTES, maxBytes, ste, rulesInfo, version: pkg.version };
     }
   });
   return require_entry();
