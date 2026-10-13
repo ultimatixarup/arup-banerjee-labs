@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>agent-ops-check in your browser — Arup Banerjee Labs</title>
+  <meta name="description" content="Free, offline agent-ops check in your browser: personal-to-work data crossover, irreversible actions, governance and cost, Agent Health Checker, STE style checks, document-wide prompt-injection scan, standards maps and eval sets. Nothing is uploaded. Heuristic, not a security audit." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="author" content="Arup Kumar Banerjee" />
+  <link rel="stylesheet" href="../shared/labs.css" />
+  <link rel="stylesheet" href="aoc.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark">AO</div>
+        <div>agent-ops-check <span class="brand-sub">Arup Banerjee Labs · free · MIT · runs in this tab</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+        <a class="hub-link" href="../index.html">← Labs hub</a>
+        <div class="badge-privacy">Nothing uploaded · no network calls</div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Check your AI agents for <span>data crossover, risky actions and missing controls</span>, in your browser.</h1>
+      <p class="hero-lead">The browser version of the free, open-source <a href="https://github.com/ultimatixarup/agent-ops-check" rel="noopener noreferrer">agent-ops-check</a> CLI.
+        Same rules, same scanners, same score. Pick a folder, a .zip or files. Everything runs in this tab: the page has no server, makes no network requests (its Content-Security-Policy blocks them), and sends no analytics about what you scan.</p>
+      <p class="heuristic-label" role="note"><strong>Heuristic checker, not a security audit.</strong> Regex and static checks. It can miss real problems and flag harmless code. A clean score is not a guarantee. Standards are shown as “maps to”; this is not a compliance assessment.</p>
+      <div class="trust"><span>Client-side only</span><span>No account</span><span>Free forever</span><span>Rules <b id="rules-ver">…</b></span></div>
+    </section>
+
+    <div class="panel-grid">
+      <section class="card">
+        <h2>1 · Agent code, prompts and configs</h2>
+        <p class="hint">One sub-folder per agent works best. Real <code>.env</code> files are never read (only <code>.env.example</code>).</p>
+        <div id="drop" class="aoc-drop" tabindex="0">Drop a folder, .zip or files here</div>
+        <div class="file-row"><label class="field-label" for="in-folder">Folder</label><input type="file" id="in-folder" webkitdirectory directory multiple /></div>
+        <div class="file-row"><label class="field-label" for="in-zip">.zip</label><input type="file" id="in-zip" accept=".zip,application/zip" multiple /></div>
+        <div class="file-row"><label class="field-label" for="in-files">Files</label><input type="file" id="in-files" multiple /></div>
+        <ul id="queue" class="aoc-queue"></ul>
+        <details class="aoc-more"><summary>More inputs (ADSF docs, STE, ignore, options)</summary>
+          <div class="file-row"><label class="field-label" for="in-docs">Extra docs for the prompt-injection scan (ADSF)</label><input type="file" id="in-docs" multiple /></div>
+          <label class="field-label" for="ste-text">STE: paste text to check (prompt, instructions, procedure)</label>
+          <textarea id="ste-text" class="input aoc-small" spellcheck="false"></textarea>
+          <div class="file-row"><label class="field-label" for="ste-files">STE: text files</label><input type="file" id="ste-files" multiple accept=".md,.txt,.prompt,.rst,.adoc,.html,.htm" /></div>
+          <div class="file-row"><label class="field-label" for="ste-dict">STE: your approved-word list (one word per line)</label><input type="file" id="ste-dict" accept=".txt,.csv" /></div>
+          <label class="field-label" for="cmp-orig">Information-loss compare: original</label>
+          <textarea id="cmp-orig" class="input aoc-small" spellcheck="false"></textarea>
+          <label class="field-label" for="cmp-rew">Information-loss compare: STE rewrite</label>
+          <textarea id="cmp-rew" class="input aoc-small" spellcheck="false"></textarea>
+          <label class="field-label" for="ignore">Ignore paths (globs, one per line)</label>
+          <textarea id="ignore" class="input aoc-small" spellcheck="false" placeholder="tests/**"></textarea>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" id="opt-nolabs" /> Skip Labs tools</label>
+            <label class="check-item"><input type="checkbox" id="opt-noste" /> Skip STE</label>
+            <label class="check-item"><input type="checkbox" id="opt-noinj" /> Skip ADSF</label>
+            <label class="check-item"><input type="checkbox" id="opt-noevals" /> Skip eval sets</label>
+          </div>
+        </details>
+        <div class="toolbar">
+          <button type="button" class="primary" id="btn-run">Run check</button>
+          <button type="button" id="btn-bad">Sample: bad agents</button>
+          <button type="button" id="btn-good">Sample: good agent</button>
+          <button type="button" id="btn-ste">Sample: STE</button>
+          <button type="button" class="ghost" id="btn-clear">Clear</button>
+        </div>
+        <p class="hint" id="status" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>2 · Results</h2>
+        <div id="results-empty" class="results-empty">Pick inputs or a sample, then Run check.</div>
+        <div id="results" class="hidden">
+          <div class="score-head">
+            <div class="score-ring" id="score-ring" style="--p:0"><div class="score-ring-inner"><div class="score-num" id="score-num">0</div><div class="score-label">/100</div></div></div>
+            <div class="score-meta"><h3 id="score-title"></h3><p id="score-sub"></p></div>
+          </div>
+          <table class="preview-table" id="group-table"></table>
+          <p class="hint" id="network-line"></p>
+          <h3>Download reports</h3>
+          <div class="toolbar" id="downloads"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="section hidden" id="details">
+      <nav class="aoc-tabs" id="tabs" role="tablist"></nav>
+      <div id="tab-body"></div>
+    </section>
+
+    <section class="section">
+      <h2>What it checks</h2>
+      <ol class="howto">
+        <li><strong>Personal-to-work data crossover</strong>: agents that read personal sources (mail, files, chats) and write to work channels; shared credentials; secrets (masked) and PII.</li>
+        <li><strong>Irreversible actions</strong>: send, pay, delete, deploy, submit and browser writes, with a gate map (approval, dry-run, rate limit, allowlist).</li>
+        <li><strong>Governance and cost</strong>: AI inventory, token and step caps, loops, logging, model pinning.</li>
+        <li><strong>Labs tools</strong>: Agent Health Checker, Cloud Bill Smell Detector, Observability Gap Finder.</li>
+        <li><strong>ADSF prompt-injection scan</strong> over every document: hidden instructions, invisible Unicode, base64 payloads, exfiltration links.</li>
+        <li><strong>STE style checks</strong> inspired by ASD-STE100 writing rules (not a certified ASD-STE100 checker), plus an information-loss compare.</li>
+        <li><strong>Standards map</strong> for 10 frameworks (“maps to”, not compliance) and <strong>generated eval sets</strong> (generated, not run).</li>
+      </ol>
+      <p class="hint">Prefer the command line? <code>npx github:ultimatixarup/agent-ops-check ./my-agents</code>. The CLI also offers an optional LLM review with your own key; the browser version has no LLM option, so nothing ever leaves the tab.</p>
+    </section>
+
+    <footer class="site-footer">
+      <div>Built by <strong style="color:var(--text)">Arup Kumar Banerjee</strong> · Arup Banerjee Labs · engine <span id="engine-ver"></span> generated from the CLI’s rule files</div>
+      <div>This page loads no analytics or counters. Nothing you pick or paste is stored or sent.</div>
+      <div style="color:var(--muted);font-size:.8rem">Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.</div>
+    </footer>
+  </div>
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/agent-ops-check.js"></script>
+  <script src="vendor/samples.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
