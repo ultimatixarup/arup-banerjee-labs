@@ -20,7 +20,7 @@
   $("queue").addEventListener("click", function (e) { var i = e.target.getAttribute("data-rm"); if (i != null) { queue.splice(+i, 1); renderQueue(); } });
 
   function readText(file) { return file.text(); }
-  function keep(path, size) { return AOC.wanted(path) && size <= AOC.MAX_BYTES; } // same filter as the CLI; others are never read
+  function keep(path, size) { return AOC.wanted(path) && size <= (AOC.maxBytes ? AOC.maxBytes(path) : AOC.MAX_BYTES); } // same filter as the CLI; others are never read
   async function addZip(file) {
     var entries = await AOC.readZip(window.JSZip, await file.arrayBuffer());
     queue.push({ name: file.name, kind: "zip", entries: entries });
