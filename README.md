@@ -74,3 +74,8 @@ Or open `index.html` via `file://` (sample fetch may use embedded fallbacks).
 Maintainer: Arup Kumar Banerjee · Little Elm, Texas · arupkumar.banerjee@gmail.com
 
 Personal project built on my own time. Not affiliated with or endorsed by my employer; views are my own.
+
+## agent-ops-check (browser)
+
+`agent-ops-check/` is the browser version of the open-source [agent-ops-check](https://github.com/ultimatixarup/agent-ops-check) CLI. `agent-ops-check/vendor/` is generated: run `npm run build:labs` in an agent-ops-check checkout next to this repo to refresh it (same rule files as the CLI). The page has a strict CSP (no network), loads no analytics, and keeps everything in the tab.
+Headless check: `python3 tests/agent-ops-check-e2e.py ../agent-ops-check` loads the sample zip and compares findings and scores with the CLI.
