@@ -95,14 +95,17 @@
     <section class="section">
       <h2>What it checks</h2>
       <ol class="howto">
-        <li><strong>Personal-to-work data crossover</strong>: agents that read personal sources (mail, files, chats) and write to work channels; shared credentials; secrets (masked) and PII.</li>
-        <li><strong>Irreversible actions</strong>: send, pay, delete, deploy, submit and browser writes, with a gate map (approval, dry-run, rate limit, allowlist).</li>
-        <li><strong>Governance and cost</strong>: AI inventory, token and step caps, loops, logging, model pinning.</li>
-        <li><strong>Labs tools</strong>: Agent Health Checker, Cloud Bill Smell Detector, Observability Gap Finder.</li>
-        <li><strong>ADSF prompt-injection scan</strong> over every document: hidden instructions, invisible Unicode, base64 payloads, exfiltration links.</li>
-        <li><strong>STE style checks</strong> inspired by ASD-STE100 writing rules (not a certified ASD-STE100 checker), plus an information-loss compare.</li>
+        <li><strong>Personal-to-work data crossover</strong>: agents that read personal sources (mail, files, chats) and write to work channels; shared credentials; secrets (masked) and PII.<div class="std-map" data-std-group="crossover"></div></li>
+        <li><strong>Irreversible actions</strong>: send, pay, delete, deploy, submit and browser writes, with a gate map (approval, dry-run, rate limit, allowlist).<div class="std-map" data-std-group="actions"></div></li>
+        <li><strong>Governance and cost</strong>: AI inventory, token and step caps, loops, logging, model pinning.<div class="std-map" data-std-group="governance"></div></li>
+        <li><strong>Labs tools</strong>: Agent Health Checker, Cloud Bill Smell Detector, Observability Gap Finder.<div class="std-map" data-std-group="labs"></div></li>
+        <li><strong>ADSF prompt-injection scan</strong> over every document: hidden instructions, invisible Unicode, base64 payloads, exfiltration links.
+          <p class="hint" id="llmail-note">Includes 8 rules derived from Microsoft’s <a href="https://huggingface.co/datasets/microsoft/llmail-inject-challenge">LLMail-Inject</a> dataset (MIT License). On 500 held-out attacks the scan flags 66.8% at any severity and 44.6% at medium or higher, with 0/203 false positives on the dataset’s benign emails; about a third of attacks are still missed. <a href="https://github.com/ultimatixarup/agent-ops-check/blob/main/docs/LLMAIL_BENCHMARK.md">Benchmark details</a>.</p>
+          <div class="std-map" data-std-group="injection"></div></li>
+        <li><strong>STE style checks</strong> inspired by ASD-STE100 writing rules (not a certified ASD-STE100 checker), plus an information-loss compare.<div class="std-map" data-std-group="ste"></div></li>
         <li><strong>Standards map</strong> for 10 frameworks (“maps to”, not compliance) and <strong>generated eval sets</strong> (generated, not run).</li>
       </ol>
+      <p class="hint">Each “Maps to” list comes from the tool’s offline standards data (<a href="https://github.com/ultimatixarup/agent-ops-check/tree/main/data/standards">data/standards/</a>): ✅ = the tool checks for evidence of it, 🟡 = partly. It shows what the checks relate to, not compliance. Standards and datasets are named for reference only; this project is not affiliated with or endorsed by Microsoft, OWASP, NIST, ISO, MITRE, CSA, Anthropic or the EU.</p>
       <p class="hint">Prefer the command line? <code>npx github:ultimatixarup/agent-ops-check ./my-agents</code>. The CLI also offers an optional LLM review with your own key; the browser version has no LLM option, so nothing ever leaves the tab.</p>
     </section>
 
@@ -115,6 +118,7 @@
   <script src="vendor/jszip.min.js"></script>
   <script src="vendor/agent-ops-check.js"></script>
   <script src="vendor/samples.js"></script>
+  <script src="vendor/check-standards.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

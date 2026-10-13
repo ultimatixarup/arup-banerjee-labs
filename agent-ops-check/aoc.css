@@ -10,3 +10,8 @@
 .aoc-tbl code{font-size:.82rem}
 .sev-high{color:#ff6b7a;font-weight:700}.sev-medium{color:#f0a640;font-weight:700}.sev-low{color:#8fb3ff}.sev-info{color:var(--muted)}
 .yes{color:#3fbf7f}.no{color:#ff6b7a}
+
+.std-details{margin:.35rem 0 .6rem;font-size:.85rem;color:var(--muted)}
+.std-details summary{cursor:pointer;color:var(--text)}
+.std-details ul{margin:.3rem 0 0 1rem;padding:0}
+.std-details li{margin:.2rem 0}
