@@ -155,5 +155,17 @@
     if (n === "__zip") { var z = new window.JSZip(); Object.keys(lastOutputs).forEach(function (k) { z.file("agent-ops-report/" + k, lastOutputs[k]); }); save("agent-ops-report.zip", await z.generateAsync({ type: "blob" })); return; }
     save(n.replace(/\//g, "-"), new Blob([lastOutputs[n]], { type: MIME[n.split(".").pop()] || "text/plain" }));
   });
+  // "What it checks": standards each check group maps to (generated from data/standards/ by the CLI's build-web.js).
+  (function () {
+    var CS = window.AOC_CHECK_STANDARDS; if (!CS) return;
+    CS.groups.forEach(function (g) {
+      var el = document.querySelector('[data-std-group="' + g.id + '"]'); if (!el || !g.frameworks.length) return;
+      el.innerHTML = '<details class="std-details"><summary>Maps to ' + g.frameworks.length + ' frameworks</summary><ul>' + g.frameworks.map(function (fw) {
+        return '<li><a href="' + esc(fw.source) + '">' + esc(fw.name) + '</a>: ' + fw.items.map(function (it) { return esc(it.icon + " " + it.id + " " + it.title); }).join("; ") + '</li>';
+      }).join("") + '</ul></details>';
+    });
+    var L = CS.llmail, n = $("llmail-note");
+    if (L && n) n.innerHTML = 'Includes ' + esc(L.rules) + ' rules derived from Microsoft’s <a href="https://huggingface.co/datasets/microsoft/llmail-inject-challenge">LLMail-Inject</a> dataset (MIT License). On ' + esc(L.heldout) + ' held-out attacks the scan flags ' + esc(L.any) + ' at any severity and ' + esc(L.medium) + ' at medium or higher, with ' + esc(L.fp) + ' false positives on the dataset’s benign emails; about a third of attacks are still missed. <a href="https://github.com/ultimatixarup/agent-ops-check/blob/main/docs/LLMAIL_BENCHMARK.md">Benchmark details</a>.';
+  })();
   window.__AOC_LAST__ = function () { return lastReport; }; // for automated tests only
 })();
