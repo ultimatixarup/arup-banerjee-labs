@@ -19,8 +19,10 @@
   }
   $("queue").addEventListener("click", function (e) { var i = e.target.getAttribute("data-rm"); if (i != null) { queue.splice(+i, 1); renderQueue(); } });
 
-  function readText(file) { return file.text(); }
-  function keep(path, size) { return AOC.wanted(path) && size <= (AOC.maxBytes ? AOC.maxBytes(path) : AOC.MAX_BYTES); } // same filter as the CLI; others are never read
+  // .pyc and lockfiles: only the NAME is used (skill-provenance tab), so the bytes are never read.
+  function nameOnly(path) { return /\.py[co]$|\.lockb?$|(^|\/)go\.sum$/i.test(path); }
+  function readText(file, path) { return nameOnly(path || file.name) ? Promise.resolve("") : file.text(); }
+  function keep(path, size) { return (AOC.keep ? AOC.keep(path) : AOC.wanted(path)) && size <= (AOC.maxBytes ? AOC.maxBytes(path) : AOC.MAX_BYTES); } // same filter as the CLI; others are never read
   async function addZip(file) {
     var entries = await AOC.readZip(window.JSZip, await file.arrayBuffer());
     queue.push({ name: file.name, kind: "zip", entries: entries });
@@ -31,7 +33,7 @@
       var it = list[i], parts = it.rel.split("/"), top = parts.length > 1 ? parts.shift() : "files", rel = parts.join("/");
       if (/(^|\/)(node_modules|\.git)(\/|$)/.test(rel)) continue;
       if (!keep(rel, it.file.size)) continue;
-      (groups[top] = groups[top] || []).push({ path: rel, text: await readText(it.file) });
+      (groups[top] = groups[top] || []).push({ path: rel, text: await readText(it.file, rel) });
     }
     Object.keys(groups).forEach(function (k) { queue.push({ name: k, kind: k === "files" ? "file" : "folder", entries: groups[k] }); });
   }
@@ -115,6 +117,7 @@
     if (g.id === "governance") { var inv = g.inventory; return "<h3>AI inventory</h3><ul><li>Providers: " + esc(Object.keys(inv.providers).join(", ") || "none found") + "</li><li>Frameworks/SDKs: " + esc(Object.keys(inv.frameworks).join(", ") || "none found") + "</li><li>Models: " + esc(Object.keys(inv.models).join(", ") || "none found") + "</li></ul>"; }
     if (g.id === "labs") return "<h3>Tool runs</h3><table class=aoc-tbl><tr><th>Tool</th><th>Input</th><th>Score</th><th>Verdict</th></tr>" + g.runs.map(function (x) { return "<tr><td>" + esc(x.tool) + "</td><td>" + esc(x.file) + "</td><td>" + esc(x.score) + "</td><td>" + esc(x.verdict) + "</td></tr>"; }).join("") + "</table>";
     if (g.id === "injection") return "<p class=hint>" + esc(g.note) + " " + g.docsScanned + " file(s) scanned.</p>";
+    if (g.id === "daemon" || g.id === "skills") return "<p class=hint>" + esc(g.note) + "</p>";
     if (g.id === "ste") return "<p class=hint>" + esc(g.note) + "</p>" + (g.dictionary ? "<p>Approved-word list: " + esc(g.dictionary) + "</p>" : "")
       + "<table class=aoc-tbl><tr><th>Input</th><th>Sentences</th><th>Findings</th></tr>" + g.docs.map(function (d) { return "<tr><td>" + esc(d.file) + "</td><td>" + d.sentences + "</td><td>" + d.findings + "</td></tr>"; }).join("") + "</table>"
       + (g.compare ? "<h3>Information-loss check</h3><p><b>" + g.compare.missing.length + "</b> fact(s) or constraint(s) missing from the rewrite.</p><table class=aoc-tbl><tr><th>Severity</th><th>Kind</th><th>Missing value</th></tr>" + g.compare.missing.map(function (m) { return "<tr><td>" + SEV(m.severity) + "</td><td>" + esc(m.kind) + "</td><td><code>" + esc(m.value) + "</code></td></tr>"; }).join("") + "</table>" : "");
