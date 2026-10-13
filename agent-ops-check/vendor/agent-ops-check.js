@@ -1886,7 +1886,7 @@ var AgentOpsCheck = (() => {
   var require_aoc_assets = __commonJS({
     "aoc:aoc-assets"(exports, module) {
       init_process();
-      module.exports = { "/aoc/rules/CHANGELOG.md": '# Rules changelog\n\nRule updates ship only through this Git repo. Refresh with `git pull` or re-run `npx github:ultimatixarup/agent-ops-check`.\n\n## 2026.10.13 (second update, same day: false-positive fixes)\nFalse-positive fixes from the vendor-samples campaign (`campaigns/2026-10-vendor-samples/`). Each has a regression test in `test/fp-regressions.test.js` built on short attributed excerpts of the scanned samples (`test/fixtures/fp/`).\n- New: Jupyter notebooks (`.ipynb`) are scanned: code and markdown cells only (outputs ignored), findings say "notebook cell N, line M". Raw notebook limit 8 MB, extracted text limit 2 MB.\n- Changed: `governance.unbounded_loop` only fires when the loop body calls a model (`llm_call`) or a tool (new `tool_invoke` pattern). Pagination, stream and input-prompt loops are no longer flagged.\n- Changed: injection matches in a defensive context (guardrail/detector text that describes attacks: "detect", "jailbreak", "attempts to", "never follow"...) are lowered to low, not removed.\n- Changed: `injection.fake_system` ignores `system: str`-style parameters and docstring `Args:` entries in code files, and now reports the right line for matches anchored on a newline.\n- Changed: tool-call JSON (`llmail_tool_call_syntax`, `tool_call_injection`) inside markdown code (fenced or `inline`) is low.\n- Changed: `injection.templated_url` in infrastructure-as-code (CDK, Terraform, CloudFormation, Bicep, Pulumi) is low.\n- Changed: Agent Health Checker config checks skip CI/devcontainer/package/tooling files and need a prompt/instructions key in JSON/YAML.\n- New: `placeholders:` in `crossover.yaml` (AWS example account `123456789012`, AWS example keys, test card numbers, the retired "Woolworth" SSN) are skipped by the PII and secret rules.\n- Changed: tool names that start with a read-only verb (`get_`, `list_`, `read_`, `fetch_`, `search_`...) are not irreversible unless they also contain a strong action verb (`get_and_delete_file`).\n- Changed: agent boundaries: folders such as `backend/`, `frontend/`, `ui/`, `python-backend/`, `docs/`, `.github/` belong to the root app, and files at the input root don\'t count as a separate agent for shared-credential checks when there are sub-agents.\n- Changed: STE checks only prompt/instruction files (`*prompt*`, `*instruction*`, `system*`, `AGENTS.md`, `CLAUDE.md`, ...) and prompt strings in configs by default, not every README. `--ste-all` restores the old scope.\n\n## 2026.10.13\n- New: 8 ADSF rules in `injection.yaml` (`llmail:` group) derived from Microsoft\'s LLMail-Inject adaptive prompt-injection challenge dataset (MIT, https://huggingface.co/datasets/microsoft/llmail-inject-challenge): tool-call/api_call syntax, fake turn delimiters, obfuscated addresses, decode-then-run instructions, post-task triggers, send-email directives, encoded text, and a low-severity "send to address" signal. Each rule carries `source` and `family` metadata.\n- New: `data/llmail/` samples (500 held-out phase 2 attacks, 300 phase 1 attacks, 203 benign emails, 30 hand-written benign emails) and `docs/LLMAIL_BENCHMARK.md` with measured detection and false-positive rates.\n- New: LLMail-style indirect-injection cases in the generated security eval set.\n\n## 2026.10.12\n- New: `injection.yaml` (ADSF document-wide prompt-injection scan): override phrases, fake system markers, hidden HTML comments, CSS-hidden text, zero-width/bidi/tag characters, base64 instructions, data-leaking image links, request-capture hosts.\n- New: `ste.yaml` (Simplified Technical English style rules, original word lists).\n- New: `data/standards/*.yaml` (offline mappings to 9 frameworks).\n- Initial: `crossover.yaml`, `actions.yaml`, `governance.yaml`.\n', "/aoc/rules/VERSION.json": '{\n  "version": "2026.10.13",\n  "date": "2026-10-13"\n}\n', "/aoc/rules/actions.yaml": `# Irreversible-action rules (case-insensitive JS regex).
+      module.exports = { "/aoc/rules/CHANGELOG.md": '# Rules changelog\n\nRule updates ship only through this Git repo. Refresh with `git pull` or re-run `npx github:ultimatixarup/agent-ops-check`.\n\n## 2026.10.13 (third update, same day: background daemons + skill artifact provenance)\nTwo new static check families in `rules/persistence.yaml` and `src/scanners/persistence.js`, shown as tabs 7 and 8. They don\'t change the overall score (tabs 1\u20133). Every rule carries `family` and `source` metadata. Static only: they cannot see running processes, installed binaries, runtime behavior, files written outside the scanned folder, or what a `.pyc` contains (never decoded or run). Verify on your install.\n- New: `daemon.*` (8 rules): `launchd_register`, `systemd_register`, `cron_register`, `windows_task_register`, `auto_update`, `daemon_mode`, `unpinned_latest_install`, `pipe_to_shell`. Matches in documentation are lowered to low. Source: a single, unreproduced report about a coding-agent CLI\'s self-updating background daemon (openai/codex#48195; Hacker News, 2026-10-12; Groundy audit guide https://groundy.com/articles/codex-cli-now-runs-a-self-updating-daemon-how-to-audit-and-stop/). This project does not confirm that report.\n- New: `skills.*` (6 rules): `committed_pycache`, `orphan_pyc`, `persistent_write`, `session_hook`, `unpinned_source`, `no_hashes`, applied in skill/plugin scope (SKILL.md folders with front matter, `.claude/`, `.codex/`, `.gemini/`, `.agents/`, `skills/`, `plugins/`, MCP and plugin configs). Sources (their findings, not ours): SkillRelayBench, arXiv 2610.13227 (https://arxiv.org/abs/2610.13227); PyCache Trap, arXiv 2610.10612 (https://arxiv.org/abs/2610.10612).\n- New: install/startup scripts and unit files (`.sh`, `.ps1`, `.bat`, `.plist`, `.service`, `.timer`, Dockerfile, Makefile, crontab...), `.pyc` names and lockfile names are collected for these two tabs only. The other checks see the same files as before.\n- New: `data/standards/` "maps to" entries: OWASP LLM03; OWASP Agentic ASI04, ASI05, ASI06, ASI10; OWASP Agentic T1, T11; MITRE ATLAS AML.T0010; NIST GAI-ValueChain. All stay \u{1F7E1} partial.\n- New: `--no-persistence` CLI flag.\n- Tuned on the vendor-samples campaign repos (see the PR for counts): Python `threading.Thread(daemon=True)` is not flagged as a daemon; a `skill.md` without front matter (a tips document) is not a skill root; non-SKILL.md docs in skill scope are lowered to low.\n\n## 2026.10.13 (second update, same day: false-positive fixes)\nFalse-positive fixes from the vendor-samples campaign (`campaigns/2026-10-vendor-samples/`). Each has a regression test in `test/fp-regressions.test.js` built on short attributed excerpts of the scanned samples (`test/fixtures/fp/`).\n- New: Jupyter notebooks (`.ipynb`) are scanned: code and markdown cells only (outputs ignored), findings say "notebook cell N, line M". Raw notebook limit 8 MB, extracted text limit 2 MB.\n- Changed: `governance.unbounded_loop` only fires when the loop body calls a model (`llm_call`) or a tool (new `tool_invoke` pattern). Pagination, stream and input-prompt loops are no longer flagged.\n- Changed: injection matches in a defensive context (guardrail/detector text that describes attacks: "detect", "jailbreak", "attempts to", "never follow"...) are lowered to low, not removed.\n- Changed: `injection.fake_system` ignores `system: str`-style parameters and docstring `Args:` entries in code files, and now reports the right line for matches anchored on a newline.\n- Changed: tool-call JSON (`llmail_tool_call_syntax`, `tool_call_injection`) inside markdown code (fenced or `inline`) is low.\n- Changed: `injection.templated_url` in infrastructure-as-code (CDK, Terraform, CloudFormation, Bicep, Pulumi) is low.\n- Changed: Agent Health Checker config checks skip CI/devcontainer/package/tooling files and need a prompt/instructions key in JSON/YAML.\n- New: `placeholders:` in `crossover.yaml` (AWS example account `123456789012`, AWS example keys, test card numbers, the retired "Woolworth" SSN) are skipped by the PII and secret rules.\n- Changed: tool names that start with a read-only verb (`get_`, `list_`, `read_`, `fetch_`, `search_`...) are not irreversible unless they also contain a strong action verb (`get_and_delete_file`).\n- Changed: agent boundaries: folders such as `backend/`, `frontend/`, `ui/`, `python-backend/`, `docs/`, `.github/` belong to the root app, and files at the input root don\'t count as a separate agent for shared-credential checks when there are sub-agents.\n- Changed: STE checks only prompt/instruction files (`*prompt*`, `*instruction*`, `system*`, `AGENTS.md`, `CLAUDE.md`, ...) and prompt strings in configs by default, not every README. `--ste-all` restores the old scope.\n\n## 2026.10.13\n- New: 8 ADSF rules in `injection.yaml` (`llmail:` group) derived from Microsoft\'s LLMail-Inject adaptive prompt-injection challenge dataset (MIT, https://huggingface.co/datasets/microsoft/llmail-inject-challenge): tool-call/api_call syntax, fake turn delimiters, obfuscated addresses, decode-then-run instructions, post-task triggers, send-email directives, encoded text, and a low-severity "send to address" signal. Each rule carries `source` and `family` metadata.\n- New: `data/llmail/` samples (500 held-out phase 2 attacks, 300 phase 1 attacks, 203 benign emails, 30 hand-written benign emails) and `docs/LLMAIL_BENCHMARK.md` with measured detection and false-positive rates.\n- New: LLMail-style indirect-injection cases in the generated security eval set.\n\n## 2026.10.12\n- New: `injection.yaml` (ADSF document-wide prompt-injection scan): override phrases, fake system markers, hidden HTML comments, CSS-hidden text, zero-width/bidi/tag characters, base64 instructions, data-leaking image links, request-capture hosts.\n- New: `ste.yaml` (Simplified Technical English style rules, original word lists).\n- New: `data/standards/*.yaml` (offline mappings to 9 frameworks).\n- Initial: `crossover.yaml`, `actions.yaml`, `governance.yaml`.\n', "/aoc/rules/VERSION.json": '{\n  "version": "2026.10.13",\n  "date": "2026-10-13"\n}\n', "/aoc/rules/actions.yaml": `# Irreversible-action rules (case-insensitive JS regex).
 # Verbs that make a tool name irreversible (matched as a word part: send_email, sendEmail, slack.post).
 irreversible_verbs: 'send|post|publish|tweet|delete|remove|drop|destroy|purge|submit|pay|charge|refund|transfer|wire|purchase|buy|order|checkout|book|cancel|approve|merge|deploy|accept|sign|transact'
 tool_def_context: '"name"\\s*:|name:\\s|def\\s+\\w+\\s*\\(|function\\s+\\w+\\s*\\(|tool\\(|@tool|DynamicTool|server\\.tool\\(|registerTool|"type"\\s*:\\s*"function"|tools:'
@@ -2127,6 +2127,100 @@ llmail:
     source: LLMail-Inject (microsoft/llmail-inject-challenge, MIT)
     pattern: '\\b(send|reply|submit|forward|e-?mail|mail|confirm)\\b[^.\\n]{0,60}\\bto:?\\s*["''(\`]?[a-z0-9._+-]+@[a-z0-9-]+\\.[a-z]{2,}'
     message: 'Low-confidence signal: text asks the reader to send something to a specific address. Normal in human email; worth a look when the reader is an agent with a send tool.'
+`, "/aoc/rules/persistence.yaml": `# Background daemon / sidecar and skill-artifact provenance rules. Case-insensitive JS regex, matched per line.
+# STATIC ONLY: these rules read files in the scanned folder. They cannot see running processes, installed
+# binaries, what a CLI does at runtime, or files a skill writes outside the folder. Treat every finding as
+# "verify on your install", not as proof.
+#
+# Severity is for code, config and scripts. Matches in documentation (.md/.txt/.rst, notebook markdown) are
+# lowered to low: install instructions in a README are common and are not themselves a persistent process.
+
+sources:
+  codex_daemon_report: >-
+    Single, unreproduced report (openai/codex#48195, author-reported) discussed on Hacker News on 2026-10-12
+    ("Codex CLI installs a persistent, self-updating background daemon by default") and in Groundy's audit guide
+    (https://groundy.com/articles/codex-cli-now-runs-a-self-updating-daemon-how-to-audit-and-stop/). Not verified
+    by this project. Used only as the reason to look for persistence and self-update patterns.
+  skillrelaybench: >-
+    arXiv 2610.13227 (SkillRelayBench, https://arxiv.org/abs/2610.13227). Their finding, not ours: 1,890 runs
+    (270 cases x 7 models on Codex CLI, Gemini CLI and Claude Code); attack success 46.7-77.4% (64.7% overall);
+    53% of runs completed both the user's task and the attack.
+  supply_chain: >-
+    General supply-chain hygiene (pin versions and commits, keep lockfiles/hashes), as in OWASP LLM03:2025 Supply Chain.
+    No specific incident is claimed.
+  pycache_trap: >-
+    arXiv 2610.10612 (PyCache Trap, https://arxiv.org/abs/2610.10612). Their finding, not ours: a swapped
+    __pycache__ .pyc can run instead of the reviewed .py; 94-100% attack success against 7 skill scanners on 100 skills.
+
+verify_hint: 'Verify on your install: ps / Activity Monitor, launchctl list, systemctl --user list-units, crontab -l, schtasks /query, and the CLI''s own settings.'
+
+daemon:
+  - id: launchd_register
+    severity: medium
+    family: persistence (macOS launchd)
+    source: codex_daemon_report
+    pattern: '\\blaunchctl\\s+(load|bootstrap|enable|submit|kickstart)\\b|Library/Launch(Agents|Daemons)/|<key>\\s*(RunAtLoad|KeepAlive)\\s*</key>'
+    message: Registers or defines a macOS launchd job, which keeps running (or restarts) after the terminal closes.
+  - id: systemd_register
+    severity: medium
+    family: persistence (Linux systemd)
+    source: codex_daemon_report
+    pattern: '\\bsystemctl\\s+(--user\\s+)?(enable|link)\\b|\\bloginctl\\s+enable-linger\\b|^\\s*WantedBy\\s*=\\s*(default|multi-user|timers)\\.target|^\\s*Restart\\s*=\\s*always\\b'
+    message: Enables a systemd unit (or lingering user services) that survives logout or reboot.
+  - id: cron_register
+    severity: medium
+    family: persistence (cron)
+    source: codex_daemon_report
+    pattern: '\\bcrontab\\s+(?!-l\\b)(-\\s*$|[\\w./~$-]+\\s*$)|\\(\\s*crontab\\s+-l|\\|\\s*crontab\\s+-|/etc/cron\\.(d|hourly|daily|weekly)/|^\\s*@reboot\\b'
+    message: Installs a cron job (or @reboot entry) that runs on a schedule outside your session.
+  - id: windows_task_register
+    severity: medium
+    family: persistence (Windows)
+    source: codex_daemon_report
+    pattern: '\\bschtasks(\\.exe)?\\s+/create\\b|\\bRegister-ScheduledTask\\b|\\bNew-Service\\b|\\bsc(\\.exe)?\\s+create\\s|CurrentVersion\\\\+Run(Once)?\\b'
+    message: Registers a Windows scheduled task, service or Run key that starts without you.
+  - id: auto_update
+    severity: medium
+    family: self-update
+    source: codex_daemon_report
+    pattern: '\\bauto[_-]?updates?(_?enabled)?["'']?\\s*[:=]\\s*["'']?(true|on|yes|1|enabled|latest)\\b|\\bautoUpdates?(Enabled)?["'']?\\s*[:=]\\s*true\\b|\\bself[_-]update\\b|\\bdaemon_auto_start\\b|\\bfeatures\\s+enable\\s+daemon\\b'
+    message: Turns on automatic or self-updating behavior, so the binary that runs may not be the version you pinned.
+  - id: daemon_mode
+    severity: low
+    family: background process
+    source: codex_daemon_report
+    pattern: '\\s--daemon(ize)?\\b|\\bdaemon(ize)?["'']?\\s*[:=]\\s*["'']?(true|yes|1)\\b|\\bdaemon\\s+start\\b|^\\s*nohup\\s+\\S|\\bsetsid\\s+\\S|\\bdisown\\b|Start-Process\\b[^\\n]*-WindowStyle\\s+Hidden'
+    # Python daemon threads/processes (threading.Thread(daemon=True)) end with the program: not a background service.
+    exclude: '\\b(Thread|Process|Timer|ThreadPoolExecutor)\\s*\\(|\\.daemon\\s*=|\\bdaemon_threads\\b'
+    message: Starts a detached or daemon-mode process that can outlive the session.
+  - id: unpinned_latest_install
+    severity: medium
+    family: unpinned install
+    source: codex_daemon_report
+    pattern: '\\b(npm|pnpm|yarn|bun)\\s+(i|install|add|global\\s+add)\\b[^\\n]*@latest\\b|\\b(npx|bunx|pnpm\\s+dlx|uvx|pipx\\s+run)\\b[^\\n]*@latest\\b|/releases/latest/download/'
+    message: Installs or runs "latest" rather than a pinned version, so each run can pick up a different binary.
+  - id: pipe_to_shell
+    severity: medium
+    family: unpinned install
+    source: codex_daemon_report
+    pattern: '\\b(curl|wget)\\b[^|\\n]{0,240}\\|\\s*(sudo\\s+)?(-E\\s+)?(ba|z|k|da)?sh\\b|\\b(iwr|irm|Invoke-WebRequest|Invoke-RestMethod)\\b[^|\\n]{0,240}\\|\\s*iex\\b'
+    message: Pipes a downloaded script straight into a shell. You run whatever the server sends that day, unreviewed and unpinned.
+
+skills:
+  # Where skill rules apply: skill/plugin folders, folders with a SKILL.md, agent config folders, MCP configs.
+  scope_path: '(^|/)(\\.claude|\\.codex|\\.gemini|\\.cursor|\\.agents?|\\.claude-plugin|skills?|plugins?)(/|$)'
+  mcp_config: '(^|/)(\\.?mcp(_servers)?\\.json|mcp\\.ya?ml|claude_desktop_config\\.json|plugin\\.json|marketplace\\.json)$|(^|/)\\.(claude|gemini|cursor|vscode|codex)/(settings(\\.local)?\\.json|mcp\\.json|config\\.toml)$'
+  # Files that a later agent session loads automatically (memory, instructions, hooks, shell startup).
+  persistent_targets: '\\b(CLAUDE|AGENTS|GEMINI|MEMORY)\\.md\\b|\\.claude/(settings(\\.local)?\\.json|hooks|commands|agents|skills|memory)|\\.codex/|\\.gemini/|(^|[/\\s"''])memory/[\\w.-]+\\.(md|json)|\\bmemory\\.(md|json)\\b|\\.(bash|zsh)rc\\b|\\.bash_profile\\b|\\.profile\\b|config\\.fish\\b|\\bhooks\\.json\\b|\\bsitecustomize\\.py\\b|\\.pth\\b'
+  write_verbs: '>>?\\s*["''$~./\\w]|\\btee\\b|\\b(write|append)(_text|_bytes|File|FileSync|line|lines)?\\s*\\(|\\bopen\\s*\\([^)]*["''](a|w|a\\+|w\\+)["'']|\\b(append|add|write|save|record|update|edit|insert|persist)\\b[^\\n]{0,40}\\b(to|into|in)\\b'
+  hook_events: '"(SessionStart|UserPromptSubmit|PreToolUse|PostToolUse|Stop|SubagentStop|PreCompact|Notification|SessionEnd|BeforeAgent|AfterAgent|BeforeTool|AfterTool)"\\s*:'
+  hook_events_startup: 'SessionStart|UserPromptSubmit|BeforeAgent'
+  # Version pins that count as pinned for a package argument.
+  pinned_pkg: '@v?\\d+(\\.\\d+){0,3}([-+][\\w.]+)?$|==\\s*v?\\d|@[0-9a-f]{7,40}$|@sha256:[0-9a-f]{64}$'
+  git_source: '\\bgit\\+(https?|ssh)://[^\\s"''<>)]+|\\bgithub:[\\w.-]+/[\\w.-]+[^\\s"''<>)]*|\\bpip\\s+install\\s+[^\\n]*git\\+[^\\s"'']+'
+  pinned_git: '[#@][0-9a-f]{7,40}\\b|#(v?\\d+\\.\\d+[\\w.-]*)'
+  hash_markers: '\\bsha(256|384|512)\\b|\\bintegrity\\b|\\bchecksum\\b|--hash='
+  lockfiles: '(^|/)(package-lock\\.json|npm-shrinkwrap\\.json|pnpm-lock\\.yaml|yarn\\.lock|bun\\.lockb?|uv\\.lock|poetry\\.lock|Pipfile\\.lock|Cargo\\.lock|go\\.sum|requirements[\\w.-]*\\.lock)$'
 `, "/aoc/rules/ste.yaml": "# Simplified Technical English (STE) style rules, inspired by ASD-STE100 writing rules.\n# NOT the ASD-STE100 specification and NOT a certified checker. No text or dictionary from the\n# specification is included. All word lists below are original and incomplete. Edit freely.\nlimits:\n  procedural_words: 20\n  descriptive_words: 25\n  noun_cluster: 3          # flag clusters of MORE than this many nouns in a row\n# Words that start an instruction (imperative). Used to tell procedural sentences from descriptive ones.\nimperative_verbs: [add, adjust, align, apply, ask, attach, check, clean, click, close, compare, connect, copy, create, delete, disconnect, do, download, enter, examine, find, flag, give, install, keep, let, make, measure, monitor, move, open, put, read, record, remove, replace, report, reply, return, run, save, select, send, set, show, start, stop, submit, summarize, tell, test, turn, type, update, use, verify, wait, write, never, always, only, don't, avoid, answer, list, include, refuse, follow, escalate, hand, collect, call, post]\nauxiliaries: [is, are, was, were, be, been, being, am]\nmodals: [will, would, shall, should, can, could, may, might, must]\n# Irregular past participles (ending -ed is detected automatically).\nirregular_participles: [done, made, given, taken, sent, shown, known, seen, written, found, built, kept, set, put, held, run, told, put, read, left, lost, paid, sold, brought, bought, chosen, driven, frozen, hidden, broken, spoken, stolen, worn, torn, drawn, grown, thrown, begun, cut, hit, shut, split, spread, understood, forgotten, gotten]\n# Words that are never nouns in a noun cluster (function words, common verbs, adjectives).\nnot_nouns: [a, an, the, this, that, these, those, and, or, but, if, then, of, in, on, at, to, for, with, by, from, as, is, are, was, were, be, been, it, its, you, your, we, our, they, their, he, she, his, her, not, no, all, any, each, every, some, more, most, less, than, when, where, which, who, what, how, do, does, did, can, will, must, should, may, has, have, had, new, old, good, bad, high, low, large, small, other, same, only, also, very, so, up, down, out, into, over, under, about, after, before, until, one, two, three, four, five]\n# Common phrasal verbs, with an original plain replacement hint.\nphrasal_verbs:\n  set up: prepare / install\n  carry out: do\n  find out: find / learn\n  look into: examine\n  look up: find\n  go over: examine\n  point out: show\n  figure out: find / calculate\n  make sure: verify / ensure\n  turn on: start / energize\n  turn off: stop / de-energize\n  fill in: write / enter\n  fill out: complete\n  get rid of: remove\n  put off: delay\n  come up with: make / write\n  check out: examine\n  back up: copy / support\n  shut down: stop\n  hand over: give\n  pick up: take\n  sort out: correct\n  deal with: handle / correct\n  bring up: show / start\n  keep up: continue\n# Vague hedges and soft words.\nhedges: [perhaps, maybe, possibly, probably, generally, usually, typically, somewhat, fairly, quite, rather, as appropriate, as needed, if possible, where possible, as soon as possible, try to, it is recommended, it is suggested, in some cases, sort of, kind of, etc, and so on, a few, several, some time, reasonable, appropriate, adequate, sufficient]\n# Original unapproved -> plain hint list (written for this tool; not from the specification).\nhints:\n  utilize: use\n  utilise: use\n  commence: start\n  terminate: stop\n  facilitate: help\n  endeavor: try\n  ascertain: find\n  approximately: about\n  subsequently: then / after\n  prior to: before\n  in order to: to\n  in the event that: if\n  due to the fact that: because\n  at this point in time: now\n  a number of: some / (give the number)\n  in addition: also\n  with regard to: about\n  sufficient: enough\n  additional: more\n  numerous: many\n  obtain: get\n  require: need\n  demonstrate: show\n  indicate: show\n  modify: change\n  perform: do\n  assist: help\n  attempt: try\n  ensure: make sure \u2192 verify\n  via: through / with\n  e.g.: for example\n  i.e.: that is\n", "/aoc/data/standards/anthropic-agents.yaml": `# Offline mapping data. Status = what agent-ops-check checks statically. "Maps to", never "compliant".
 id: anthropic-agents
 name: Anthropic / Claude agent guidance (summarized)
@@ -2378,7 +2472,14 @@ items:
     coverage: partial
     checks:
       - governance.unpinned_model
-    how: Pinning only
+      - skills.unpinned_source
+      - skills.no_hashes
+      - skills.committed_pycache
+      - skills.orphan_pyc
+      - daemon.unpinned_latest_install
+      - daemon.pipe_to_shell
+      - daemon.auto_update
+    how: Pinning only; unpinned skill/MCP/CLI sources, missing skill hashes, stray .pyc, curl|sh (static)
   - id: AML.T0083
     title: Credentials from AI Agent Configuration
     coverage: covered
@@ -2485,13 +2586,15 @@ items:
     coverage: partial
     checks:
       - governance.unpinned_model
-    how: Provider/SDK/model inventory and pinning
+      - skills.
+      - daemon.
+    how: Provider/SDK/model inventory and pinning; skill provenance and background-daemon/self-update checks (static)
   - id: GAI-Harmful
     title: 'GenAI risks: CBRN, violent/hateful, obscene, bias, IP, environmental'
     coverage: none
     checks: []
     how: Not checked
-`, "/aoc/data/standards/owasp-agentic-2026.yaml": '# Offline mapping data. Status = what agent-ops-check checks statically. "Maps to", never "compliant".\nid: owasp-agentic-2026\nname: OWASP Top 10 for Agentic Applications 2026 (ASI01\u2013ASI10)\nsource: https://genai.owasp.org/download/52117\nnote: Item names as listed in the OWASP GenAI Security Project document (via framework-pitch research).\nitems:\n  - id: ASI01\n    title: Agent Goal Hijack\n    coverage: covered\n    checks:\n      - injection.\n      - health.untrusted_input\n      - actions.no_deny_list\n    how: ADSF injection scan over all docs, untrusted-input rule, deny-list check\n  - id: ASI02\n    title: Tool Misuse and Exploitation\n    coverage: covered\n    checks:\n      - actions.\n    how: Gate map, rate limits, allowlists, wildcard domains, URL shorteners\n  - id: ASI03\n    title: Identity and Privilege Abuse\n    coverage: covered\n    checks:\n      - crossover.shared_credential\n      - crossover.source_to_sink\n      - actions.browser_profile\n      - actions.cookie_read\n    how: Shared credentials, scopes, browser profiles, cookie reads\n  - id: ASI04\n    title: Agentic Supply Chain Vulnerabilities\n    coverage: partial\n    checks:\n      - governance.unpinned_model\n    how: MCP/provider inventory, unpinned models; no registry integrity check\n  - id: ASI05\n    title: Unexpected Code Execution\n    coverage: partial\n    checks:\n      - health.injection_sinks\n    how: Free-form shell/exec/SQL tools\n  - id: ASI06\n    title: Memory and Context Poisoning\n    coverage: partial\n    checks:\n      - injection.\n    how: ADSF scan of knowledge/memory files you point it at; no runtime memory check\n  - id: ASI07\n    title: Insecure Inter-Agent Communication\n    coverage: none\n    checks: []\n    how: Not checked\n  - id: ASI08\n    title: Cascading Failures\n    coverage: partial\n    checks:\n      - governance.no_recursion_cap\n      - governance.unbounded_loop\n      - governance.no_retry_cap\n      - governance.no_timeout\n      - health.single_llm_spof\n    how: Step, loop and retry caps, timeouts, single-provider fallback\n  - id: ASI09\n    title: Human-Agent Trust Exploitation\n    coverage: partial\n    checks:\n      - health.bot_disclosure\n      - health.t_human_claim\n      - health+.t_handoff_claim\n    how: Bot disclosure, human claims, unrecorded handoffs\n  - id: ASI10\n    title: Rogue Agents\n    coverage: partial\n    checks:\n      - governance.no_tracing\n      - governance.no_owner\n      - observability.\n    how: Tracing, owner, observability; no stop-switch check\n', "/aoc/data/standards/owasp-agentic.yaml": `# Offline mapping data. Status = what agent-ops-check checks statically. "Maps to", never "compliant".
+`, "/aoc/data/standards/owasp-agentic-2026.yaml": '# Offline mapping data. Status = what agent-ops-check checks statically. "Maps to", never "compliant".\nid: owasp-agentic-2026\nname: OWASP Top 10 for Agentic Applications 2026 (ASI01\u2013ASI10)\nsource: https://genai.owasp.org/download/52117\nnote: Item names as listed in the OWASP GenAI Security Project document (via framework-pitch research).\nitems:\n  - id: ASI01\n    title: Agent Goal Hijack\n    coverage: covered\n    checks:\n      - injection.\n      - health.untrusted_input\n      - actions.no_deny_list\n    how: ADSF injection scan over all docs, untrusted-input rule, deny-list check\n  - id: ASI02\n    title: Tool Misuse and Exploitation\n    coverage: covered\n    checks:\n      - actions.\n    how: Gate map, rate limits, allowlists, wildcard domains, URL shorteners\n  - id: ASI03\n    title: Identity and Privilege Abuse\n    coverage: covered\n    checks:\n      - crossover.shared_credential\n      - crossover.source_to_sink\n      - actions.browser_profile\n      - actions.cookie_read\n    how: Shared credentials, scopes, browser profiles, cookie reads\n  - id: ASI04\n    title: Agentic Supply Chain Vulnerabilities\n    coverage: partial\n    checks:\n      - governance.unpinned_model\n      - skills.unpinned_source\n      - skills.no_hashes\n      - skills.committed_pycache\n      - skills.orphan_pyc\n      - daemon.unpinned_latest_install\n      - daemon.pipe_to_shell\n      - daemon.auto_update\n      - skills.session_hook\n    how: MCP/provider inventory, unpinned models; no registry integrity check; unpinned skill/MCP sources, missing skill hashes, stray .pyc, curl|sh, latest installs, self-update flags (static)\n  - id: ASI05\n    title: Unexpected Code Execution\n    coverage: partial\n    checks:\n      - health.injection_sinks\n      - skills.orphan_pyc\n      - daemon.pipe_to_shell\n    how: Free-form shell/exec/SQL tools; .pyc with no source in skills, curl|sh installers\n  - id: ASI06\n    title: Memory and Context Poisoning\n    coverage: partial\n    checks:\n      - injection.\n      - skills.persistent_write\n      - skills.session_hook\n    how: ADSF scan of knowledge/memory files you point it at; no runtime memory check; skills that write memory/instruction/hook files later sessions load, session hooks (static)\n  - id: ASI07\n    title: Insecure Inter-Agent Communication\n    coverage: none\n    checks: []\n    how: Not checked\n  - id: ASI08\n    title: Cascading Failures\n    coverage: partial\n    checks:\n      - governance.no_recursion_cap\n      - governance.unbounded_loop\n      - governance.no_retry_cap\n      - governance.no_timeout\n      - health.single_llm_spof\n    how: Step, loop and retry caps, timeouts, single-provider fallback\n  - id: ASI09\n    title: Human-Agent Trust Exploitation\n    coverage: partial\n    checks:\n      - health.bot_disclosure\n      - health.t_human_claim\n      - health+.t_handoff_claim\n    how: Bot disclosure, human claims, unrecorded handoffs\n  - id: ASI10\n    title: Rogue Agents\n    coverage: partial\n    checks:\n      - governance.no_tracing\n      - governance.no_owner\n      - observability.\n      - daemon.\n    how: Tracing, owner, observability; no stop-switch check; background daemons/scheduled tasks that outlive the session (static; verify on your install)\n', "/aoc/data/standards/owasp-agentic.yaml": `# Offline mapping data. Status = what agent-ops-check checks statically. "Maps to", never "compliant".
 id: owasp-agentic
 name: OWASP Agentic AI \u2013 Threats and Mitigations (T1\u2013T15)
 source: https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/
@@ -2502,7 +2605,8 @@ items:
     coverage: partial
     checks:
       - injection.
-    how: Hidden instructions in files an agent may load as memory/knowledge
+      - skills.persistent_write
+    how: Hidden instructions in files an agent may load as memory/knowledge; skills that write memory/instruction files later sessions load (static)
   - id: T2
     title: Tool Misuse
     coverage: covered
@@ -2577,7 +2681,9 @@ items:
     coverage: partial
     checks:
       - health.injection_sinks
-    how: Shell/exec/SQL tools fed by model output
+      - skills.orphan_pyc
+      - daemon.pipe_to_shell
+    how: Shell/exec/SQL tools fed by model output; .pyc with no source in skills, curl|sh installers
   - id: T12
     title: Agent Communication Poisoning
     coverage: partial
@@ -2633,7 +2739,14 @@ items:
     coverage: partial
     checks:
       - governance.unpinned_model
-    how: Model pinning and SDK inventory only; no dependency or model-provenance scan
+      - skills.unpinned_source
+      - skills.no_hashes
+      - skills.committed_pycache
+      - skills.orphan_pyc
+      - daemon.unpinned_latest_install
+      - daemon.pipe_to_shell
+      - daemon.auto_update
+    how: Model pinning, SDK inventory, unpinned skill/MCP/CLI sources, missing skill hashes, stray .pyc, curl|sh and self-update patterns; no dependency or model-provenance scan
   - id: LLM04
     title: Data and Model Poisoning
     coverage: partial
@@ -3144,6 +3257,20 @@ items:
         return m ? "cell " + m.cell + ", line " + m.line : null;
       }
       var APP_PART = /^\.(github|devcontainer|vscode|agents?|claude|cursor)$|^((python|node|py|js|ts)[-_])?(backend|frontend|server|client|ui|web|webapp|app|api|src|lib|docs?|tests?|scripts|infra|cdk|deploy(ment)?|assets|static|public|config|shared|common)$/i;
+      var SCRIPT_EXT = /* @__PURE__ */ new Set([".sh", ".bash", ".zsh", ".fish", ".ps1", ".psm1", ".bat", ".cmd", ".plist", ".service", ".timer", ".socket", ".desktop"]);
+      var SCRIPT_NAMES = /^(dockerfile|containerfile|makefile|justfile|crontab|procfile)$|^(install|setup|bootstrap|postinstall|entrypoint)(\.[\w-]+)?$/;
+      var MAX_SCRIPT_BYTES = 512 * 1024;
+      function extraKind(file) {
+        const base = path.basename(file).toLowerCase(), ext = path.extname(base);
+        if (ext === ".pyc" || ext === ".pyo") return "pyc";
+        if (wanted(file)) return null;
+        if (/^(uv\.lock|poetry\.lock|pipfile\.lock|yarn\.lock|bun\.lockb?|cargo\.lock|go\.sum)$|^requirements[\w.-]*\.lock$/.test(base)) return "lock";
+        if (SCRIPT_EXT.has(ext) || SCRIPT_NAMES.test(base)) return "script";
+        return null;
+      }
+      function keep(file) {
+        return wanted(file) || !!extraKind(file);
+      }
       function globToRe(g) {
         const s = g.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*\/?/g, "\0").replace(/\*/g, "[^/]*").replace(/\?/g, "[^/]").replace(/\u0000/g, ".*");
         return new RegExp("(^|/)" + s + "($|/)");
@@ -3157,6 +3284,7 @@ items:
       function collect(inputs, ignore, labels) {
         const ig = (ignore || []).map(globToRe);
         const out = [];
+        const extras = [];
         const roots = [];
         function walk(p, root) {
           const rel = path.relative(root, p).split(path.sep).join("/") || path.basename(p);
@@ -3168,6 +3296,14 @@ items:
             return;
           }
           if (st.isDirectory()) {
+            if (path.basename(p) === "__pycache__") {
+              for (const e of fs.readdirSync(p).sort()) {
+                const a = path.join(p, e);
+                const r2 = path.relative(root, a).split(path.sep).join("/");
+                if (!ig.some((re) => re.test(r2)) && extraKind(a) === "pyc") extras.push({ abs: a, rel: r2, root, kind: "pyc", text: "" });
+              }
+              return;
+            }
             if (SKIP_DIRS.has(path.basename(p))) return;
             for (const e of fs.readdirSync(p).sort()) walk(path.join(p, e), root);
           } else if (st.isFile() && wanted(p) && /\.ipynb$/i.test(p)) {
@@ -3176,6 +3312,12 @@ items:
             if (nb) out.push({ abs: p, rel, root, text: nb.text, notebook: nb.map });
           } else if (st.isFile() && wanted(p) && st.size <= MAX_BYTES) {
             out.push({ abs: p, rel, root, text: fs.readFileSync(p, "utf8") });
+          } else if (st.isFile() && extraKind(p) === "pyc") {
+            extras.push({ abs: p, rel, root, kind: "pyc", text: "" });
+          } else if (st.isFile() && extraKind(p) === "lock") {
+            extras.push({ abs: p, rel, root, kind: "lock", text: "" });
+          } else if (st.isFile() && extraKind(p) === "script" && st.size <= MAX_SCRIPT_BYTES) {
+            extras.push({ abs: p, rel, root, kind: "script", text: fs.readFileSync(p, "utf8") });
           }
         }
         for (const inp of inputs) {
@@ -3186,16 +3328,17 @@ items:
           roots.push(root);
           walk(abs, root);
         }
-        for (const f of out) {
+        for (const f of out.concat(extras)) {
           const parts = f.rel.split("/");
           f.agent = parts.length > 1 && !APP_PART.test(parts[0]) ? parts[0] : path.basename(f.root);
           f.atRoot = parts.length === 1;
           const label = labels && labels[f.root];
           f.display = label ? label + "!/" + f.rel : path.relative(process.cwd(), f.abs).split(path.sep).join("/");
         }
+        Object.defineProperty(out, "extras", { value: extras, enumerable: false });
         return out;
       }
-      module.exports = { collect, globToRe, wanted, notebookText, notebookLoc, APP_PART, MAX_BYTES, MAX_NOTEBOOK_BYTES };
+      module.exports = { collect, globToRe, wanted, keep, extraKind, notebookText, notebookLoc, APP_PART, MAX_BYTES, MAX_NOTEBOOK_BYTES };
     }
   });
 
@@ -9065,6 +9208,262 @@ items:
     }
   });
 
+  // src/scanners/persistence.js
+  var require_persistence = __commonJS({
+    "src/scanners/persistence.js"(exports, module) {
+      "use strict";
+      init_process();
+      var path = require_path_browserify();
+      var { loadRules, re, lines } = require_util();
+      var DOC = /\.(md|markdown|mdx|txt|rst|adoc)$/i;
+      var NB_MD = (f, line) => f.notebook && f.notebook[line - 1] && f.notebook[line - 1].type === "markdown";
+      var isComment = (ln) => /^\s*(#(?!!)|\/\/|;|REM\s|::)/i.test(ln);
+      function textFiles(files) {
+        return (files || []).concat((files && files.extras || []).filter((e) => e.kind === "script"));
+      }
+      function display(f) {
+        return f.display || f.rel;
+      }
+      function scanDaemon(files, R) {
+        const findings = [];
+        for (const f of textFiles(files)) {
+          const L = lines(f.text), doc = DOC.test(f.rel);
+          const seen = /* @__PURE__ */ new Set();
+          L.forEach((ln, i) => {
+            if (ln.length > 2e3) return;
+            if (!doc && isComment(ln)) return;
+            for (const r of R.daemon) {
+              const m = ln.match(re(r.pattern));
+              if (!m || r.exclude && re(r.exclude).test(ln)) continue;
+              const key = r.id + ":" + (i + 1);
+              if (seen.has(key)) continue;
+              seen.add(key);
+              const inDoc = doc || NB_MD(f, i + 1);
+              findings.push({
+                rule: "daemon." + r.id,
+                severity: inDoc ? "low" : r.severity,
+                file: display(f),
+                line: i + 1,
+                family: r.family,
+                source: r.source,
+                message: r.message + (inDoc ? " (documentation: lowered)" : "") + " " + R.verify_hint,
+                evidence: ln.trim().slice(0, 140)
+              });
+            }
+          });
+        }
+        return findings;
+      }
+      function skillRoots(all) {
+        const roots = /* @__PURE__ */ new Set();
+        for (const f of all) {
+          const b = path.posix.basename(f.rel);
+          if (/^skill\.md$/i.test(b) && /^\uFEFF?---\s*\n[\s\S]{0,2000}?^name\s*:/m.test(f.text || "")) roots.add(path.posix.dirname(f.rel));
+          if (b === "plugin.json") {
+            const d = path.posix.dirname(f.rel);
+            roots.add(path.posix.basename(d) === ".claude-plugin" ? path.posix.dirname(d) : d);
+          }
+        }
+        return [...roots].map((r) => r === "." ? "" : r);
+      }
+      var under = (rel, root) => root === "" || rel === root || rel.startsWith(root + "/");
+      function inScope(f, S, roots) {
+        return re(S.scope_path).test(f.rel) || re(S.mcp_config).test(f.rel) || roots.some((r) => under(f.rel, r) && f.root);
+      }
+      function pkgOf(args) {
+        for (const a of args) {
+          if (typeof a !== "string") continue;
+          if (/^-/.test(a)) continue;
+          return a;
+        }
+        return null;
+      }
+      function mcpServers(text) {
+        let j;
+        try {
+          j = JSON.parse(text);
+        } catch (_) {
+          return null;
+        }
+        const out = [];
+        const visit = (o) => {
+          if (!o || typeof o !== "object") return;
+          for (const k of ["mcpServers", "servers", "mcp_servers"]) if (o[k] && typeof o[k] === "object") {
+            for (const [name, s] of Object.entries(o[k])) if (s && typeof s === "object") out.push({ name, s });
+          }
+          for (const v of Object.values(o)) if (v && typeof v === "object") visit(v);
+        };
+        visit(j);
+        return out;
+      }
+      function lineOfStr(L, needle) {
+        const i = L.findIndex((l) => l.includes(needle));
+        return i < 0 ? 1 : i + 1;
+      }
+      function scanSkills(files, R) {
+        const S = R.skills, findings = [];
+        const extras = files && files.extras || [];
+        const all = (files || []).concat(extras);
+        const roots = skillRoots(all);
+        const add = (o) => findings.push(Object.assign({ family: "skill artifact provenance" }, o));
+        const pyc = extras.filter((e) => e.kind === "pyc");
+        const pySet = new Set(all.filter((f) => /\.py$/i.test(f.rel)).map((f) => f.rel));
+        const byDir = {};
+        for (const p of pyc) (byDir[path.posix.dirname(p.rel)] = byDir[path.posix.dirname(p.rel)] || []).push(p);
+        for (const [dir, list] of Object.entries(byDir)) {
+          const scoped = inScope(list[0], S, roots);
+          add({
+            rule: "skills.committed_pycache",
+            severity: scoped ? "medium" : "low",
+            file: display(list[0]),
+            line: 0,
+            source: "pycache_trap",
+            message: list.length + " compiled Python file(s) in " + dir + "/" + (scoped ? " inside a skill/plugin folder" : "") + ". Python can run a .pyc instead of the .py you reviewed, and source-reading scanners (this one included) don't check what it does. Delete it and add __pycache__/ and *.pyc to .gitignore. Static check: it may also be local build output; check git ls-files.",
+            evidence: list.slice(0, 3).map((p) => path.posix.basename(p.rel)).join(", ") + (list.length > 3 ? ", \u2026" : "")
+          });
+          for (const p of list) {
+            const base = path.posix.basename(p.rel).replace(/\.(cpython|pypy|py)[\w-]*(\.opt-\d)?\.py[co]$/i, "").replace(/\.py[co]$/i, "");
+            const inCache = path.posix.basename(dir) === "__pycache__";
+            const srcDir = inCache ? path.posix.dirname(dir) : dir;
+            const src = (srcDir === "." ? "" : srcDir + "/") + base + ".py";
+            if (pySet.has(src)) continue;
+            add({
+              rule: "skills.orphan_pyc",
+              severity: scoped ? "high" : "medium",
+              file: display(p),
+              line: 0,
+              source: "pycache_trap",
+              message: "Compiled Python with no matching source file (" + src + " not found). Nobody can review what it runs. Remove it, or ship the source and rebuild from it.",
+              evidence: path.posix.basename(p.rel)
+            });
+          }
+        }
+        for (const f of textFiles(files)) {
+          if (!inScope(f, S, roots)) continue;
+          const L = lines(f.text), isJson = /\.json$/i.test(f.rel);
+          const doc = DOC.test(f.rel) && !/(^|\/)SKILL\.md$/i.test(f.rel);
+          const lower = (o) => doc && o.severity !== "low" ? Object.assign(o, { severity: "low", message: o.message + " (documentation: lowered)" }) : o;
+          L.forEach((ln, i) => {
+            if (ln.length > 2e3 || !doc && isComment(ln)) return;
+            if (!isJson && re(S.persistent_targets).test(ln) && re(S.write_verbs).test(ln))
+              add(lower({
+                rule: "skills.persistent_write",
+                severity: "medium",
+                file: display(f),
+                line: i + 1,
+                source: "skillrelaybench",
+                message: "Skill writes to a file that later sessions load automatically (" + ln.match(re(S.persistent_targets))[0].trim() + "). Text it leaves there can act as instructions in a new session. Keep skill output out of memory/instruction/hook files, or review each write.",
+                evidence: ln.trim().slice(0, 140)
+              }));
+            if (isJson && re(S.hook_events).test(ln)) {
+              const ev = ln.match(re(S.hook_events))[1];
+              const startup = re("^(" + S.hook_events_startup + ")$").test(ev);
+              add({
+                rule: "skills.session_hook",
+                severity: startup ? "medium" : "low",
+                file: display(f),
+                line: i + 1,
+                source: "skillrelaybench",
+                message: "Hook " + ev + " runs a command automatically" + (startup ? " at the start of a session or prompt" : "") + ". Verify what it runs and that it does not write files later sessions load.",
+                evidence: ln.trim().slice(0, 140)
+              });
+            }
+            for (const m of ln.match(re(S.git_source, "gi")) || []) {
+              if (re(S.pinned_git).test(m)) continue;
+              add(lower({
+                rule: "skills.unpinned_source",
+                severity: "medium",
+                file: display(f),
+                line: i + 1,
+                source: "supply_chain",
+                message: "Skill or plugin source points at a git repo with no commit pin, so a later install can fetch different code than you reviewed. Pin a commit SHA.",
+                evidence: m.slice(0, 140)
+              }));
+            }
+            if (!isJson) {
+              const m = ln.match(/\b(npx|bunx|uvx|pnpm\s+dlx|pipx\s+run)\s+((?:-{1,2}[\w-]+\s+)*)([@\w][\w@.\/:=+-]*)/);
+              if (m && !/^-/.test(m[3]) && !re(S.pinned_pkg).test(m[3]) && !/\.(js|py|sh)$/.test(m[3]))
+                add(lower({
+                  rule: "skills.unpinned_source",
+                  severity: /@latest$/.test(m[3]) ? "medium" : "low",
+                  file: display(f),
+                  line: i + 1,
+                  source: "supply_chain",
+                  message: "Skill/MCP command runs package " + m[3] + " without a version pin, so each run can fetch new code. Pin an exact version.",
+                  evidence: ln.trim().slice(0, 140)
+                }));
+            }
+          });
+          if (isJson) for (const { name, s } of mcpServers(f.text) || []) {
+            const cmd = String(s.command || ""), args = Array.isArray(s.args) ? s.args : [];
+            if (/^(npx|bunx|uvx|pipx)$/.test(path.posix.basename(cmd)) || /pnpm$/.test(cmd) && args[0] === "dlx") {
+              const pkg = pkgOf(cmd.endsWith("pnpm") ? args.slice(1) : args);
+              if (pkg && !re(S.pinned_pkg).test(pkg) && !/\.(js|py|sh)$/.test(pkg) && !re(S.git_source).test(pkg))
+                add({
+                  rule: "skills.unpinned_source",
+                  severity: /@latest$/.test(pkg) ? "medium" : "low",
+                  file: display(f),
+                  line: lineOfStr(L, JSON.stringify(pkg)),
+                  source: "supply_chain",
+                  message: "MCP server '" + name + "' runs " + cmd + " " + pkg + " with no version pin, so each start can fetch new code. Pin an exact version (pkg@1.2.3).",
+                  evidence: (cmd + " " + args.join(" ")).slice(0, 140)
+                });
+            }
+            if (/docker$/.test(cmd)) {
+              const img = args.find((a, k) => k > 0 && typeof a === "string" && !/^-/.test(a) && /[/:]|^[\w.-]+$/.test(a) && args[k - 1] !== "-e" && args[k - 1] !== "--env" && args[k - 1] !== "-v" && args[k - 1] !== "--name" && a !== "run");
+              if (img && !/@sha256:[0-9a-f]{64}/.test(img))
+                add({
+                  rule: "skills.unpinned_source",
+                  severity: "low",
+                  file: display(f),
+                  line: lineOfStr(L, JSON.stringify(img)),
+                  source: "supply_chain",
+                  message: "MCP server '" + name + "' runs Docker image " + img + " with no @sha256 digest. Tags can move; pin the digest.",
+                  evidence: (cmd + " " + args.join(" ")).slice(0, 140)
+                });
+            }
+          }
+        }
+        for (const r of roots) {
+          const inRoot = all.filter((f) => under(f.rel, r) && f.rel !== r);
+          const codeFiles = inRoot.filter((f) => /\.(py|js|mjs|cjs|ts|sh|bash|ps1)$/i.test(f.rel) || f.kind === "pyc");
+          if (!codeFiles.length) continue;
+          if (inRoot.some((f) => re(S.lockfiles).test(f.rel)) || inRoot.some((f) => f.text && re(S.hash_markers).test(f.text))) continue;
+          const anchor = inRoot.find((f) => /(^|\/)(SKILL\.md|plugin\.json)$/i.test(f.rel)) || inRoot[0];
+          add({
+            rule: "skills.no_hashes",
+            severity: "low",
+            file: display(anchor),
+            line: 0,
+            source: "supply_chain",
+            message: "Skill/plugin folder " + (r || ".") + "/ ships " + codeFiles.length + " code file(s) but no lockfile or hashes (sha256/integrity), so you can't check that what you install matches what was reviewed.",
+            evidence: codeFiles.slice(0, 3).map((f) => path.posix.basename(f.rel)).join(", ")
+          });
+        }
+        return findings;
+      }
+      var LIMITS = "Static check of files in the scanned folder only. It cannot see running processes, installed binaries, what a CLI or skill does at runtime, files written outside this folder, or what a .pyc contains (never decoded or run). A clean result does not mean nothing persists or nothing was swapped. Verify on your install.";
+      function scan(files, opts) {
+        const R = loadRules("persistence", opts && opts.rulesDir);
+        return [
+          {
+            id: "daemon",
+            title: "Background daemons + self-update",
+            findings: scanDaemon(files, R),
+            note: 'Looks for launchd/systemd/cron/scheduled-task registration, auto-update flags, daemon modes, "latest" installs and curl|sh installers. Prompted by a single, unreproduced report about a coding-agent CLI (HN, Oct 12, 2026; Groundy audit guide); this tool does not confirm that report. ' + LIMITS
+          },
+          {
+            id: "skills",
+            title: "Skill artifact provenance",
+            findings: scanSkills(files, R),
+            note: "Looks at skill/plugin folders (SKILL.md, .claude/, .codex/, .gemini/, plugin and MCP configs) for compiled Python, writes to files later sessions load, session hooks, unpinned sources and missing hashes. Background research (their findings, not ours): SkillRelayBench (arXiv 2610.13227) saw 46.7-77.4% attack success through files left for later sessions; PyCache Trap (arXiv 2610.10612) saw 94-100% success against 7 skill scanners with swapped .pyc files. " + LIMITS
+          }
+        ];
+      }
+      module.exports = { scan, LIMITS };
+    }
+  });
+
   // src/evals.js
   var require_evals = __commonJS({
     "src/evals.js"(exports, module) {
@@ -9362,6 +9761,7 @@ items:
       var labs = require_labs();
       var ste = require_ste();
       var injection = require_injection();
+      var persistence = require_persistence();
       var evals = require_evals();
       var standards = require_standards();
       var W = { high: 10, medium: 4, low: 1, info: 0 };
@@ -9396,6 +9796,7 @@ items:
         if (!o.noLabs && !steOnly) groups.push(labs.scan(files));
         if (!o.noInjection && (files.length || o.docs && o.docs.length)) groups.push(injection.scan(files, o));
         if (!o.noSte) groups.push(ste.scan(files, o));
+        if (!o.noPersistence && !steOnly && (files.length || files.extras && files.extras.length)) groups.push(...persistence.scan(files, o));
         const nbs = {};
         for (const f of files) if (f.notebook) nbs[f.display] = f.notebook;
         if (Object.keys(nbs).length) for (const g of groups) for (const f of g.findings) {
@@ -9455,6 +9856,8 @@ items:
             extra = "<p class=note>" + esc(g.note) + " <a href='ste.html'>Open the offline STE page</a> to paste text or pick files.</p>" + (g.dictionary ? "<p>Approved-word list: " + esc(g.dictionary) + "</p>" : "") + "<h3>Documents checked</h3><table><tr><th>Input</th><th>Sentences</th><th>Findings</th></tr>" + g.docs.map((d) => "<tr><td>" + esc(d.file) + "</td><td>" + d.sentences + "</td><td>" + d.findings + "</td></tr>").join("") + "</table>" + (g.compare ? "<h3>Information-loss check</h3><p>" + esc(g.compare.original) + " \u2192 " + esc(g.compare.rewrite) + ": <b>" + g.compare.missing.length + "</b> missing</p><table><tr><th>Sev</th><th>Kind</th><th>Missing value</th></tr>" + g.compare.missing.map((m) => "<tr class=" + m.severity + "><td>" + m.severity + "</td><td>" + esc(m.kind) + "</td><td><code>" + esc(m.value) + "</code></td></tr>").join("") + "</table>" : "");
           } else if (g.id === "injection") {
             extra = "<p class=note>" + esc(g.note) + "</p><p>" + g.docsScanned + " files scanned.</p>";
+          } else if (g.id === "daemon" || g.id === "skills") {
+            extra = "<p class=note>" + esc(g.note) + "</p>";
           } else if (g.id === "labs") {
             extra = (g.redteam ? "<p class=note>Red-team pack: 20 test messages to send to your own customer-facing bot are in <a href='redteam-pack.txt'>redteam-pack.txt</a>.</p><details><summary>Show the red-team pack</summary><pre style='white-space:pre-wrap'>" + esc(g.redteam) + "</pre></details>" : "") + "<h3>Tool runs</h3><table><tr><th>Tool</th><th>Input</th><th>Score</th><th>Verdict</th></tr>" + g.runs.map((x) => "<tr><td>" + esc(x.tool) + "</td><td>" + esc(x.file) + "</td><td>" + esc(x.score) + "</td><td>" + esc(x.verdict) + "</td></tr>").join("") + "</table>";
           }
@@ -9528,6 +9931,7 @@ items:
         L.push("", "## 4. Findings (P0 = fix before real traffic)", "");
         for (const g of r.groups) {
           L.push("### " + g.title, "");
+          if (g.id === "daemon" || g.id === "skills") L.push("_" + g.note + "_", "");
           if (!g.findings.length) L.push("No findings.", "");
           g.findings.forEach((f) => L.push("- **" + P[f.severity] + "** `" + f.rule + "` " + f.file + (f.line > 0 ? ":" + f.line : "") + " \u2014 " + f.message + (f.evidence ? " (`" + String(f.evidence).replace(/`/g, "'") + "`)" : "")));
           L.push("");
@@ -9673,8 +10077,8 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
         o.inputsLabel = (req.inputs || []).map((i) => i.name);
         return analyze(inputs, o);
       }
-      var { wanted, MAX_BYTES, MAX_NOTEBOOK_BYTES } = require_files();
-      var maxBytes = (p) => /\.ipynb$/i.test(p) ? MAX_NOTEBOOK_BYTES : MAX_BYTES;
+      var { wanted, keep, MAX_BYTES, MAX_NOTEBOOK_BYTES } = require_files();
+      var maxBytes = (p) => /\.ipynb$/i.test(p) ? MAX_NOTEBOOK_BYTES : wanted(p) ? MAX_BYTES : /\.py[co]$|\.lockb?$|go\.sum$/i.test(p) ? Infinity : 512 * 1024;
       async function readZip(JSZip, data) {
         const z = await JSZip.loadAsync(data);
         const all = Object.values(z.files);
@@ -9690,8 +10094,8 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
           const size = f._data && f._data.uncompressedSize || 0;
           total += size;
           if (total > 200 * 1024 * 1024) throw new Error("Zip expands to more than 200 MB");
-          if (!wanted(norm) || size > maxBytes(norm)) continue;
-          out.push({ path: norm, text: await f.async("string") });
+          if (!keep(norm) || size > maxBytes(norm)) continue;
+          out.push({ path: norm, text: /\.py[co]$|\.lockb?$|(^|\/)go\.sum$/i.test(norm) ? "" : await f.async("string") });
         }
         return out;
       }
@@ -9711,7 +10115,7 @@ $("cmp").onclick=()=>{const r=STE.compare($("orig").value,$("rew").value);$("cou
         return out;
       }
       var ste = { check: (text, name, dict) => steCore.check(text, loadRules("ste"), { file: name || "(pasted)", dict: dict || null }), compare: (a, b) => steCore.compare(a, b) };
-      module.exports = { scan, outputs, readZip, wanted, MAX_BYTES, MAX_NOTEBOOK_BYTES, maxBytes, ste, rulesInfo, version: pkg.version };
+      module.exports = { scan, outputs, readZip, wanted, keep, MAX_BYTES, MAX_NOTEBOOK_BYTES, maxBytes, ste, rulesInfo, version: pkg.version };
     }
   });
   return require_entry();
