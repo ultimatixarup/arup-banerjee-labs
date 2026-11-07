@@ -11,6 +11,9 @@
 .sev-high{color:#ff6b7a;font-weight:700}.sev-medium{color:#f0a640;font-weight:700}.sev-low{color:#8fb3ff}.sev-info{color:var(--muted)}
 .yes{color:#3fbf7f}.no{color:#ff6b7a}
 
+.cli-only{margin:.35rem 0 1rem;padding-left:1.15rem;color:var(--muted);font-size:.92rem;max-width:78ch}
+.cli-only li{margin:.55rem 0}
+.cli-only strong{color:var(--text)}
 .std-details{margin:.35rem 0 .6rem;font-size:.85rem;color:var(--muted)}
 .std-details summary{cursor:pointer;color:var(--text)}
 .std-details ul{margin:.3rem 0 0 1rem;padding:0}
